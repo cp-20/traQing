@@ -7,11 +7,13 @@
     "dev": "npm-run-all --parallel dev:client dev:server",
     "dev:client": "vite",
     "dev:server": "bun run --watch ./src/server/index.ts",
-    "build": "tsc && vite build",
+    "build:client": "tsc && vite build",
     "lint": "eslint ./src/**/*.ts ./src/**/*.tsx",
     "migration": "drizzle-kit generate:sqlite",
     "collect-data": "bun run ./src/features/traQ/runner.ts",
-    "preview": "vite preview"
+    "start": "npm-run-all --parallel start:client start:server",
+    "start:client": "vite preview --host",
+    "start:server": "bun run ./src/server/index.ts"
   },
   "dependencies": {
     "@mantine/core": "^7.8.1",
