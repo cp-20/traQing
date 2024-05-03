@@ -7,21 +7,12 @@ import { api } from './api';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const formatDateStr = (date: Date) => {
-  const year = date.getFullYear();
-  const month = `${date.getMonth() + 1}`.padStart(2, '0');
-  const day = `${date.getDate()}`.padStart(2, '0');
-  const hour = `${date.getHours()}`.padStart(2, '0');
-  const minute = `${date.getMinutes()}`.padStart(2, '0');
-  const second = `${date.getSeconds()}`.padStart(2, '0');
-  return `${year}-${month}-${day}T${hour}:${minute}:${second}.000Z`;
-};
-
 export const updateMessages = async () => {
   const lastMessage = await getLastMessageCreatedAt();
-  const after = lastMessage ? formatDateStr(new Date(lastMessage)) : undefined;
+  const after = lastMessage ? new Date(lastMessage).toISOString() : undefined;
 
-  let before = formatDateStr(new Date());
+  let before = new Date().toISOString();
+
   let offset = 0;
   // eslint-disable-next-line no-constant-condition
   while (true) {

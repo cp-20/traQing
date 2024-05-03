@@ -179,7 +179,24 @@ app.get('/message-stamps', async (c) => {
   }
 });
 
-setInterval(updateMessages, 1000 * 60 * 5);
+let lock = false;
+const update = async () => {
+  if (lock) {
+    console.log('Already updating. Skipping...');
+    return;
+  }
+
+  console.log('Updating...');
+
+  lock = true;
+  await updateMessages();
+  lock = false;
+
+  console.log('Finished updating.');
+};
+
+setInterval(update, 1000 * 60 * 5);
+update();
 
 export default {
   port: 8080,
