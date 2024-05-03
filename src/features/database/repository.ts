@@ -13,7 +13,7 @@ const dbUrl = process.env.DB_URL;
 if (!dbUrl) throw new Error('DB_URL is not set');
 
 const database = new Database(dbUrl);
-const db = drizzle(database, { schema, logger: true });
+const db = drizzle(database, { schema });
 migrate(db, { migrationsFolder: './drizzle' });
 
 export const insertMessages = async (messages: Message[]) => {
