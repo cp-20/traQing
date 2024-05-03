@@ -92,7 +92,6 @@ export const traqAuthRoutes = () => {
   app.get('/callback', async (c) => {
     const code = c.req.query('code');
     const state = c.req.query('state');
-    console.log(code, state);
     if (typeof code !== 'string' || typeof state !== 'string') {
       c.status(400);
       return c.redirect('/');
