@@ -17,7 +17,7 @@ const formatDateStr = (date: Date) => {
   return `${year}-${month}-${day}T${hour}:${minute}:${second}.000Z`;
 };
 
-const updateMessages = async () => {
+export const updateMessages = async () => {
   const lastMessage = await getLastMessageCreatedAt();
   const after = lastMessage ? formatDateStr(new Date(lastMessage)) : undefined;
 
@@ -71,5 +71,3 @@ const updateMessages = async () => {
     await sleep(100);
   }
 };
-
-await updateMessages();

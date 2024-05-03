@@ -9,6 +9,7 @@ import { tokenKey, traqAuthRoutes } from './auth';
 import { Hono } from 'hono';
 import { getCookie } from 'hono/cookie';
 import { StatusCode } from 'hono/utils/http-status';
+import { updateMessages } from '@/features/traQ';
 
 const app = new Hono<{
   Variables: { token: string };
@@ -177,6 +178,8 @@ app.get('/message-stamps', async (c) => {
     return c.json({ message: 'Failed to fetch stamps' });
   }
 });
+
+setInterval(updateMessages, 1000 * 60 * 5);
 
 export default {
   port: 8080,

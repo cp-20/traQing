@@ -10,7 +10,7 @@
     "build": "tsc && vite build",
     "lint": "eslint ./src/**/*.ts ./src/**/*.tsx",
     "migration": "drizzle-kit generate:sqlite",
-    "collect-data": "bun run ./src/features/traQ/index.ts",
+    "collect-data": "bun run ./src/features/traQ/runner.ts",
     "preview": "vite preview"
   },
   "dependencies": {
