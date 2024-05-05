@@ -10,6 +10,7 @@ import { MonthlyChannelRanking } from '@/models/Rankings/MonthlyChannelRanking';
 import { MonthlyStampRanking } from '@/models/Rankings/MonthlyStampRanking';
 import { MonthlyUserRanking } from '@/models/Rankings/MonthlyUserRanking';
 import { FC } from 'react';
+import LogoImage from '@/assets/logo.svg';
 
 export const Dashboard: FC = () => {
   const { switcher: dailySwitcher, range: dailyRange } = useDailySwitcher();
@@ -17,11 +18,13 @@ export const Dashboard: FC = () => {
     useMonthlySwitcher();
 
   return (
-    <div className="mx-8 font-['Noto_Sans_JP']">
-      <h1 className="font-semibold text-blue-500 text-2xl mb-8 mt-8">
-        traQing
-      </h1>
-      <div className="space-y-12">
+    <div className="font-['Noto_Sans_JP']">
+      <header className="border-b border-zinc-200 py-2 px-8 mb-8">
+        <h1 className="font-semibold text-blue-500 text-2xl">
+          <img src={LogoImage} alt="traQing" width={128} />
+        </h1>
+      </header>
+      <div className="space-y-12 px-8">
         <div className="space-y-4">
           <div className="flex gap-4">
             <h2 className="font-semibold text-xl">デイリーランキング</h2>
