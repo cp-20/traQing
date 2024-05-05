@@ -12,5 +12,19 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
+    cors: {
+      origin: [
+        'https://usevia.app',
+        /localhost(:\d+)?$/,
+        /((.+)\.)?trap\.jp$/,
+        /((.+)\.)?trap\.show$/,
+        /((.+)\.)?trap\.games$/,
+        /((.+)\.)?cp20\.dev$/,
+      ],
+      methods: 'GET, POST, OPTIONS',
+      allowedHeaders: 'Content-Type, Cookie',
+      // maxAge: 86400,
+      credentials: true,
+    },
   },
 });

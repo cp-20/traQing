@@ -116,6 +116,7 @@ export const traqAuthRoutes = () => {
     setCookie(c, tokenKey, token, {
       secure: true,
       httpOnly: true,
+      sameSite: 'None',
     });
 
     return c.redirect('/');

@@ -15,27 +15,6 @@ const app = new Hono<{
   Variables: { token: string };
 }>();
 
-const permittedHosts = [
-  /localhost(:\d+)?/,
-  /((.+)\.)?trap\.jp/,
-  /((.+)\.)?trap\.show/,
-  /((.+)\.)?trap\.games/,
-  /((.+)\.)?cp20\.dev/,
-];
-
-app.use(async (c, next) => {
-  const host = c.req.header('host');
-  if (host && permittedHosts.some((re) => re.test(host))) {
-    const url = new URL(c.req.url);
-
-    c.header('Access-Control-Allow-Origin', url.origin);
-    c.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    c.header('Access-Control-Allow-Headers', 'Content-Type');
-    c.header('Access-Control-Max-Age', '86400');
-  }
-  return await next();
-});
-
 app.use(async (c, next) => {
   if (c.req.path.startsWith('/auth')) {
     return await next();
