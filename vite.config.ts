@@ -14,7 +14,6 @@ export default defineConfig({
     },
     cors: {
       origin: [
-        'https://usevia.app',
         /localhost(:\d+)?$/,
         /((.+)\.)?trap\.jp$/,
         /((.+)\.)?trap\.show$/,
