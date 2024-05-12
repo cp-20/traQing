@@ -48,15 +48,15 @@ export type MessagesQuery = z.infer<typeof MessagesQuerySchema>;
 
 export const getMessages = async (query: MessagesQuery) => {
   const select = {
-    month: sql`strftime('%Y-%m', date(${schema.messages.createdAt}))`,
-    day: sql`strftime('%Y-%m-%d', date(${schema.messages.createdAt}))`,
+    month: sql`strftime('%Y-%m', date(${schema.messages.createdAt}, 'localtime'))`,
+    day: sql`strftime('%Y-%m-%d', date(${schema.messages.createdAt}, 'localtime'))`,
     user: schema.messages.userId,
     channel: schema.messages.channelId,
   }[query.groupBy ?? 'day'];
 
   const groupBy = {
-    month: sql`strftime('%Y-%m', date(${schema.messages.createdAt}))`,
-    day: sql`strftime('%Y-%m-%d', date(${schema.messages.createdAt}))`,
+    month: sql`strftime('%Y-%m', date(${schema.messages.createdAt}), 'localtime')`,
+    day: sql`strftime('%Y-%m-%d', date(${schema.messages.createdAt}), 'localtime')`,
     user: schema.messages.userId,
     channel: schema.messages.channelId,
   }[query.groupBy ?? 'day'];
@@ -74,12 +74,12 @@ export const getMessages = async (query: MessagesQuery) => {
     query.after &&
       gt(
         schema.messages.createdAtTimestamp,
-        sql`strftime('%s', ${query.after})`
+        Math.floor(new Date(query.after).getTime() / 1000)
       ),
     query.before &&
       lt(
         schema.messages.createdAtTimestamp,
-        sql`strftime('%s', ${query.before})`
+        Math.floor(new Date(query.before).getTime() / 1000)
       ),
   ];
 

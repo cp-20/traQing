@@ -15,8 +15,11 @@ export const prevMonth = (range: MonthlyTimeRange) => ({
   month: range.month === 1 ? 12 : range.month - 1,
 });
 
-export const monthlyTimeRangeToTime = (range: MonthlyTimeRange) =>
-  `${range.year}-${String(range.month).padStart(2, '0')}-01T00:00:00.000Z`;
+export const monthlyTimeRangeToTime = (range: MonthlyTimeRange) => {
+  const year = range.year;
+  const month = range.month.toString().padStart(2, '0');
+  return `${year}-${month}-01T00:00:00.000+09:00`;
+};
 
 export const useMonthlyTimeRange = (initial?: MonthlyTimeRange) => {
   const [range, setRange] = useState<MonthlyTimeRange>(
@@ -56,10 +59,12 @@ export const prevDay = (range: DailyTimeRange) => {
   };
 };
 
-export const dailyTimeRangeToTime = (range: DailyTimeRange) =>
-  `${range.year}-${String(range.month).padStart(2, '0')}-${String(
-    range.day
-  ).padStart(2, '0')}T00:00:00.000Z`;
+export const dailyTimeRangeToTime = (range: DailyTimeRange) => {
+  const year = range.year;
+  const month = range.month.toString().padStart(2, '0');
+  const day = range.day.toString().padStart(2, '0');
+  return `${year}-${month}-${day}T00:00:00.000+09:00`;
+};
 
 export const useDailyTimeRange = (initial?: DailyTimeRange) => {
   const [range, setRange] = useState<DailyTimeRange>(
