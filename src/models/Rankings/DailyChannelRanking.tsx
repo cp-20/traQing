@@ -35,7 +35,7 @@ export const DailyChannelRanking: FC<DailyRankingProps> = ({ range }) => {
       <Bar
         options={commonChartOptions}
         data={data}
-        height={200}
+        height={300}
         className={clsx(loading && 'opacity-70')}
       />
     </div>
