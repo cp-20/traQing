@@ -11,19 +11,21 @@ export const channelRankingQuery = {
 export const useChannelRankingData = (
   messages: { channel: string; count: number }[]
 ) => {
-  const { getSummedChannelName, channels } = useChannels();
+  const { getChannelName, getSummedChannelName, channels } = useChannels();
 
   if (messages.length === 0 || channels.length === 0) {
-    const emptyArray = new Array(channelRankingQuery.limit);
-    return {
+    const emptyArray = new Array(channelRankingQuery.limit).fill('');
+    const data = {
       labels: emptyArray,
       datasets: [{ data: emptyArray.fill(0) }],
     };
+    return { data, fullChannelNames: emptyArray };
   }
 
   const sorted = messages.toSorted((a, b) => b.count - a.count);
   const stats = sorted.map((stat) => ({
     channelName: getSummedChannelName(stat.channel),
+    fullChannelName: getChannelName(stat.channel),
     count: stat.count,
   }));
 
@@ -32,5 +34,7 @@ export const useChannelRankingData = (
     datasets: [{ data: stats.map((stat) => stat.count) }],
   };
 
-  return data;
+  const fullChannelNames = stats.map((stat) => `#${stat.fullChannelName}`);
+
+  return { data, fullChannelNames };
 };

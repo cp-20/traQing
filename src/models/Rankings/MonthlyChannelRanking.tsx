@@ -4,7 +4,7 @@ import { FC, useMemo } from 'react';
 import { useChannelRankingData, channelRankingQuery } from './channel';
 import {
   MonthlyRankingProps,
-  commonChartOptions,
+  getCommonChartOptions,
 } from '@/models/Rankings/common';
 import { Bar } from 'react-chartjs-2';
 import clsx from 'clsx';
@@ -20,11 +20,15 @@ export const MonthlyChannelRanking: FC<MonthlyRankingProps> = ({ range }) => {
   );
   const { messages, loading } = useMessages(query);
 
-  const data = useChannelRankingData(messages);
+  const { data, fullChannelNames } = useChannelRankingData(messages);
 
   return (
     <div className={clsx(loading && 'opacity-70')}>
-      <Bar options={commonChartOptions} data={data} height={300} />
+      <Bar
+        options={getCommonChartOptions(fullChannelNames)}
+        data={data}
+        height={300}
+      />
     </div>
   );
 };

@@ -5,7 +5,7 @@ import { useUserRankingData, userRankingQuery } from './user';
 import clsx from 'clsx';
 import {
   MonthlyRankingProps,
-  commonChartOptions,
+  getCommonChartOptions,
 } from '@/models/Rankings/common';
 import { Bar } from 'react-chartjs-2';
 
@@ -24,7 +24,7 @@ export const MonthlyUserRanking: FC<MonthlyRankingProps> = ({ range }) => {
 
   return (
     <div className={clsx(loading && 'opacity-70')}>
-      <Bar options={commonChartOptions} data={data} height={300} />
+      <Bar options={getCommonChartOptions()} data={data} height={300} />
     </div>
   );
 };
