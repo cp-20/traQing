@@ -1,5 +1,14 @@
 import { DailyTimeRange, MonthlyTimeRange } from '@/hooks/useTimeRange';
 import { ChartOptions } from 'chart.js';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Tooltip,
+} from 'chart.js';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
 export const commonChartOptions = {
   indexAxis: 'y' as const,
@@ -8,6 +17,13 @@ export const commonChartOptions = {
       borderWidth: 1,
       borderColor: '#74c0fc',
       backgroundColor: '#228be633',
+    },
+  },
+  plugins: {
+    tooltip: {
+      enabled: true,
+      axis: 'x',
+      displayColors: false,
     },
   },
   scales: {

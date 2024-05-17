@@ -1,12 +1,6 @@
 import { useMessages } from '@/hooks/useMessages';
 import { nextMonth, monthlyTimeRangeToTime } from '@/hooks/useTimeRange';
 import { FC, useMemo } from 'react';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-} from 'chart.js';
 import { useUserRankingData, userRankingQuery } from './user';
 import clsx from 'clsx';
 import {
@@ -14,8 +8,6 @@ import {
   commonChartOptions,
 } from '@/models/Rankings/common';
 import { Bar } from 'react-chartjs-2';
-
-ChartJS.register(CategoryScale, LinearScale, BarElement);
 
 export const MonthlyUserRanking: FC<MonthlyRankingProps> = ({ range }) => {
   const query = useMemo(
