@@ -12,6 +12,9 @@ export const commonChartOptions = {
   },
   scales: {
     y: {
+      grid: {
+        display: false,
+      },
       border: {
         display: false,
       },
