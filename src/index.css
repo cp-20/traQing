@@ -18,3 +18,7 @@
   font-weight: 700;
   src: url('/fonts/noto-sans-jp-v52-japanese_latin-700.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+}

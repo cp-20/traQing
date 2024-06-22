@@ -18,7 +18,7 @@ export const Dashboard: FC = () => {
     useMonthlySwitcher();
 
   return (
-    <div className="font-['Noto_Sans_JP']">
+    <div>
       <header className="border-b border-zinc-200 py-2 px-8 mb-8">
         <h1 className="font-semibold text-blue-500 text-2xl">
           <img src={LogoImage} alt="traQing" width={128} />
