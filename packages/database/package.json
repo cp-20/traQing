@@ -1,0 +1,22 @@
+{
+  "name": "@traq-ing/database",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "types": "dist/index.d.ts",
+  "module": "dist/index.js",
+  "scripts": {
+    "dev": "bun run build --watch",
+    "build": "tsup-node --config tsup.config.ts",
+    "migration": "drizzle-kit generate:sqlite"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.30.9"
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "drizzle-kit": "^0.20.17",
+    "tsup": "^8.1.0"
+  }
+}
