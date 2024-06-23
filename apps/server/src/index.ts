@@ -66,7 +66,10 @@ const routes = app
     const id = c.req.param('id');
     const url = `https://q.trap.jp/api/v3/files/${id}`;
     const res = await fetch(url, {
-      headers: { Authorization: `Bearer ${c.get('token')}` },
+      headers: {
+        Authorization: `Bearer ${c.get('token')}`,
+        ...c.req.raw.headers,
+      },
     });
     if (!res.ok) {
       return c.status(res.status as StatusCode);
@@ -77,6 +80,10 @@ const routes = app
     c.header(
       'Content-Type',
       res.headers.get('Content-Type') ?? 'application/octet-stream'
+    );
+    c.header(
+      'Cache-Control',
+      res.headers.get('Cache-Control') ?? 'public, max-age=31536000'
     );
     return c.newResponse(data);
   })
