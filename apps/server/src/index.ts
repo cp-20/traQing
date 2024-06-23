@@ -98,6 +98,17 @@ const routes = app
       return c.json({ message: 'Failed to fetch messages' }, 500);
     }
   })
+  .get('/messages/:id', async (c) => {
+    const id = c.req.param('id');
+    try {
+      const messages = await api.messages.getMessage(id);
+      if (!messages.ok) throw new Error('Failed to fetch messages');
+      return c.json(messages.data, 200);
+    } catch (err) {
+      console.error(err);
+      return c.json({ message: 'Failed to fetch messages' }, 500);
+    }
+  })
   .get('/stamps', zValidator('query', StampsQuerySchema), async (c) => {
     const query = c.req.valid('query');
     try {
