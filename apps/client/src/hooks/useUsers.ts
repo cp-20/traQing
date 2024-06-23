@@ -21,6 +21,15 @@ export const useUsers = () => {
     [users]
   );
 
+  const getUserId = useCallback(
+    (username: string): string | undefined => {
+      const user = users.find((u) => u.name === username);
+      if (!user) return undefined;
+      return user.id;
+    },
+    [users]
+  );
+
   useEffect(() => {
     const fetchUsers = async () => {
       const res = await client.users.$get();
@@ -35,5 +44,5 @@ export const useUsers = () => {
     fetchUsers();
   }, [setUsers]);
 
-  return { users, getUsername };
+  return { users, getUsername, getUserId };
 };
