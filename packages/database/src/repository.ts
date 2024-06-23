@@ -144,6 +144,7 @@ export const insertMessageStamps = async (stamps: MessageStamp[]) => {
 export const StampsQuerySchema = z
   .object({
     userId: z.string(),
+    messageUserId: z.string(),
     channelId: z.string(),
     stampId: z.string(),
     before: z.string(),
@@ -152,6 +153,8 @@ export const StampsQuerySchema = z
       z.literal('month'),
       z.literal('day'),
       z.literal('user'),
+      z.literal('message'),
+      z.literal('messageUser'),
       z.literal('channel'),
       z.literal('stamp'),
     ]),
@@ -169,6 +172,8 @@ export const getStamps = async (query: StampsQuery) => {
     month: sql`strftime('%Y-%m', date(${schema.messageStamps.createdAt}), 'localtime')`,
     day: sql`strftime('%Y-%m-%d', date(${schema.messageStamps.createdAt}), 'localtime')`,
     user: schema.messageStamps.userId,
+    message: schema.messageStamps.messageId,
+    messageUser: schema.messages.userId,
     channel: schema.messageStamps.channelId,
     stamp: schema.messageStamps.stampId,
   }[query.groupBy ?? 'day'];
@@ -177,6 +182,8 @@ export const getStamps = async (query: StampsQuery) => {
     month: sql`strftime('%Y-%m', date(${schema.messageStamps.createdAt}), 'localtime')`,
     day: sql`strftime('%Y-%m-%d', date(${schema.messageStamps.createdAt}), 'localtime')`,
     user: schema.messageStamps.userId,
+    message: schema.messageStamps.messageId,
+    messageUser: schema.messages.userId,
     channel: schema.messageStamps.channelId,
     stamp: schema.messageStamps.stampId,
   }[query.groupBy ?? 'day'];
@@ -190,6 +197,7 @@ export const getStamps = async (query: StampsQuery) => {
 
   const conditions = [
     query.userId && eq(schema.messageStamps.userId, query.userId),
+    query.messageUserId && eq(schema.messages.userId, query.messageUserId),
     query.channelId && eq(schema.messageStamps.channelId, query.channelId),
     query.after &&
       gt(
@@ -203,24 +211,31 @@ export const getStamps = async (query: StampsQuery) => {
       ),
   ];
 
-  let initialQuery = db
+  const initialQuery = db
     .select({
       ...(query.groupBy ? { [query.groupBy]: select } : {}),
       count: count(schema.messageStamps.stampId),
     })
-    .from(schema.messageStamps)
+    .from(schema.messageStamps);
+
+  const joinedQuery = query.messageUserId
+    ? initialQuery.leftJoin(
+        schema.messages,
+        eq(schema.messages.id, schema.messageStamps.messageId)
+      )
+    : initialQuery;
+
+  const groupedQuery = query.groupBy
+    ? joinedQuery.groupBy(groupBy)
+    : joinedQuery;
+
+  const resultQuery = groupedQuery
     .where(and(...conditions.filter((x) => !!x)))
     .orderBy(orderBy)
     .limit(Math.min(query?.limit ?? 10000, 10000))
     .offset(query?.offset ?? 0);
 
-  let newQuery;
-  if (query.groupBy) {
-    newQuery = initialQuery.groupBy(groupBy);
-  }
-  const dbQuery = newQuery ?? initialQuery;
-
-  const results = await dbQuery.execute();
+  const results = await resultQuery.execute();
 
   return results;
 };
