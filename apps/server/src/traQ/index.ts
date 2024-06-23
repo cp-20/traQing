@@ -2,7 +2,7 @@ import {
   getLastMessageCreatedAt,
   insertMessageStamps,
   insertMessages,
-} from '@/features/database/repository';
+} from '@traq-ing/database';
 import { api } from './api';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));

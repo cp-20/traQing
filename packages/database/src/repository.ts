@@ -4,7 +4,6 @@ import * as schema from './schema';
 import Database from 'bun:sqlite';
 import { and, asc, count, desc, eq, gt, lt, sql } from 'drizzle-orm';
 import { z } from 'zod';
-import { excludeFalsy } from '@/utils/excludeFalsy';
 
 type Message = typeof schema.messages.$inferSelect;
 type MessageStamp = typeof schema.messageStamps.$inferSelect;
@@ -14,7 +13,7 @@ if (!dbUrl) throw new Error('DB_URL is not set');
 
 const database = new Database(dbUrl);
 const db = drizzle(database, { schema });
-migrate(db, { migrationsFolder: './drizzle' });
+migrate(db, { migrationsFolder: '../../drizzle' });
 
 export const insertMessages = async (messages: Message[]) => {
   await db
@@ -89,7 +88,7 @@ export const getMessages = async (query: MessagesQuery) => {
       count: count(schema.messages.id),
     })
     .from(schema.messages)
-    .where(and(...excludeFalsy(conditions)))
+    .where(and(...conditions.filter((x) => !!x)))
     .orderBy(orderBy)
     .limit(Math.min(query?.limit ?? 1000, 1000))
     .offset(query?.offset ?? 0);
@@ -193,7 +192,7 @@ export const getStamps = async (query: StampsQuery) => {
       count: count(schema.messageStamps.stampId),
     })
     .from(schema.messageStamps)
-    .where(and(...excludeFalsy(conditions)))
+    .where(and(...conditions.filter((x) => !!x)))
     .orderBy(orderBy)
     .limit(Math.min(query?.limit ?? 1000, 1000))
     .offset(query?.offset ?? 0);

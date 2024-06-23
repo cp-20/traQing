@@ -3,13 +3,13 @@ import {
   StampsQuerySchema,
   getMessages,
   getStamps,
-} from '@/features/database/repository';
-import { api } from '@/features/traQ/api';
+} from '@traq-ing/database';
+import { api } from '@/traQ/api';
 import { tokenKey, traqAuthRoutes } from './auth';
 import { Hono } from 'hono';
 import { getCookie } from 'hono/cookie';
 import { StatusCode } from 'hono/utils/http-status';
-import { updateMessages } from '@/features/traQ';
+import { updateMessages } from '@/traQ';
 
 const app = new Hono<{
   Variables: { token: string };

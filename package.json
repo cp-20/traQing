@@ -3,48 +3,26 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "npm-run-all --parallel dev:client dev:server",
-    "dev:client": "vite",
-    "dev:server": "bun run --watch ./src/server/index.ts",
-    "build:client": "tsc && vite build",
-    "lint": "eslint ./src/**/*.ts ./src/**/*.tsx",
-    "migration": "drizzle-kit generate:sqlite",
-    "collect-data": "bun run ./src/features/traQ/runner.ts",
-    "start": "npm-run-all --parallel start:client start:server",
-    "start:client": "vite preview --host",
-    "start:server": "bun run ./src/server/index.ts"
-  },
-  "dependencies": {
-    "@mantine/core": "^7.8.1",
-    "@mantine/hooks": "^7.8.1",
-    "@tabler/icons-react": "^3.3.0",
-    "chart.js": "^4.4.2",
-    "clsx": "^2.1.1",
-    "drizzle-orm": "^0.30.9",
-    "hono": "^4.2.8",
-    "jotai": "^2.8.0",
-    "js-sha256": "^0.11.0",
-    "react": "^18.3.1",
-    "react-chartjs-2": "^5.2.0",
-    "react-dom": "^18.3.1",
-    "traq-bot-ts": "^1.2.1",
-    "vite-tsconfig-paths": "^4.3.2",
-    "zod": "^3.23.4"
+    "dev": "npm-run-all --parallel dev:*",
+    "dev:database": "bun --filter \"@traq-ing/database\" dev",
+    "dev:client": "bun --filter \"@traq-ing/client\" dev",
+    "dev:server": "bun --filter \"@traq-ing/server\" dev",
+    "build": "npm-run-all --parallel build:*",
+    "build:database": "bun --filter \"@traq-ing/database\" build",
+    "build:client": "bun --filter \"@traq-ing/client\" build",
+    "build:server": "bun --filter \"@traq-ing/server\" build",
+    "start": "npm-run-all --parallel start:*",
+    "start:client": "bun --filter \"@traq-ing/client\" start",
+    "start:server": "bun --filter \"@traq-ing/server\" start",
+    "migration": "bun --filter \"@traq-ing/database\" migration"
   },
   "devDependencies": {
-    "@types/react": "^18.3.1",
-    "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react-swc": "^3.6.0",
-    "autoprefixer": "^10.4.19",
-    "bun-types": "latest",
-    "drizzle-kit": "^0.20.17",
-    "npm-run-all2": "^6.1.2",
-    "postcss": "^8.4.38",
-    "postcss-preset-mantine": "^1.15.0",
-    "postcss-simple-vars": "^7.0.1",
-    "tailwindcss": "^3.4.3",
-    "typescript": "^5.4.5",
-    "vite": "^5.2.10"
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.5.2"
   }
 }
