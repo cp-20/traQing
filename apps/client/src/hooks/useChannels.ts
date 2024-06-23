@@ -1,3 +1,4 @@
+import { client } from '@/features/api';
 import { atom, useAtom } from 'jotai';
 import { useCallback, useEffect } from 'react';
 import type { Channel } from 'traq-bot-ts';
@@ -35,7 +36,11 @@ export const useChannels = () => {
 
   useEffect(() => {
     const fetchChannels = async () => {
-      const res = await fetch('/api/channels');
+      const res = await client.channels.$get();
+      if (!res.ok) {
+        console.error('Failed to fetch channels');
+        return;
+      }
       const data = await res.json();
       setChannels(data);
     };

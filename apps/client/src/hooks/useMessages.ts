@@ -1,4 +1,5 @@
-import { MessagesQuery } from '@/features/database/repository';
+import { client } from '@/features/api';
+import { MessagesQuery } from '@traq-ing/database';
 import { useEffect, useState } from 'react';
 
 type Result<Q extends MessagesQuery> = {
@@ -16,9 +17,14 @@ export const useMessages = <Q extends MessagesQuery>(query: Q) => {
   useEffect(() => {
     setLoading(true);
     const fetchMessages = async () => {
-      const queryStr = encodeURIComponent(JSON.stringify(query));
-      const res = await fetch(`/api/messages?query=${queryStr}`);
-      const data = await res.json();
+      const res = await client.messages.$get({
+        query: {
+          ...query,
+          limit: query.limit?.toString(),
+          offset: query.offset?.toString(),
+        },
+      });
+      const data = (await res.json()) as Result<Q>[];
       setMessages(data);
       setLoading(false);
     };

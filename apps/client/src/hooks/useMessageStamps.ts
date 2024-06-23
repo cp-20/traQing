@@ -1,3 +1,4 @@
+import { client } from '@/features/api';
 import { atom, useAtom } from 'jotai';
 import { useCallback, useEffect } from 'react';
 import type { Stamp } from 'traq-bot-ts';
@@ -22,7 +23,11 @@ export const useMessageStamps = () => {
 
   useEffect(() => {
     const fetchStamps = async () => {
-      const res = await fetch('/api/message-stamps');
+      const res = await client['message-stamps'].$get();
+      if (!res.ok) {
+        console.error('Failed to fetch stamps');
+        return;
+      }
       const data = await res.json();
       setStamps(data);
     };

@@ -1,3 +1,4 @@
+import { client } from '@/features/api';
 import { atom, useAtom } from 'jotai';
 import { useCallback, useEffect } from 'react';
 import type { User } from 'traq-bot-ts';
@@ -22,7 +23,11 @@ export const useUsers = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const res = await fetch('/api/users');
+      const res = await client.users.$get();
+      if (!res.ok) {
+        console.error('Failed to fetch users');
+        return;
+      }
       const data = await res.json();
       setUsers(data);
     };

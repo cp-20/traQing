@@ -1,4 +1,4 @@
-import { MessagesQuery } from '@/features/database/repository';
+import { MessagesQuery } from '@traq-ing/database';
 import { useChannels } from '@/hooks/useChannels';
 
 export const channelRankingQuery = {

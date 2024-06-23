@@ -78,49 +78,49 @@ export const sendTraqAuthTokenRequest = (
 export const traqAuthRoutes = () => {
   const app = new Hono();
 
-  app.get('/request', async (c) => {
-    const { redirectUri, codeVerifier, state } = getTraqAuthCodeRequestUrl();
-    setCookie(c, codeVerifierKey(state), codeVerifier, {
-      maxAge: 60 * 60,
-      secure: true,
-      httpOnly: true,
-      sameSite: 'Lax',
+  const routes = app
+    .get('/request', async (c) => {
+      const { redirectUri, codeVerifier, state } = getTraqAuthCodeRequestUrl();
+      setCookie(c, codeVerifierKey(state), codeVerifier, {
+        maxAge: 60 * 60,
+        secure: true,
+        httpOnly: true,
+        sameSite: 'Lax',
+      });
+      return c.redirect(redirectUri);
+    })
+    .get('/callback', async (c) => {
+      const code = c.req.query('code');
+      const state = c.req.query('state');
+      if (typeof code !== 'string' || typeof state !== 'string') {
+        c.status(400);
+        return c.redirect('/');
+      }
+
+      const codeVerifier = getCookie(c, codeVerifierKey(state));
+      if (typeof codeVerifier !== 'string') {
+        c.status(400);
+        return c.redirect('/');
+      }
+
+      const tokenRes = await sendTraqAuthTokenRequest(code, codeVerifier);
+      const tokenData = await tokenRes.json();
+
+      const token = tokenData.access_token;
+      deleteCookie(c, codeVerifierKey(state));
+      if (typeof token !== 'string') {
+        c.status(500);
+        return c.redirect('/');
+      }
+
+      setCookie(c, tokenKey, token, {
+        secure: true,
+        httpOnly: true,
+        sameSite: 'None',
+      });
+
+      return c.redirect('/');
     });
-    return c.redirect(redirectUri);
-  });
 
-  app.get('/callback', async (c) => {
-    const code = c.req.query('code');
-    const state = c.req.query('state');
-    if (typeof code !== 'string' || typeof state !== 'string') {
-      c.status(400);
-      return c.redirect('/');
-    }
-
-    const codeVerifier = getCookie(c, codeVerifierKey(state));
-    if (typeof codeVerifier !== 'string') {
-      c.status(400);
-      return c.redirect('/');
-    }
-
-    const tokenRes = await sendTraqAuthTokenRequest(code, codeVerifier);
-    const tokenData = await tokenRes.json();
-
-    const token = tokenData.access_token;
-    deleteCookie(c, codeVerifierKey(state));
-    if (typeof token !== 'string') {
-      c.status(500);
-      return c.redirect('/');
-    }
-
-    setCookie(c, tokenKey, token, {
-      secure: true,
-      httpOnly: true,
-      sameSite: 'None',
-    });
-
-    return c.redirect('/');
-  });
-
-  return app;
+  return routes;
 };

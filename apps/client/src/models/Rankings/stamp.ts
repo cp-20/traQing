@@ -1,4 +1,4 @@
-import { StampsQuery } from '@/features/database/repository';
+import { StampsQuery } from '@traq-ing/database';
 import { useMessageStamps } from '@/hooks/useMessageStamps';
 
 export const stampRankingQuery = {

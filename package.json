@@ -12,7 +12,7 @@
     "dev:database": "bun --filter \"@traq-ing/database\" dev",
     "dev:client": "bun --filter \"@traq-ing/client\" dev",
     "dev:server": "bun --filter \"@traq-ing/server\" dev",
-    "build": "npm-run-all --parallel build:*",
+    "build": "bun run build:database && bun run build:server && bun run build:client",
     "build:database": "bun --filter \"@traq-ing/database\" build",
     "build:client": "bun --filter \"@traq-ing/client\" build",
     "build:server": "bun --filter \"@traq-ing/server\" build",

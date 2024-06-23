@@ -38,14 +38,28 @@ export const MessagesQuerySchema = z
     ]),
     orderBy: z.union([z.literal('date'), z.literal('count')]),
     order: z.union([z.literal('asc'), z.literal('desc')]),
-    limit: z.number(),
-    offset: z.number(),
+    limit: z.preprocess((x) => Number(x), z.number().int().positive()),
+    offset: z.preprocess((x) => Number(x), z.number().int().nonnegative()),
   })
   .partial();
 
 export type MessagesQuery = z.infer<typeof MessagesQuerySchema>;
 
-export const getMessages = async (query: MessagesQuery) => {
+type GetMessagesResult<Q extends MessagesQuery> = Promise<
+  Array<
+    {
+      [K in Q extends { groupBy: infer U }
+        ? U extends undefined
+          ? never
+          : U
+        : never]: string;
+    } & { count: number }
+  >
+>;
+
+export const getMessages = async (
+  query: MessagesQuery
+): GetMessagesResult<MessagesQuery> => {
   const select = {
     month: sql`strftime('%Y-%m', date(${schema.messages.createdAt}, 'localtime'))`,
     day: sql`strftime('%Y-%m-%d', date(${schema.messages.createdAt}, 'localtime'))`,
@@ -140,8 +154,8 @@ export const StampsQuerySchema = z
     ]),
     orderBy: z.union([z.literal('date'), z.literal('count')]),
     order: z.union([z.literal('asc'), z.literal('desc')]),
-    limit: z.number(),
-    offset: z.number(),
+    limit: z.preprocess((x) => Number(x), z.number().int().positive()),
+    offset: z.preprocess((x) => Number(x), z.number().int().nonnegative()),
   })
   .partial();
 

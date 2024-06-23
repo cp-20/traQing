@@ -1,4 +1,4 @@
-import { MessagesQuery } from '@/features/database/repository';
+import { MessagesQuery } from '@traq-ing/database';
 import { useUsers } from '@/hooks/useUsers';
 
 export const userRankingQuery = {

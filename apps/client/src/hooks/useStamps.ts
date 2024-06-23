@@ -1,4 +1,5 @@
-import { StampsQuery } from '@/features/database/repository';
+import { client } from '@/features/api';
+import { StampsQuery } from '@traq-ing/database';
 import { useEffect, useState } from 'react';
 
 type Result<Q extends StampsQuery> = {
@@ -16,9 +17,14 @@ export const useStamps = <Q extends StampsQuery>(query: Q) => {
   useEffect(() => {
     setLoading(true);
     const fetchStamps = async () => {
-      const queryStr = encodeURIComponent(JSON.stringify(query));
-      const res = await fetch(`/api/stamps?query=${queryStr}`);
-      const data = await res.json();
+      const res = await client.stamps.$get({
+        query: {
+          ...query,
+          limit: query.limit?.toString(),
+          offset: query.offset?.toString(),
+        },
+      });
+      const data = (await res.json()) as Result<Q>[];
       setStamps(data);
       setLoading(false);
     };

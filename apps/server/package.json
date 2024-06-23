@@ -3,15 +3,22 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "dev": "bun run --watch ./src/index.ts",
+    "dev": "npm-run-all --parallel dev:*",
+    "dev:server": "bun run --watch ./src/index.ts",
+    "dev:build": "bun run build --watch",
     "lint": "eslint ./src/**/*.ts ./src/**/*.tsx",
     "collect-data": "bun run ./src/traQ/runner.ts",
+    "build": "tsup --config tsup.config.ts",
     "start": "bun run ./src/index.ts"
   },
   "dependencies": {
     "@traq-ing/database": "workspace:*",
-    "hono": "^4.2.8",
+    "@hono/zod-validator": "^0.2.2",
+    "hono": "^4.4.7",
     "js-sha256": "^0.11.0",
     "zod": "^3.23.4",
     "traq-bot-ts": "^1.2.1"
