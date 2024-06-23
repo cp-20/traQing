@@ -33,6 +33,7 @@ export const MessagesQuerySchema = z
     groupBy: z.union([
       z.literal('month'),
       z.literal('day'),
+      z.literal('hour'),
       z.literal('user'),
       z.literal('channel'),
     ]),
@@ -61,8 +62,9 @@ export const getMessages = async (
   query: MessagesQuery
 ): GetMessagesResult<MessagesQuery> => {
   const select = {
-    month: sql`strftime('%Y-%m', date(${schema.messages.createdAt}, 'localtime'))`,
-    day: sql`strftime('%Y-%m-%d', date(${schema.messages.createdAt}, 'localtime'))`,
+    month: sql`strftime('%Y-%m', date(${schema.messages.createdAt}), 'localtime')`,
+    day: sql`strftime('%Y-%m-%d', date(${schema.messages.createdAt}), 'localtime')`,
+    hour: sql`strftime('%H', datetime(${schema.messages.createdAt}), 'localtime')`,
     user: schema.messages.userId,
     channel: schema.messages.channelId,
   }[query.groupBy ?? 'day'];
@@ -70,6 +72,7 @@ export const getMessages = async (
   const groupBy = {
     month: sql`strftime('%Y-%m', date(${schema.messages.createdAt}), 'localtime')`,
     day: sql`strftime('%Y-%m-%d', date(${schema.messages.createdAt}), 'localtime')`,
+    hour: sql`strftime('%H', datetime(${schema.messages.createdAt}), 'localtime')`,
     user: schema.messages.userId,
     channel: schema.messages.channelId,
   }[query.groupBy ?? 'day'];
@@ -163,16 +166,16 @@ export type StampsQuery = z.infer<typeof StampsQuerySchema>;
 
 export const getStamps = async (query: StampsQuery) => {
   const select = {
-    month: sql`strftime('%Y-%m', date(${schema.messageStamps.createdAt}))`,
-    day: sql`strftime('%Y-%m-%d', date(${schema.messageStamps.createdAt}))`,
+    month: sql`strftime('%Y-%m', date(${schema.messageStamps.createdAt}), 'localtime')`,
+    day: sql`strftime('%Y-%m-%d', date(${schema.messageStamps.createdAt}), 'localtime')`,
     user: schema.messageStamps.userId,
     channel: schema.messageStamps.channelId,
     stamp: schema.messageStamps.stampId,
   }[query.groupBy ?? 'day'];
 
   const groupBy = {
-    month: sql`strftime('%Y-%m', date(${schema.messageStamps.createdAt}))`,
-    day: sql`strftime('%Y-%m-%d', date(${schema.messageStamps.createdAt}))`,
+    month: sql`strftime('%Y-%m', date(${schema.messageStamps.createdAt}), 'localtime')`,
+    day: sql`strftime('%Y-%m-%d', date(${schema.messageStamps.createdAt}), 'localtime')`,
     user: schema.messageStamps.userId,
     channel: schema.messageStamps.channelId,
     stamp: schema.messageStamps.stampId,
