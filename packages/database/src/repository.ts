@@ -199,6 +199,7 @@ export const getStamps = async (query: StampsQuery) => {
     query.userId && eq(schema.messageStamps.userId, query.userId),
     query.messageUserId && eq(schema.messages.userId, query.messageUserId),
     query.channelId && eq(schema.messageStamps.channelId, query.channelId),
+    query.stampId && eq(schema.messageStamps.stampId, query.stampId),
     query.after &&
       gt(
         schema.messageStamps.createdAtTimestamp,
