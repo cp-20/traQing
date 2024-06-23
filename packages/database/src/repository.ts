@@ -104,7 +104,7 @@ export const getMessages = async (
     .from(schema.messages)
     .where(and(...conditions.filter((x) => !!x)))
     .orderBy(orderBy)
-    .limit(Math.min(query?.limit ?? 1000, 10000))
+    .limit(Math.min(query?.limit ?? 10000, 10000))
     .offset(query?.offset ?? 0);
 
   let newQuery;
@@ -208,7 +208,7 @@ export const getStamps = async (query: StampsQuery) => {
     .from(schema.messageStamps)
     .where(and(...conditions.filter((x) => !!x)))
     .orderBy(orderBy)
-    .limit(Math.min(query?.limit ?? 1000, 10000))
+    .limit(Math.min(query?.limit ?? 10000, 10000))
     .offset(query?.offset ?? 0);
 
   let newQuery;
