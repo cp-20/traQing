@@ -1,15 +1,19 @@
+import { NeedLogin } from '@/components/NeedLogin';
+import { RouteAuthGuard } from '@/components/RouteAuthGuard';
+import { router } from '@/pages/router';
 import { MantineProvider } from '@mantine/core';
 
 import '@mantine/core/styles.css';
-import { useAuth } from '@/hooks/useAuth';
-import { Dashboard } from '@/pages/dashboard';
-import { LandingPage } from '@/pages';
+import { RouterProvider } from 'react-router-dom';
 
 const App = () => {
-  const { me } = useAuth();
-
   return (
-    <MantineProvider>{me ? <Dashboard /> : <LandingPage />}</MantineProvider>
+    <MantineProvider>
+      <RouteAuthGuard
+        component={<RouterProvider router={router} />}
+        fallback={<NeedLogin />}
+      />
+    </MantineProvider>
   );
 };
 
