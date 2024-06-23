@@ -2,12 +2,10 @@ FROM oven/bun:slim
 
 WORKDIR /app
 
-COPY ./package.json ./bun.lockb /app/
+COPY . /app
 
 RUN bun i
 
-COPY . /app
-
-RUN bun run build:client
+RUN bun run build
 
 CMD ["bun", "run", "start"]

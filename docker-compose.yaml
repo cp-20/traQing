@@ -1,8 +1,5 @@
-version: '3'
-
 services:
   traq-ing:
-    container_name: traq-ing
     build:
       context: .
       dockerfile: Dockerfile
@@ -10,6 +7,6 @@ services:
     ports:
       - '4173:4173'
     env_file:
-      - .env
+      - ./apps/server/.env
     volumes:
       - ./traq.db:/app/traq.db
