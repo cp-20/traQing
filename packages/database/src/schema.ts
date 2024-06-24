@@ -1,9 +1,11 @@
+import { count } from 'drizzle-orm';
 import {
   text,
   integer,
   sqliteTable,
   primaryKey,
   index,
+  sqliteView,
 } from 'drizzle-orm/sqlite-core';
 
 export const messages = sqliteTable(
@@ -26,6 +28,16 @@ export const messages = sqliteTable(
     ),
     pinnedIndex: index('messages_pinned_idx').on(t.pinned),
   })
+);
+
+export const messagesRanking = sqliteView('messages_ranking').as((qb) =>
+  qb
+    .select({
+      user: messages.userId,
+      count: count(messages.userId).as('count'),
+    })
+    .from(messages)
+    .groupBy(messages.userId)
 );
 
 export const messageStamps = sqliteTable(
@@ -52,4 +64,28 @@ export const messageStamps = sqliteTable(
       'message_stamps_created_at_timestamp_idx'
     ).on(t.createdAtTimestamp),
   })
+);
+
+export const gaveMessageStampsRanking = sqliteView(
+  'gave_message_stamps_ranking'
+).as((qb) =>
+  qb
+    .select({
+      user: messageStamps.userId,
+      count: count(messageStamps.userId).as('count'),
+    })
+    .from(messageStamps)
+    .groupBy(messageStamps.userId)
+);
+
+export const receivedMessageStampsRanking = sqliteView(
+  'received_message_stamps_ranking'
+).as((qb) =>
+  qb
+    .select({
+      user: messages.userId,
+      count: count(messages.userId).as('count'),
+    })
+    .from(messages)
+    .groupBy(messages.userId)
 );

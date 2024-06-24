@@ -219,12 +219,13 @@ export const getStamps = async (query: StampsQuery) => {
     })
     .from(schema.messageStamps);
 
-  const joinedQuery = query.messageUserId
-    ? initialQuery.leftJoin(
-        schema.messages,
-        eq(schema.messages.id, schema.messageStamps.messageId)
-      )
-    : initialQuery;
+  const joinedQuery =
+    query.messageUserId || query.groupBy === 'messageUser'
+      ? initialQuery.leftJoin(
+          schema.messages,
+          eq(schema.messages.id, schema.messageStamps.messageId)
+        )
+      : initialQuery;
 
   const groupedQuery = query.groupBy
     ? joinedQuery.groupBy(groupBy)
@@ -239,4 +240,16 @@ export const getStamps = async (query: StampsQuery) => {
   const results = await resultQuery.execute();
 
   return results;
+};
+
+export const getMessagesRanking = async () => {
+  return await db.select().from(schema.messagesRanking).execute();
+};
+
+export const getGaveMessageStampsRanking = async () => {
+  return await db.select().from(schema.gaveMessageStampsRanking).execute();
+};
+
+export const getReceivedMessageStampsRanking = async () => {
+  return await db.select().from(schema.receivedMessageStampsRanking).execute();
 };
