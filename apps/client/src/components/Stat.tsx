@@ -16,7 +16,7 @@ export const Stat: FC<StatProps> = ({ label, value, unit, annotation }) => {
           <span className="text-3xl text-blue-600 font-medium">{value}</span>
           {unit && <span>{unit}</span>}
         </div>
-        {annotation && <div className="text-xs">{annotation}</div>}
+        {annotation && <div className="text-xs mt-1">{annotation}</div>}
       </div>
     </div>
   );
