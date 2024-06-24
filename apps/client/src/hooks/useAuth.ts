@@ -1,7 +1,8 @@
 import { atom, useAtom } from 'jotai';
 import { useEffect } from 'react';
+import type { MyUserDetail } from 'traq-bot-ts';
 
-const meAtom = atom(null);
+const meAtom = atom<MyUserDetail | null>(null);
 export const useAuth = () => {
   const [me, setMe] = useAtom(meAtom);
 
