@@ -11,6 +11,7 @@ import { getCookie } from 'hono/cookie';
 import { StatusCode } from 'hono/utils/http-status';
 import { updateMessages } from '@/traQ';
 import { zValidator } from '@hono/zod-validator';
+import { z } from 'zod';
 
 const app = new Hono<{
   Variables: { token: string };
@@ -62,7 +63,7 @@ const routes = app
 
     return c.json(await res.json(), 200);
   })
-  .get('/files/:id', async (c) => {
+  .on('GET', ['/files/:id', '/v3/files/:id'], async (c) => {
     const id = c.req.param('id');
     const url = `https://q.trap.jp/api/v3/files/${id}`;
     const res = await fetch(url, {
@@ -129,6 +130,16 @@ const routes = app
       return c.json({ message: 'Failed to fetch users' }, 500);
     }
   })
+  .get('/groups', async (c) => {
+    try {
+      const userGroups = await api.groups.getUserGroups();
+      if (!userGroups.ok) throw new Error('Failed to fetch user groups');
+      return c.json(userGroups.data, 200);
+    } catch (err) {
+      console.error(err);
+      return c.json({ message: 'Failed to fetch user groups' }, 500);
+    }
+  })
   .get('/channels', async (c) => {
     try {
       const channels = await api.channels.getChannels();
@@ -147,6 +158,42 @@ const routes = app
     } catch (err) {
       console.error(err);
       return c.json({ message: 'Failed to fetch stamps' }, 500);
+    }
+  })
+  .get('/og', zValidator('query', z.object({ url: z.string() })), async (c) => {
+    const { url } = c.req.valid('query');
+    try {
+      const res = await fetch(url, { headers: { 'User-Agent': 'bot' } });
+      if (!res.ok) throw new Error('Failed to fetch og');
+      const data = await res.text();
+      const metaTags = data.match(/<meta [^>]+>/g) ?? [];
+      const parsedMetaTags = metaTags.map((tag) => {
+        const properties = tag.matchAll(/([a-z]+)="([^"]+)"/g);
+        const props = Array.from(properties).map(
+          (prop) => [prop[1], prop[2]] as const
+        );
+        const propMap = Object.fromEntries(props);
+        return propMap;
+      });
+
+      const title = parsedMetaTags.find(
+        (tag) => tag.property === 'og:title'
+      )?.content;
+      const description = parsedMetaTags.find(
+        (tag) => tag.property === 'og:description'
+      )?.content;
+      const image = parsedMetaTags.find(
+        (tag) => tag.property === 'og:image'
+      )?.content;
+      const origin = new URL(url).host;
+      const type = ['twitter.com', 'x.com'].includes(origin)
+        ? 'summary'
+        : 'article';
+
+      return c.json({ title, description, image, origin, type }, 200);
+    } catch (err) {
+      console.error(err);
+      return c.json({ message: 'Failed to fetch og' }, 500);
     }
   });
 
