@@ -1,19 +1,10 @@
-import { drizzle } from 'drizzle-orm/bun-sqlite';
-import { migrate } from 'drizzle-orm/bun-sqlite/migrator';
+import { db } from '@/db';
 import * as schema from './schema';
-import Database from 'bun:sqlite';
 import { and, asc, count, desc, eq, gt, lt, sql } from 'drizzle-orm';
 import { z } from 'zod';
 
 type Message = typeof schema.messages.$inferSelect;
 type MessageStamp = typeof schema.messageStamps.$inferSelect;
-
-const dbUrl = process.env.DB_URL;
-if (!dbUrl) throw new Error('DB_URL is not set');
-
-const database = new Database(dbUrl);
-const db = drizzle(database, { schema });
-migrate(db, { migrationsFolder: '../../drizzle' });
 
 export const insertMessages = async (messages: Message[]) => {
   await db
@@ -44,6 +35,10 @@ export const MessagesQuerySchema = z
   })
   .partial();
 
+const sqlGetMonth = <T>(date: T) => sql`TO_CHAR(${date}, 'YYYY-MM')`;
+const sqlGetDate = <T>(date: T) => sql`TO_CHAR(${date}, 'YYYY-MM-DD')`;
+const sqlGetHour = <T>(date: T) => sql`TO_CHAR(${date}, 'HH24')`;
+
 export type MessagesQuery = z.infer<typeof MessagesQuerySchema>;
 
 type GetMessagesResult<Q extends MessagesQuery> = Promise<
@@ -62,17 +57,17 @@ export const getMessages = async (
   query: MessagesQuery
 ): GetMessagesResult<MessagesQuery> => {
   const select = {
-    month: sql`strftime('%Y-%m', date(${schema.messages.createdAt}), 'localtime')`,
-    day: sql`strftime('%Y-%m-%d', date(${schema.messages.createdAt}), 'localtime')`,
-    hour: sql`strftime('%H', datetime(${schema.messages.createdAt}), 'localtime')`,
+    month: sqlGetMonth(schema.messages.createdAt),
+    day: sqlGetDate(schema.messages.createdAt),
+    hour: sqlGetHour(schema.messages.createdAt),
     user: schema.messages.userId,
     channel: schema.messages.channelId,
   }[query.groupBy ?? 'day'];
 
   const groupBy = {
-    month: sql`strftime('%Y-%m', date(${schema.messages.createdAt}), 'localtime')`,
-    day: sql`strftime('%Y-%m-%d', date(${schema.messages.createdAt}), 'localtime')`,
-    hour: sql`strftime('%H', datetime(${schema.messages.createdAt}), 'localtime')`,
+    month: sqlGetMonth(schema.messages.createdAt),
+    day: sqlGetDate(schema.messages.createdAt),
+    hour: sqlGetHour(schema.messages.createdAt),
     user: schema.messages.userId,
     channel: schema.messages.channelId,
   }[query.groupBy ?? 'day'];
@@ -80,26 +75,18 @@ export const getMessages = async (
   const order = query.order === 'asc' ? asc : desc;
 
   const orderBy = {
-    date: order(schema.messages.createdAt),
+    date: query.groupBy ? order(groupBy) : order(schema.messages.createdAt),
     count: order(count(schema.messages.id)),
   }[query.orderBy ?? 'count'];
 
   const conditions = [
     query.userId && eq(schema.messages.userId, query.userId),
     query.channelId && eq(schema.messages.channelId, query.channelId),
-    query.after &&
-      gt(
-        schema.messages.createdAtTimestamp,
-        Math.floor(new Date(query.after).getTime() / 1000)
-      ),
-    query.before &&
-      lt(
-        schema.messages.createdAtTimestamp,
-        Math.floor(new Date(query.before).getTime() / 1000)
-      ),
+    query.after && gt(schema.messages.createdAt, new Date(query.after)),
+    query.before && lt(schema.messages.createdAt, new Date(query.before)),
   ];
 
-  let initialQuery = db
+  const initialQuery = db
     .select({
       ...(query.groupBy ? { [query.groupBy]: select } : {}),
       count: count(schema.messages.id),
@@ -110,14 +97,11 @@ export const getMessages = async (
     .limit(Math.min(query?.limit ?? 10000, 10000))
     .offset(query?.offset ?? 0);
 
-  let newQuery;
-  if (query.groupBy) {
-    newQuery = initialQuery.groupBy(groupBy);
-  }
+  const finalQuery = query.groupBy
+    ? initialQuery.groupBy(groupBy)
+    : initialQuery;
 
-  const dbQuery = newQuery ?? initialQuery;
-
-  const results = await dbQuery.execute();
+  const results = await finalQuery.execute();
 
   return results;
 };
@@ -169,8 +153,8 @@ export type StampsQuery = z.infer<typeof StampsQuerySchema>;
 
 export const getStamps = async (query: StampsQuery) => {
   const select = {
-    month: sql`strftime('%Y-%m', date(${schema.messageStamps.createdAt}), 'localtime')`,
-    day: sql`strftime('%Y-%m-%d', date(${schema.messageStamps.createdAt}), 'localtime')`,
+    month: sqlGetMonth(schema.messageStamps.createdAt),
+    day: sqlGetDate(schema.messageStamps.createdAt),
     user: schema.messageStamps.userId,
     message: schema.messageStamps.messageId,
     messageUser: schema.messages.userId,
@@ -179,8 +163,8 @@ export const getStamps = async (query: StampsQuery) => {
   }[query.groupBy ?? 'day'];
 
   const groupBy = {
-    month: sql`strftime('%Y-%m', date(${schema.messageStamps.createdAt}), 'localtime')`,
-    day: sql`strftime('%Y-%m-%d', date(${schema.messageStamps.createdAt}), 'localtime')`,
+    month: sqlGetMonth(schema.messageStamps.createdAt),
+    day: sqlGetDate(schema.messageStamps.createdAt),
     user: schema.messageStamps.userId,
     message: schema.messageStamps.messageId,
     messageUser: schema.messages.userId,
@@ -200,22 +184,14 @@ export const getStamps = async (query: StampsQuery) => {
     query.messageUserId && eq(schema.messages.userId, query.messageUserId),
     query.channelId && eq(schema.messageStamps.channelId, query.channelId),
     query.stampId && eq(schema.messageStamps.stampId, query.stampId),
-    query.after &&
-      gt(
-        schema.messageStamps.createdAtTimestamp,
-        sql`strftime('%s', ${query.after})`
-      ),
-    query.before &&
-      lt(
-        schema.messageStamps.createdAtTimestamp,
-        sql`strftime('%s', ${query.before})`
-      ),
+    query.after && gt(schema.messageStamps.createdAt, new Date(query.after)),
+    query.before && lt(schema.messageStamps.createdAt, new Date(query.before)),
   ];
 
   const initialQuery = db
     .select({
       ...(query.groupBy ? { [query.groupBy]: select } : {}),
-      count: count(schema.messageStamps.stampId),
+      count: count(),
     })
     .from(schema.messageStamps);
 

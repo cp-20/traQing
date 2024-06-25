@@ -4,16 +4,9 @@
   "entries": [
     {
       "idx": 0,
-      "version": "5",
-      "when": 1714193228377,
-      "tag": "0000_tense_spencer_smythe",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1719215910165,
-      "tag": "0001_clumsy_kat_farrell",
+      "version": "7",
+      "when": 1719243653764,
+      "tag": "0000_futuristic_karma",
       "breakpoints": true
     }
   ]

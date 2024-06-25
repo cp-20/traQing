@@ -1,11 +1,11 @@
 import type { Config } from 'drizzle-kit';
 
-const dbUrl = process.env.DB_URL;
-if (!dbUrl) throw new Error('DB_URL is not set');
+const connectionString = process.env.DATABASE_URL;
+if (!connectionString) throw new Error('DATABASE_URL is not set');
 
 export default {
   schema: './src/schema.ts',
   out: '../../drizzle',
-  driver: 'better-sqlite',
-  dbCredentials: { url: dbUrl },
+  dialect: 'postgresql',
+  dbCredentials: { url: connectionString },
 } satisfies Config;

@@ -1,36 +1,35 @@
 import { count } from 'drizzle-orm';
 import {
-  text,
-  integer,
-  sqliteTable,
-  primaryKey,
   index,
-  sqliteView,
-} from 'drizzle-orm/sqlite-core';
+  integer,
+  pgTable,
+  primaryKey,
+  text,
+  uuid,
+  timestamp,
+  boolean,
+  pgMaterializedView,
+} from 'drizzle-orm/pg-core';
 
-export const messages = sqliteTable(
+export const messages = pgTable(
   'messages',
   {
-    id: text('id').primaryKey().notNull(),
-    userId: text('user_id').notNull(),
-    channelId: text('channel_id').notNull(),
+    id: uuid('id').primaryKey().notNull(),
+    userId: uuid('user_id').notNull(),
+    channelId: uuid('channel_id').notNull(),
     content: text('content').notNull(),
-    createdAt: text('created_at').notNull(),
-    createdAtTimestamp: integer('created_at_timestamp').notNull(),
-    pinned: integer('pinned').notNull(),
+    createdAt: timestamp('created_at').notNull(),
+    pinned: boolean('pinned').notNull(),
   },
   (t) => ({
     userIdIndex: index('messages_user_id_idx').on(t.userId),
     channelIdIndex: index('messages_channel_id_idx').on(t.channelId),
     createdAtIndex: index('messages_created_at_idx').on(t.createdAt),
-    createdAtTimestampIndex: index('messages_created_at_timestamp_idx').on(
-      t.createdAtTimestamp
-    ),
     pinnedIndex: index('messages_pinned_idx').on(t.pinned),
   })
 );
 
-export const messagesRanking = sqliteView('messages_ranking').as((qb) =>
+export const messagesRanking = pgMaterializedView('messages_ranking').as((qb) =>
   qb
     .select({
       user: messages.userId,
@@ -40,18 +39,17 @@ export const messagesRanking = sqliteView('messages_ranking').as((qb) =>
     .groupBy(messages.userId)
 );
 
-export const messageStamps = sqliteTable(
+export const messageStamps = pgTable(
   'message_stamps',
   {
-    userId: text('user_id').notNull(),
-    stampId: text('stamp_id').notNull(),
-    messageId: text('message_id')
+    userId: uuid('user_id').notNull(),
+    stampId: uuid('stamp_id').notNull(),
+    messageId: uuid('message_id')
       .notNull()
       .references(() => messages.id),
-    channelId: text('channel_id'),
+    channelId: uuid('channel_id'),
     count: integer('count').notNull(),
-    createdAt: text('created_at').notNull(),
-    createdAtTimestamp: integer('created_at_timestamp').notNull(),
+    createdAt: timestamp('created_at').notNull(),
   },
   (t) => ({
     pk: primaryKey({ columns: [t.userId, t.stampId, t.messageId] }),
@@ -60,13 +58,10 @@ export const messageStamps = sqliteTable(
     channelIdIndex: index('message_stamps_channel_id_idx').on(t.channelId),
     messageIdIndex: index('message_stamps_message_id_idx').on(t.messageId),
     createdAtIndex: index('message_stamps_created_at_idx').on(t.createdAt),
-    createdAtTimestampIndex: index(
-      'message_stamps_created_at_timestamp_idx'
-    ).on(t.createdAtTimestamp),
   })
 );
 
-export const gaveMessageStampsRanking = sqliteView(
+export const gaveMessageStampsRanking = pgMaterializedView(
   'gave_message_stamps_ranking'
 ).as((qb) =>
   qb
@@ -78,7 +73,7 @@ export const gaveMessageStampsRanking = sqliteView(
     .groupBy(messageStamps.userId)
 );
 
-export const receivedMessageStampsRanking = sqliteView(
+export const receivedMessageStampsRanking = pgMaterializedView(
   'received_message_stamps_ranking'
 ).as((qb) =>
   qb
