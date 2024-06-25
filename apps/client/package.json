@@ -15,14 +15,18 @@
     "@mantine/core": "^7.8.1",
     "@mantine/hooks": "^7.8.1",
     "@tabler/icons-react": "^3.3.0",
+    "@tailwindcss/container-queries": "^0.1.1",
+    "@traptitech/traq-markdown-it": "^6.3.0",
     "chart.js": "^4.4.2",
     "clsx": "^2.1.1",
+    "deepmerge": "^4.3.1",
     "hono": "^4.4.7",
     "jotai": "^2.8.0",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.23.1",
+    "swr": "^2.2.5",
     "vite-tsconfig-paths": "^4.3.2"
   },
   "devDependencies": {

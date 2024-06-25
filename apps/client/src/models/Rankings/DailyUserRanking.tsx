@@ -4,7 +4,7 @@ import { FC, useMemo } from 'react';
 import { useUserRankingData, userRankingQuery } from './user';
 import {
   DailyRankingProps,
-  getCommonChartOptions,
+  getCommonRankingChartOptions,
 } from '@/models/Rankings/common';
 import { Bar } from 'react-chartjs-2';
 import clsx from 'clsx';
@@ -24,7 +24,7 @@ export const DailyUserRanking: FC<DailyRankingProps> = ({ range }) => {
 
   return (
     <div className={clsx(loading && 'opacity-70')}>
-      <Bar options={getCommonChartOptions()} data={data} height={300} />
+      <Bar options={getCommonRankingChartOptions()} data={data} height={300} />
     </div>
   );
 };

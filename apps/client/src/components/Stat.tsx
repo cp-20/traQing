@@ -1,3 +1,4 @@
+import { Card } from '@/components/Card';
 import { FC, ReactNode } from 'react';
 
 export type StatProps = {
@@ -9,15 +10,15 @@ export type StatProps = {
 
 export const Stat: FC<StatProps> = ({ label, value, unit, annotation }) => {
   return (
-    <div className="border rounded-md p-4">
+    <Card>
       <div>
-        <div className="text-sm">{label}</div>
+        <div className="text-sm font-bold">{label}</div>
         <div>
-          <span className="text-3xl text-blue-600 font-medium">{value}</span>
+          <span className="text-4xl text-blue-600 font-medium">{value}</span>
           {unit && <span>{unit}</span>}
         </div>
-        {annotation && <div className="text-xs mt-1">{annotation}</div>}
+        {annotation && <div className="text-sm mt-1">{annotation}</div>}
       </div>
-    </div>
+    </Card>
   );
 };

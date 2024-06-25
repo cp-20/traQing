@@ -13,7 +13,7 @@ export const StampRanking: FC<Props> = ({ stats }) => {
     <table className="w-full">
       <tbody>
         {stats.map((stamp, i) => (
-          <tr key={stamp.stamp?.id}>
+          <tr key={i}>
             <td className="w-8">#{i + 1}</td>
             <td className="w-10">
               <img

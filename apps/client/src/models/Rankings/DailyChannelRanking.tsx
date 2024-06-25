@@ -4,7 +4,7 @@ import { FC, useMemo } from 'react';
 import { channelRankingQuery, useChannelRankingData } from './channel';
 import {
   DailyRankingProps,
-  getCommonChartOptions,
+  getCommonRankingChartOptions,
 } from '@/models/Rankings/common';
 import { Bar } from 'react-chartjs-2';
 import clsx from 'clsx';
@@ -25,7 +25,7 @@ export const DailyChannelRanking: FC<DailyRankingProps> = ({ range }) => {
   return (
     <div className={clsx(loading && 'opacity-70')}>
       <Bar
-        options={getCommonChartOptions(fullChannelNames)}
+        options={getCommonRankingChartOptions(fullChannelNames)}
         data={data}
         height={300}
         className={clsx(loading && 'opacity-70')}

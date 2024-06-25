@@ -1,4 +1,8 @@
 import { DailyTimeRange, MonthlyTimeRange } from '@/hooks/useTimeRange';
+import {
+  commonBarChartOptions,
+  mergeOptions,
+} from '@/models/commonChartOptions';
 import { ChartOptions } from 'chart.js';
 import {
   Chart as ChartJS,
@@ -10,16 +14,9 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
-export const getCommonChartOptions = (fullLabels?: string[]) =>
-  ({
+export const getCommonRankingChartOptions = (fullLabels?: string[]) =>
+  mergeOptions(commonBarChartOptions, {
     indexAxis: 'y' as const,
-    elements: {
-      bar: {
-        borderWidth: 1,
-        borderColor: '#74c0fc',
-        backgroundColor: '#228be633',
-      },
-    },
     plugins: {
       tooltip: {
         enabled: true,
@@ -32,25 +29,11 @@ export const getCommonChartOptions = (fullLabels?: string[]) =>
     },
     scales: {
       y: {
-        grid: {
-          display: false,
-        },
-        border: {
-          display: false,
-        },
         afterFit: (scaleInstance) => {
           scaleInstance.width = 150;
         },
-        ticks: {
-          font: { size: 12 },
-        },
       },
     },
-    font: {
-      family: 'Noto Sans JP',
-    },
-    responsive: true,
-    maintainAspectRatio: false,
   } satisfies ChartOptions);
 
 export type DailyRankingProps = {

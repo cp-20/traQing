@@ -1,0 +1,41 @@
+.traq-markdown {
+  word-wrap: break-word;
+}
+
+.traq-markdown h2 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0 0 8px 0;
+}
+
+.traq-markdown p {
+  margin: 0 0 8px 0;
+  padding: 0;
+}
+
+.traq-markdown a {
+  color: rgb(37,99,235);
+  text-decoration: none;
+  font-weight: medium;
+}
+
+.traq-markdown a:hover {
+  text-decoration: underline;
+}
+
+.traq-markdown .emoji {
+  height: 24px;
+  width: 24px;
+  display: inline-block;
+  background-size: contain;
+  text-indent: 24px;
+  overflow: hidden;
+  vertical-align: -4px;
+}
+
+.traq-markdown blockquote {
+  border-left: 4px solid #e5e7eb;
+  padding-left: 8px;
+  margin-left: 0;
+}
+
