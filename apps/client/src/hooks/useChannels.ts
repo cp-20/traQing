@@ -1,20 +1,15 @@
-import { client } from '@/features/api';
-import { atom, useAtom } from 'jotai';
-import { useCallback, useEffect } from 'react';
-import type { Channel } from 'traq-bot-ts';
-
-const channelsAtom = atom<Channel[]>([]);
+import { useChannelsData } from '@/hooks/useServerData';
+import { useCallback } from 'react';
 
 export const useChannels = () => {
-  const [channels, setChannels] = useAtom(channelsAtom);
+  const { data: channels } = useChannelsData();
 
   const getChannelName = useCallback(
-    (id: string): string => {
+    (id: string): string | undefined => {
+      if (!channels) return undefined;
+
       const channel = channels.find((c) => c.id === id);
-      if (!channel) {
-        console.error(`Channel not found: ${id}`);
-        return 'Unknown';
-      }
+      if (!channel) return undefined;
 
       const parent = channels.find((c) => c.id === channel.parentId);
       if (parent) {
@@ -27,26 +22,14 @@ export const useChannels = () => {
   );
 
   const getSummedChannelName = useCallback(
-    (id: string): string => {
+    (id: string) => {
       const name = getChannelName(id);
+      if (!name) return undefined;
+
       return name.replaceAll(/([^/])[^/]*\//g, '$1/');
     },
     [channels, getChannelName]
   );
-
-  useEffect(() => {
-    const fetchChannels = async () => {
-      const res = await client.channels.$get();
-      if (!res.ok) {
-        console.error('Failed to fetch channels');
-        return;
-      }
-      const data = await res.json();
-      setChannels(data);
-    };
-
-    fetchChannels();
-  }, [setChannels]);
 
   return { channels, getChannelName, getSummedChannelName };
 };

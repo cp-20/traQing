@@ -13,7 +13,7 @@ export const useChannelRankingData = (
 ) => {
   const { getChannelName, getSummedChannelName, channels } = useChannels();
 
-  if (messages.length === 0 || channels.length === 0) {
+  if (messages.length === 0 || channels === undefined) {
     const emptyArray = new Array(channelRankingQuery.limit).fill('');
     const data = {
       labels: emptyArray,

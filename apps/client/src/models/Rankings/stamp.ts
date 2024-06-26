@@ -13,9 +13,9 @@ export const useStampRankingData = (
 ) => {
   const { stamps: messageStamps, getStamp } = useMessageStamps();
 
-  if (stamps.length === 0 || messageStamps.length === 0) {
+  if (stamps.length === 0 || messageStamps === undefined) {
     const emptyArray = new Array(stampRankingQuery.limit);
-    return emptyArray.map(() => ({ stamp: null, count: 0 }));
+    return emptyArray.map(() => ({ stamp: undefined, count: 0 }));
   }
 
   const sorted = stamps.toSorted((a, b) => b.count - a.count);

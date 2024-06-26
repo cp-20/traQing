@@ -16,7 +16,7 @@ type UserMessageChannelsProps = {
 export const UserMessageChannels: FC<UserMessageChannelsProps> = ({
   userId,
 }) => {
-  const { getSummedChannelName, getChannelName, channels } = useChannels();
+  const { getSummedChannelName, getChannelName } = useChannels();
   const query = useMemo(
     () =>
       ({
@@ -27,8 +27,6 @@ export const UserMessageChannels: FC<UserMessageChannelsProps> = ({
     [userId]
   );
   const { messages } = useMessages(query);
-
-  if (channels.length === 0) return null;
 
   const option = mergeOptions(commonBarChartOptions, {
     indexAxis: 'y' as const,

@@ -3,7 +3,7 @@ import { useMessages } from '@/hooks/useMessages';
 import { useStamps } from '@/hooks/useStamps';
 import { Skeleton } from '@mantine/core';
 import type { MessagesQuery, StampsQuery } from '@traq-ing/database';
-import { FC, useMemo } from 'react';
+import { FC, ReactNode, useMemo } from 'react';
 
 type UserStatsProps = {
   userId: string;
@@ -21,7 +21,7 @@ export const UserMessageCountStat: FC<UserStatsProps> = ({ userId }) => {
   );
   const { messages } = useMessages(query);
   const index = messages.findIndex((m) => m.user === userId);
-  if (index === -1) return <Stat label="投稿数" value={<Skeleton />} />;
+  if (index === -1) return <UserStatSkeleton label="投稿数" />;
 
   return (
     <Stat
@@ -39,7 +39,7 @@ export const UserGaveStampStat: FC<UserStatsProps> = ({ userId }) => {
   );
   const { stamps } = useStamps(query);
   const index = stamps.findIndex((s) => s.user === userId);
-  if (index === -1) return <Stat label="つけたスタンプ" value={<Skeleton />} />;
+  if (index === -1) return <UserStatSkeleton label="つけたスタンプ" />;
 
   return (
     <Stat
@@ -57,8 +57,8 @@ export const UserReceivedStampStat: FC<UserStatsProps> = ({ userId }) => {
   );
   const { stamps } = useStamps(query);
   const index = stamps.findIndex((s) => s.messageUser === userId);
-  if (index === -1)
-    return <Stat label="もらったスタンプ" value={<Skeleton />} />;
+  if (index === -1) return <UserStatSkeleton label="もらったスタンプ" />;
+
   return (
     <Stat
       label="もらったスタンプ"
@@ -67,3 +67,23 @@ export const UserReceivedStampStat: FC<UserStatsProps> = ({ userId }) => {
     />
   );
 };
+
+type UserStatSkeletonProps = {
+  label: ReactNode;
+};
+
+const UserStatSkeleton: FC<UserStatSkeletonProps> = ({ label }) => (
+  <Stat
+    label={label}
+    value={
+      <div className="h-10 flex items-center">
+        <Skeleton h={32} />
+      </div>
+    }
+    annotation={
+      <div className="h-5 flex items-center">
+        <Skeleton h={16} />
+      </div>
+    }
+  />
+);

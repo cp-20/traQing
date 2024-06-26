@@ -37,8 +37,17 @@ export const TraqMessage: FC<TraqMessageProps> = ({
   const { channels, getChannelName } = useChannels();
   const { stamps } = useMessageStamps();
 
-  const store: Readonly<Store> = useMemo(
-    () => ({
+  const store: Readonly<Store> | null = useMemo(() => {
+    if (
+      users === undefined ||
+      groups === undefined ||
+      me === undefined ||
+      channels === undefined ||
+      stamps === undefined
+    )
+      return null;
+
+    return {
       getUser: (userId) => users.find((u) => u.id === userId)!,
       getChannel: (channelId: string) =>
         channels.find((c) => c.id === channelId)!,
@@ -49,18 +58,18 @@ export const TraqMessage: FC<TraqMessageProps> = ({
       generateUserHref: (id: string) => `https://q.trap.jp/user/${id}`,
       generateUserGroupHref: (id: string) => `https://q.trap.jp/group/${id}`,
       generateChannelHref: (id: string) => `https://q.trap.jp/channel/${id}`,
-    }),
-    [users, groups, me, channels, stamps]
-  );
+    };
+  }, [users, groups, me, channels, stamps]);
 
   const [markdownIt, setMarkdownIt] = useState<traQMarkdownIt | null>(null);
   useEffect(() => {
     import('@traptitech/traq-markdown-it').then(({ traQMarkdownIt }) => {
+      if (store === null) return;
       setMarkdownIt(new traQMarkdownIt(store, undefined, 'https://q.trap.jp'));
     });
-  }, [users, groups]);
+  }, [store]);
 
-  if (message === null) {
+  if (message === undefined) {
     return <TraqMessageSkeleton />;
   }
   const user = getUserFromId(message.userId);
@@ -146,7 +155,7 @@ const QuotedMessage: FC<QuotedMessageProps> = ({ messageId, markdownIt }) => {
   const { getUserFromId } = useUsers();
   const { getChannelName } = useChannels();
   const { message } = useMessage(messageId);
-  if (message === null) {
+  if (message === undefined) {
     return <Skeleton h={12} />;
   }
 
@@ -219,7 +228,7 @@ type UrlRichPreviewProps = { url: string };
 
 const UrlRichPreview: FC<UrlRichPreviewProps> = ({ url }) => {
   const ogp = useOpenGraph(url);
-  if (ogp === null) {
+  if (ogp === undefined) {
     return <Skeleton h={64} w={384} className="mb-2" />;
   }
 

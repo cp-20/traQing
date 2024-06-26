@@ -35,7 +35,7 @@ const fetchWrapper = <T>(
   };
 };
 
-export const useMessage = (messageId: string) => {
+export const useMessageData = (messageId: string) => {
   return useSWR<Message>(
     `/api/messages/${messageId}`,
     fetchWrapper(() =>
@@ -46,37 +46,51 @@ export const useMessage = (messageId: string) => {
   );
 };
 
-export const useChannels = () => {
+export const useChannelsData = () => {
   return useSWR<Channel[]>(
     '/api/channels',
     fetchWrapper(() => client.channels.$get())
   );
 };
 
-export const useGroups = () => {
+export const useGroupsData = () => {
   return useSWR<UserGroup[]>(
     '/api/groups',
     fetchWrapper(() => client.groups.$get())
   );
 };
 
-export const useUsers = () => {
+export const useUsersData = () => {
   return useSWR<User[]>(
     '/api/users',
     fetchWrapper(() => client.users.$get())
   );
 };
 
-export const useMe = () => {
+export const useMeData = () => {
   return useSWR<MyUserDetail>(
     '/api/me',
     fetchWrapper(() => client.me.$get())
   );
 };
 
-export const useMessageStamps = () => {
+export const useMessageStampsData = () => {
   return useSWR<Stamp[]>(
     '/api/message-stamps',
     fetchWrapper(() => client['message-stamps'].$get())
+  );
+};
+
+export type OpenGraph = {
+  title?: string;
+  description?: string;
+  origin?: string;
+  image?: string;
+  type: 'summary' | 'article';
+};
+export const useOpenGraphData = (url: string) => {
+  return useSWR<OpenGraph>(
+    `/api/open-graph?url=${encodeURIComponent(url)}`,
+    fetchWrapper(() => client.og.$get({ query: { url } }))
   );
 };

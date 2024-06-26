@@ -1,9 +1,10 @@
+import { Skeleton } from '@mantine/core';
 import { FC } from 'react';
 import { Stamp } from 'traq-bot-ts';
 
 type Props = {
   stats: {
-    stamp: Stamp | null;
+    stamp: Stamp | undefined;
     count: number;
   }[];
 };
@@ -15,22 +16,31 @@ export const StampRanking: FC<Props> = ({ stats }) => {
         {stats.map((stamp, i) => (
           <tr key={i}>
             <td className="w-8">#{i + 1}</td>
-            <td className="w-10">
-              <img
-                width="24"
-                height="24"
-                src={`/api/files/${stamp.stamp?.fileId}`}
-                alt=""
-              />
-            </td>
-            <td>
-              <code className="text-sm px-1 py-[0.05rem] bg-gray-200 rounded-sm font-mono">
-                {stamp.stamp?.name}
-              </code>
-            </td>
-            <td className="w-8 text-right">
-              <code>{stamp.count}</code>
-            </td>
+            {stamp.stamp === undefined && (
+              <div className="flex items-center h-7">
+                <Skeleton h={16} />
+              </div>
+            )}
+            {stamp.stamp !== undefined && (
+              <>
+                <td className="w-10">
+                  <img
+                    width="24"
+                    height="24"
+                    src={`/api/files/${stamp.stamp?.fileId}`}
+                    alt=""
+                  />
+                </td>
+                <td>
+                  <code className="text-sm px-1 py-[0.05rem] bg-gray-200 rounded-sm font-mono">
+                    {stamp.stamp?.name}
+                  </code>
+                </td>
+                <td className="w-8 text-right">
+                  <code>{stamp.count}</code>
+                </td>
+              </>
+            )}
           </tr>
         ))}
       </tbody>

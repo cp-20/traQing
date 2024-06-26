@@ -19,12 +19,8 @@ export const UserGaveStampRanking: FC<UserStampRankingProps> = ({ userId }) => {
       } satisfies StampsQuery),
     [userId]
   );
-  const { getStamp } = useMessageStamps();
   const { stamps } = useStamps(query);
-  const stats = stamps.map((s) => ({
-    stamp: getStamp(s.stamp),
-    count: s.count,
-  }));
+  const stats = useUserStampRanking(stamps);
 
   return <StampRanking stats={stats} />;
 };
@@ -42,12 +38,22 @@ export const UserReceivedStampRanking: FC<UserStampRankingProps> = ({
       } satisfies StampsQuery),
     [userId]
   );
-  const { getStamp } = useMessageStamps();
   const { stamps } = useStamps(query);
+  const stats = useUserStampRanking(stamps);
+
+  return <StampRanking stats={stats} />;
+};
+
+const useUserStampRanking = (stamps: { stamp: string; count: number }[]) => {
+  const { getStamp } = useMessageStamps();
+
+  if (stamps.length === 0)
+    return new Array(10).fill(0).map(() => ({ stamp: undefined, count: 0 }));
+
   const stats = stamps.map((s) => ({
     stamp: getStamp(s.stamp),
     count: s.count,
   }));
 
-  return <StampRanking stats={stats} />;
+  return stats;
 };

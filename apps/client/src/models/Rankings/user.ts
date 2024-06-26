@@ -12,7 +12,7 @@ export const useUserRankingData = (
   messages: { user: string; count: number }[]
 ) => {
   const { getUsername, users } = useUsers();
-  if (messages.length === 0 || users.length === 0) {
+  if (messages.length === 0 || users === undefined) {
     const emptyArray = new Array(userRankingQuery.limit);
     return {
       labels: emptyArray,

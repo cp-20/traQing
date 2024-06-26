@@ -34,9 +34,9 @@ export const StampPicker: FC<StampPickerProps> = ({ setStampId }) => {
   const [opened, setOpened] = useState(false);
   const { stamps } = useMessageStamps();
 
-  const currentStamp = stamps.find((s) => s.name === keyword);
+  const currentStamp = stamps?.find((s) => s.name === keyword);
 
-  const filteredStamps = searchStamps(stamps, keyword);
+  const filteredStamps = stamps && searchStamps(stamps, keyword);
 
   return (
     <div>
@@ -61,7 +61,7 @@ export const StampPicker: FC<StampPickerProps> = ({ setStampId }) => {
             }
             onChange={(e) => {
               setKeyword(e.target.value);
-              const stamp = stamps.find((s) => s.name === e.target.value);
+              const stamp = stamps?.find((s) => s.name === e.target.value);
               if (stamp) setStampId(stamp.id);
               if (e.target.value === '') setStampId(null);
             }}
@@ -69,11 +69,11 @@ export const StampPicker: FC<StampPickerProps> = ({ setStampId }) => {
         </Popover.Target>
         <Popover.Dropdown>
           <div className="max-h-40 overflow-y-auto -my-3 p-4 -mx-4">
-            {filteredStamps.length === 0 && (
+            {filteredStamps?.length === 0 && (
               <div className="text-gray-400">スタンプが見つかりません</div>
             )}
             <div className="flex flex-wrap gap-2 w-fit">
-              {filteredStamps.slice(0, 100).map((s) => (
+              {filteredStamps?.slice(0, 100).map((s) => (
                 <button
                   title={s.name}
                   key={s.id}
