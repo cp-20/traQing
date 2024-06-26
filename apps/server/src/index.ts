@@ -8,7 +8,6 @@ import { api } from '@/traQ/api';
 import { tokenKey, traqAuthRoutes } from './auth';
 import { Hono } from 'hono';
 import { getCookie } from 'hono/cookie';
-import { StatusCode } from 'hono/utils/http-status';
 import { updateMessages } from '@/traQ';
 import { zValidator } from '@hono/zod-validator';
 import { z } from 'zod';
@@ -40,6 +39,9 @@ const routes = app
     c.set('token', token);
     return await next();
   })
+  .get('/v3/files/:id', async (c) => {
+    c.redirect(`/api/files/${c.req.param('id')}`, 301);
+  })
   .route('/auth', traqAuthRoutes())
   .get('/me', async (c) => {
     const url = 'https://q.trap.jp/api/v3/users/me';
@@ -63,7 +65,7 @@ const routes = app
 
     return c.json(await res.json(), 200);
   })
-  .on('GET', ['/files/:id', '/v3/files/:id'], async (c) => {
+  .get('/files/:id', async (c) => {
     const id = c.req.param('id');
     const url = `https://q.trap.jp/api/v3/files/${id}`;
     const res = await fetch(url, {
@@ -73,7 +75,7 @@ const routes = app
       },
     });
     if (!res.ok) {
-      return c.status(res.status as StatusCode);
+      return c.json({ message: 'Failed to fetch file' }, 500);
     }
 
     const data = await res.arrayBuffer();
@@ -187,8 +189,8 @@ const routes = app
       )?.content;
       const origin = new URL(url).host;
       const type = ['twitter.com', 'x.com'].includes(origin)
-        ? 'summary'
-        : 'article';
+        ? ('summary' as const)
+        : ('article' as const);
 
       return c.json({ title, description, image, origin, type }, 200);
     } catch (err) {

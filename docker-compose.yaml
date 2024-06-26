@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   traq-ing:
     container_name: traq-ing
@@ -9,7 +7,9 @@ services:
     restart: always
     ports:
       - '4173:4173'
-    env_file:
-      - .env
+    environment:
+      - TRAQ_AUTH_CLIENT_ID=${TRAQ_AUTH_CLIENT_ID}
+      - TRAQ_TOKEN=${TRAQ_TOKEN}
+      - DATABASE_URL=postgressql://user:password@host.docker.internal:5432/traq_ing
     volumes:
       - ./traq.db:/app/traq.db

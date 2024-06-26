@@ -8,7 +8,7 @@
   "module": "dist/index.js",
   "scripts": {
     "dev": "bun run build --watch",
-    "build": "tsup-node --config tsup.config.ts",
+    "build": "tsup --config tsup.config.ts",
     "migration": "drizzle-kit generate",
     "studio": "drizzle-kit studio"
   },

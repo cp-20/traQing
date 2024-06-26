@@ -6,4 +6,5 @@ export default defineConfig({
   sourcemap: true,
   format: ['cjs', 'esm'],
   dts: true,
+  external: ['/[^.].*/'],
 });
