@@ -15,7 +15,7 @@ export const StampRanking: FC<Props> = ({ stats }) => {
       <tbody>
         {stats.map((stamp, i) => (
           <tr key={i}>
-            <td className="w-8">#{i + 1}</td>
+            <td className="min-w-8 w-8">#{i + 1}</td>
             {stamp.stamp === undefined && (
               <div className="flex items-center h-7">
                 <Skeleton h={16} />
@@ -23,7 +23,7 @@ export const StampRanking: FC<Props> = ({ stats }) => {
             )}
             {stamp.stamp !== undefined && (
               <>
-                <td className="w-10">
+                <td className="min-w-10 w-10">
                   <img
                     width="24"
                     height="24"
