@@ -18,13 +18,13 @@
   "dependencies": {
     "@traq-ing/database": "workspace:*",
     "@hono/zod-validator": "^0.2.2",
-    "hono": "^4.4.7",
+    "hono": "^4.4.9",
     "js-sha256": "^0.11.0",
-    "zod": "^3.23.4",
+    "zod": "^3.23.8",
     "traq-bot-ts": "^1.2.1"
   },
   "devDependencies": {
     "bun-types": "latest",
-    "drizzle-kit": "^0.20.17"
+    "drizzle-kit": "^0.22.7"
   }
 }
