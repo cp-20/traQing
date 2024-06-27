@@ -1,6 +1,7 @@
 import { FC, ReactNode } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Loader } from '@mantine/core';
+import clsx from 'clsx';
 
 type Props = {
   component: ReactNode;
@@ -10,15 +11,18 @@ type Props = {
 
 export const RouteAuthGuard: FC<Props> = ({ component, fallback, loading }) => {
   const { me, isLoading } = useAuth();
-  if (isLoading) {
-    return (
-      loading || (
-        <div className="bg-gray-100 min-h-screen grid place-content-center">
-          <Loader type="bars" size="xl" />
-        </div>
-      )
-    );
-  }
 
-  return me ? <>{component}</> : <>{fallback}</>;
+  return (
+    <>
+      <div
+        className={clsx(
+          'bg-gray-100 inset-0 grid place-content-center fixed transition-all duration-200 ease-in',
+          !isLoading && 'invisible opacity-0'
+        )}
+      >
+        <Loader type="bars" size="xl" />
+      </div>
+      {!isLoading && (me ? component : fallback)}
+    </>
+  );
 };
