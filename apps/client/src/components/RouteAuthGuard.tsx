@@ -20,7 +20,7 @@ export const RouteAuthGuard: FC<Props> = ({ component, fallback, loading }) => {
           !isLoading && 'invisible opacity-0'
         )}
       >
-        <Loader type="bars" size="xl" />
+        {loading || <Loader type="bars" size="xl" />}
       </div>
       {!isLoading && (me ? component : fallback)}
     </>
