@@ -33,7 +33,7 @@ export const UserDetail: FC<UserDetailProps> = ({ userId }) => {
       <div className="flex gap-8 justify-center items-center">
         <div>
           <img
-            src={`https://q.trap.jp/api/v3/public/icon/${user.name}`}
+            src={`/api/files/${user.iconFileId}`}
             alt=""
             loading="eager"
             width={128}

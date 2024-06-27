@@ -12,6 +12,7 @@ import { MonthlyUserRanking } from '@/models/Rankings/MonthlyUserRanking';
 import { Card } from '@mantine/core';
 import { FC } from 'react';
 import LogoImage from '@/assets/logo.svg';
+import { SearchUsers } from '@/models/SearchUsers';
 
 export const Dashboard: FC = () => {
   const { switcher: dailySwitcher, range: dailyRange } = useDailySwitcher();
@@ -63,6 +64,10 @@ export const Dashboard: FC = () => {
               <MonthlyStampRanking range={monthlyRange} />
             </Card>
           </div>
+        </Card>
+        <Card>
+          <div className="font-semibold text-xl mb-2">ユーザー検索</div>
+          <SearchUsers />
         </Card>
       </div>
     </div>
