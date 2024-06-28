@@ -7,6 +7,7 @@ services:
     restart: always
     ports:
       - '4173:4173'
+      - '5000:5000'
     environment:
       - TRAQ_AUTH_CLIENT_ID=${TRAQ_AUTH_CLIENT_ID}
       - TRAQ_TOKEN=${TRAQ_TOKEN}
