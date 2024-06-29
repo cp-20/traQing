@@ -7,8 +7,6 @@ import { api } from './api';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const tzOffset = -new Date().getTimezoneOffset() * 60 * 1000;
-
 export const updateMessages = async () => {
   const lastMessage = await getLastMessageCreatedAt();
   const after = lastMessage ? new Date(lastMessage).toISOString() : undefined;
@@ -34,7 +32,7 @@ export const updateMessages = async () => {
       userId: m.userId,
       channelId: m.channelId,
       content: m.content.replaceAll('\u0000', ''),
-      createdAt: new Date(new Date(m.createdAt).getTime() + tzOffset),
+      createdAt: new Date(m.createdAt),
       pinned: m.pinned,
     }));
 
@@ -47,7 +45,7 @@ export const updateMessages = async () => {
         stampId: s.stampId,
         channelId: m.channelId,
         count: s.count,
-        createdAt: new Date(new Date(s.createdAt).getTime() + tzOffset),
+        createdAt: new Date(s.createdAt),
       }))
     );
 
