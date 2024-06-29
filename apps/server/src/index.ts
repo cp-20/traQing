@@ -39,9 +39,6 @@ const routes = app
     c.set('token', token);
     return await next();
   })
-  .get('/v3/files/:id', async (c) => {
-    c.redirect(`/api/files/${c.req.param('id')}`, 301);
-  })
   .route('/auth', traqAuthRoutes())
   .get('/me', async (c) => {
     const url = 'https://q.trap.jp/api/v3/users/me';
@@ -64,31 +61,6 @@ const routes = app
     }
 
     return c.json(await res.json(), 200);
-  })
-  .get('/files/:id', async (c) => {
-    const id = c.req.param('id');
-    const url = `https://q.trap.jp/api/v3/files/${id}`;
-    const res = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${c.get('token')}`,
-        ...c.req.raw.headers,
-      },
-    });
-    if (!res.ok) {
-      return c.json({ message: 'Failed to fetch file' }, 500);
-    }
-
-    const data = await res.arrayBuffer();
-
-    c.header(
-      'Content-Type',
-      res.headers.get('Content-Type') ?? 'application/octet-stream'
-    );
-    c.header(
-      'Cache-Control',
-      res.headers.get('Cache-Control') ?? 'public, max-age=31536000'
-    );
-    return c.newResponse(data);
   })
   .get('/messages', zValidator('query', MessagesQuerySchema), async (c) => {
     const query = c.req.valid('query');
@@ -198,6 +170,32 @@ const routes = app
       return c.json({ message: 'Failed to fetch og' }, 500);
     }
   });
+
+app.on('GET', ['/files/:id', '/v3/files/:id'], async (c) => {
+  const id = c.req.param('id');
+  const url = `https://q.trap.jp/api/v3/files/${id}`;
+  const res = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${c.get('token')}`,
+      ...c.req.raw.headers,
+    },
+  });
+  if (!res.ok) {
+    return c.json({ message: 'Failed to fetch file' }, 500);
+  }
+
+  const data = await res.arrayBuffer();
+
+  c.header(
+    'Content-Type',
+    res.headers.get('Content-Type') ?? 'application/octet-stream'
+  );
+  c.header(
+    'Cache-Control',
+    res.headers.get('Cache-Control') ?? 'public, max-age=31536000'
+  );
+  return c.newResponse(data);
+});
 
 let lock = false;
 const update = async () => {
