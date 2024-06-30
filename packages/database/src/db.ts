@@ -13,4 +13,4 @@ await migrate(drizzle(migrationClient), { migrationsFolder: '../../drizzle' });
 migrationClient.end();
 
 const client = postgres(connectionString);
-export const db = drizzle(client, { schema, logger: true });
+export const db = drizzle(client, { schema });
