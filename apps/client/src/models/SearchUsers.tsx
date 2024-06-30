@@ -22,6 +22,15 @@ export const SearchUsers: FC = () => {
             </div>
           ))}
         {users &&
+          users.filter(
+            (user) =>
+              user.name.includes(keyword) || user.displayName.includes(keyword)
+          ).length === 0 && (
+            <div className="text-gray-500 text-center">
+              お探しのユーザーは見つかりません
+            </div>
+          )}
+        {users &&
           users
             .filter(
               (user) =>
