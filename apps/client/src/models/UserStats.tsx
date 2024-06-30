@@ -16,6 +16,10 @@ export const UserMessageCountStat: FC<UserStatsProps> = ({ userId }) => {
   if (messages === undefined) return <UserStatSkeleton label="投稿数" />;
   const index = messages.findIndex((m) => m.user === userId);
 
+  if (index === -1) {
+    return <Stat label="投稿数" value={0} />;
+  }
+
   return (
     <Stat
       label="投稿数"
@@ -29,6 +33,10 @@ export const UserGaveStampStat: FC<UserStatsProps> = ({ userId }) => {
   const { data: stamps } = useGaveMessageStampsRanking();
   if (stamps === undefined) return <UserStatSkeleton label="つけたスタンプ" />;
   const index = stamps.findIndex((s) => s.user === userId);
+
+  if (index === -1) {
+    return <Stat label="つけたスタンプ" value={0} />;
+  }
 
   return (
     <Stat
@@ -44,6 +52,10 @@ export const UserReceivedStampStat: FC<UserStatsProps> = ({ userId }) => {
   if (stamps === undefined)
     return <UserStatSkeleton label="もらったスタンプ" />;
   const index = stamps.findIndex((s) => s.messageUser === userId);
+
+  if (index === -1) {
+    return <Stat label="もらったスタンプ" value={0} />;
+  }
 
   return (
     <Stat
