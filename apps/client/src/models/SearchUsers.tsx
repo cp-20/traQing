@@ -14,7 +14,7 @@ export const SearchUsers: FC = () => {
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
       />
-      <div className="flex flex-col max-h-96 overflow-auto">
+      <div className="flex flex-col h-96 overflow-auto">
         {users === undefined &&
           new Array(10).fill(0).map((_, i) => (
             <div key={i} className="animate-pulse">
