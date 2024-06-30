@@ -2,6 +2,7 @@ import {
   getLastMessageCreatedAt,
   insertMessageStamps,
   insertMessages,
+  updateMaterializedViews,
 } from '@traq-ing/database';
 import { api } from './api';
 
@@ -44,6 +45,7 @@ export const updateMessages = async () => {
         userId: s.userId,
         stampId: s.stampId,
         channelId: m.channelId,
+        messageUserId: m.userId,
         count: s.count,
         createdAt: new Date(s.createdAt),
       }))
@@ -59,4 +61,6 @@ export const updateMessages = async () => {
     console.log(offset, searched[searched.length - 1].createdAt);
     await sleep(100);
   }
+
+  await updateMaterializedViews();
 };

@@ -1,27 +1,20 @@
 import { Stat } from '@/components/Stat';
-import { useMessages } from '@/hooks/useMessages';
-import { useStamps } from '@/hooks/useStamps';
+import {
+  useGaveMessageStampsRanking,
+  useMessagesRanking,
+  useReceivedMessageStampsRanking,
+} from '@/hooks/useServerData';
 import { Skeleton } from '@mantine/core';
-import type { MessagesQuery, StampsQuery } from '@traq-ing/database';
-import { FC, ReactNode, useMemo } from 'react';
+import { FC, ReactNode } from 'react';
 
 type UserStatsProps = {
   userId: string;
 };
 
 export const UserMessageCountStat: FC<UserStatsProps> = ({ userId }) => {
-  const query = useMemo(
-    () =>
-      ({
-        groupBy: 'user',
-        orderBy: 'count',
-        order: 'desc',
-      } satisfies MessagesQuery),
-    [userId]
-  );
-  const { messages } = useMessages(query);
+  const { data: messages } = useMessagesRanking();
+  if (messages === undefined) return <UserStatSkeleton label="投稿数" />;
   const index = messages.findIndex((m) => m.user === userId);
-  if (index === -1) return <UserStatSkeleton label="投稿数" />;
 
   return (
     <Stat
@@ -33,13 +26,9 @@ export const UserMessageCountStat: FC<UserStatsProps> = ({ userId }) => {
 };
 
 export const UserGaveStampStat: FC<UserStatsProps> = ({ userId }) => {
-  const query = useMemo(
-    () => ({ groupBy: 'user' } satisfies StampsQuery),
-    [userId]
-  );
-  const { stamps } = useStamps(query);
+  const { data: stamps } = useGaveMessageStampsRanking();
+  if (stamps === undefined) return <UserStatSkeleton label="つけたスタンプ" />;
   const index = stamps.findIndex((s) => s.user === userId);
-  if (index === -1) return <UserStatSkeleton label="つけたスタンプ" />;
 
   return (
     <Stat
@@ -51,13 +40,10 @@ export const UserGaveStampStat: FC<UserStatsProps> = ({ userId }) => {
 };
 
 export const UserReceivedStampStat: FC<UserStatsProps> = ({ userId }) => {
-  const query = useMemo(
-    () => ({ groupBy: 'messageUser' } satisfies StampsQuery),
-    [userId]
-  );
-  const { stamps } = useStamps(query);
+  const { data: stamps } = useReceivedMessageStampsRanking();
+  if (stamps === undefined)
+    return <UserStatSkeleton label="もらったスタンプ" />;
   const index = stamps.findIndex((s) => s.messageUser === userId);
-  if (index === -1) return <UserStatSkeleton label="もらったスタンプ" />;
 
   return (
     <Stat

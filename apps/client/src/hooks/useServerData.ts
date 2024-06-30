@@ -35,6 +35,27 @@ const fetchWrapper = <T>(
   };
 };
 
+export const useMessagesRanking = () => {
+  return useSWR<{ user: string; count: number }[]>(
+    '/api/messages-ranking',
+    fetchWrapper(() => client['messages-ranking'].$get())
+  );
+};
+
+export const useGaveMessageStampsRanking = () => {
+  return useSWR<{ user: string; count: number }[]>(
+    '/api/gave-stamps-ranking',
+    fetchWrapper(() => client['gave-stamps-ranking'].$get())
+  );
+};
+
+export const useReceivedMessageStampsRanking = () => {
+  return useSWR<{ messageUser: string; count: number }[]>(
+    '/api/received-stamps-ranking',
+    fetchWrapper(() => client['received-stamps-ranking'].$get())
+  );
+};
+
 export const useMessageData = (messageId: string) => {
   return useSWR<Message>(
     `/api/messages/${messageId}`,

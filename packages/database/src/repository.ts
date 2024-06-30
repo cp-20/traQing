@@ -157,7 +157,7 @@ export const getStamps = async (query: StampsQuery) => {
     day: sqlGetDate(schema.messageStamps.createdAt),
     user: schema.messageStamps.userId,
     message: schema.messageStamps.messageId,
-    messageUser: schema.messages.userId,
+    messageUser: schema.messageStamps.messageUserId,
     channel: schema.messageStamps.channelId,
     stamp: schema.messageStamps.stampId,
   }[query.groupBy ?? 'day'];
@@ -167,7 +167,7 @@ export const getStamps = async (query: StampsQuery) => {
     day: sqlGetDate(schema.messageStamps.createdAt),
     user: schema.messageStamps.userId,
     message: schema.messageStamps.messageId,
-    messageUser: schema.messages.userId,
+    messageUser: schema.messageStamps.messageUserId,
     channel: schema.messageStamps.channelId,
     stamp: schema.messageStamps.stampId,
   }[query.groupBy ?? 'day'];
@@ -181,7 +181,8 @@ export const getStamps = async (query: StampsQuery) => {
 
   const conditions = [
     query.userId && eq(schema.messageStamps.userId, query.userId),
-    query.messageUserId && eq(schema.messages.userId, query.messageUserId),
+    query.messageUserId &&
+      eq(schema.messageStamps.messageUserId, query.messageUserId),
     query.channelId && eq(schema.messageStamps.channelId, query.channelId),
     query.stampId && eq(schema.messageStamps.stampId, query.stampId),
     query.after && gt(schema.messageStamps.createdAt, new Date(query.after)),
@@ -195,17 +196,9 @@ export const getStamps = async (query: StampsQuery) => {
     })
     .from(schema.messageStamps);
 
-  const joinedQuery =
-    query.messageUserId || query.groupBy === 'messageUser'
-      ? initialQuery.leftJoin(
-          schema.messages,
-          eq(schema.messages.id, schema.messageStamps.messageId)
-        )
-      : initialQuery;
-
   const groupedQuery = query.groupBy
-    ? joinedQuery.groupBy(groupBy)
-    : joinedQuery;
+    ? initialQuery.groupBy(groupBy)
+    : initialQuery;
 
   const resultQuery = groupedQuery
     .where(and(...conditions.filter((x) => !!x)))
@@ -219,13 +212,22 @@ export const getStamps = async (query: StampsQuery) => {
 };
 
 export const getMessagesRanking = async () => {
-  return await db.select().from(schema.messagesRanking).execute();
+  return await db.select().from(schema.messagesRankingView).execute();
 };
 
 export const getGaveMessageStampsRanking = async () => {
-  return await db.select().from(schema.gaveMessageStampsRanking).execute();
+  return await db.select().from(schema.gaveMessageStampsRankingView).execute();
 };
 
 export const getReceivedMessageStampsRanking = async () => {
-  return await db.select().from(schema.receivedMessageStampsRanking).execute();
+  return await db
+    .select()
+    .from(schema.receivedMessageStampsRankingView)
+    .execute();
+};
+
+export const updateMaterializedViews = async () => {
+  await db.refreshMaterializedView(schema.messagesRankingView);
+  await db.refreshMaterializedView(schema.gaveMessageStampsRankingView);
+  await db.refreshMaterializedView(schema.receivedMessageStampsRankingView);
 };

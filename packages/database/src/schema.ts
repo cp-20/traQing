@@ -1,4 +1,4 @@
-import { count } from 'drizzle-orm';
+import { count, desc } from 'drizzle-orm';
 import {
   index,
   integer,
@@ -29,14 +29,16 @@ export const messages = pgTable(
   })
 );
 
-export const messagesRanking = pgMaterializedView('messages_ranking').as((qb) =>
-  qb
-    .select({
-      user: messages.userId,
-      count: count(messages.userId).as('count'),
-    })
-    .from(messages)
-    .groupBy(messages.userId)
+export const messagesRankingView = pgMaterializedView('messages_ranking').as(
+  (qb) =>
+    qb
+      .select({
+        user: messages.userId,
+        count: count().as('count'),
+      })
+      .from(messages)
+      .groupBy(messages.userId)
+      .orderBy(desc(count()))
 );
 
 export const messageStamps = pgTable(
@@ -47,7 +49,8 @@ export const messageStamps = pgTable(
     messageId: uuid('message_id')
       .notNull()
       .references(() => messages.id),
-    channelId: uuid('channel_id'),
+    messageUserId: uuid('message_user_id').notNull(),
+    channelId: uuid('channel_id').notNull(),
     count: integer('count').notNull(),
     createdAt: timestamp('created_at').notNull(),
   },
@@ -57,30 +60,35 @@ export const messageStamps = pgTable(
     stampIdIndex: index('message_stamps_stamp_id_idx').on(t.stampId),
     channelIdIndex: index('message_stamps_channel_id_idx').on(t.channelId),
     messageIdIndex: index('message_stamps_message_id_idx').on(t.messageId),
+    messageUserIndex: index('message_stamps_message_user_id_idx').on(
+      t.messageUserId
+    ),
     createdAtIndex: index('message_stamps_created_at_idx').on(t.createdAt),
   })
 );
 
-export const gaveMessageStampsRanking = pgMaterializedView(
+export const gaveMessageStampsRankingView = pgMaterializedView(
   'gave_message_stamps_ranking'
 ).as((qb) =>
   qb
     .select({
       user: messageStamps.userId,
-      count: count(messageStamps.userId).as('count'),
+      count: count().as('count'),
     })
     .from(messageStamps)
     .groupBy(messageStamps.userId)
+    .orderBy(desc(count()))
 );
 
-export const receivedMessageStampsRanking = pgMaterializedView(
+export const receivedMessageStampsRankingView = pgMaterializedView(
   'received_message_stamps_ranking'
 ).as((qb) =>
   qb
     .select({
-      user: messages.userId,
-      count: count(messages.userId).as('count'),
+      messageUser: messageStamps.messageUserId,
+      count: count().as('count'),
     })
-    .from(messages)
-    .groupBy(messages.userId)
+    .from(messageStamps)
+    .groupBy(messageStamps.messageUserId)
+    .orderBy(desc(count()))
 );

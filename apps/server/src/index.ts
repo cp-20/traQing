@@ -1,7 +1,10 @@
 import {
   MessagesQuerySchema,
   StampsQuerySchema,
+  getGaveMessageStampsRanking,
   getMessages,
+  getMessagesRanking,
+  getReceivedMessageStampsRanking,
   getStamps,
 } from '@traq-ing/database';
 import { api } from '@/traQ/api';
@@ -67,6 +70,33 @@ const routes = app
 
     try {
       const messages = await getMessages(query);
+      return c.json(messages, 200);
+    } catch (err) {
+      console.error(err);
+      return c.json({ message: 'Failed to fetch messages' }, 500);
+    }
+  })
+  .get('/messages-ranking', async (c) => {
+    try {
+      const messages = await getMessagesRanking();
+      return c.json(messages, 200);
+    } catch (err) {
+      console.error(err);
+      return c.json({ message: 'Failed to fetch messages' }, 500);
+    }
+  })
+  .get('/gave-stamps-ranking', async (c) => {
+    try {
+      const messages = await getGaveMessageStampsRanking();
+      return c.json(messages, 200);
+    } catch (err) {
+      console.error(err);
+      return c.json({ message: 'Failed to fetch messages' }, 500);
+    }
+  })
+  .get('/received-stamps-ranking', async (c) => {
+    try {
+      const messages = await getReceivedMessageStampsRanking();
       return c.json(messages, 200);
     } catch (err) {
       console.error(err);
