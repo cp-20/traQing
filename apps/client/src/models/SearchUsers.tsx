@@ -31,7 +31,7 @@ export const SearchUsers: FC = () => {
             .slice(0, 100)
             .map((user) => (
               <Link
-                to={`/users/${user.name}`}
+                to={`/users/${encodeURIComponent(user.name)}`}
                 key={user.id}
                 className="flex gap-2 px-4 py-1 items-center hover:bg-gray-100 rounded-md transition-all duration-200"
               >
