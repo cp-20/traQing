@@ -13,6 +13,11 @@ import { Card } from '@mantine/core';
 import { FC } from 'react';
 import LogoImage from '@/assets/logo.svg';
 import { SearchUsers } from '@/models/SearchUsers';
+import {
+  UserGaveStampsRanking,
+  UserMessagesRanking,
+  UserReceivedStampsRanking,
+} from '@/models/UserRanking';
 
 export const Dashboard: FC = () => {
   const { switcher: dailySwitcher, range: dailyRange } = useDailySwitcher();
@@ -68,6 +73,23 @@ export const Dashboard: FC = () => {
         <Card>
           <div className="font-semibold text-xl mb-2">ユーザー検索</div>
           <SearchUsers />
+        </Card>
+        <Card>
+          <div className="font-semibold text-xl mb-2">ユーザーランキング</div>
+          <div className="grid 2xl:grid-cols-3 grid-cols-1 gap-4">
+            <Card className="border">
+              <div className="font-medium text mb-2">投稿数</div>
+              <UserMessagesRanking />
+            </Card>
+            <Card className="border">
+              <div className="font-medium text mb-2">つけたスタンプ</div>
+              <UserGaveStampsRanking />
+            </Card>
+            <Card className="border">
+              <div className="font-medium text mb-2">もらったスタンプ</div>
+              <UserReceivedStampsRanking />
+            </Card>
+          </div>
         </Card>
       </div>
     </div>
