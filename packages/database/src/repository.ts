@@ -136,6 +136,7 @@ export const StampsQuerySchema = z
     groupBy: z.union([
       z.literal('month'),
       z.literal('day'),
+      z.literal('hour'),
       z.literal('user'),
       z.literal('message'),
       z.literal('messageUser'),
@@ -155,6 +156,7 @@ export const getStamps = async (query: StampsQuery) => {
   const select = {
     month: sqlGetMonth(schema.messageStamps.createdAt),
     day: sqlGetDate(schema.messageStamps.createdAt),
+    hour: sqlGetHour(schema.messageStamps.createdAt),
     user: schema.messageStamps.userId,
     message: schema.messageStamps.messageId,
     messageUser: schema.messageStamps.messageUserId,
@@ -165,6 +167,7 @@ export const getStamps = async (query: StampsQuery) => {
   const groupBy = {
     month: sqlGetMonth(schema.messageStamps.createdAt),
     day: sqlGetDate(schema.messageStamps.createdAt),
+    hour: sqlGetHour(schema.messageStamps.createdAt),
     user: schema.messageStamps.userId,
     message: schema.messageStamps.messageId,
     messageUser: schema.messageStamps.messageUserId,

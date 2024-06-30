@@ -1,21 +1,29 @@
 import { useMessages } from '@/hooks/useMessages';
+import { useStamps } from '@/hooks/useStamps';
 import {
-  commonBarChartOptions,
+  getCommonLineChartOptions,
   mergeOptions,
 } from '@/models/commonChartOptions';
-import { MessagesQuery } from '@traq-ing/database';
+import { MessagesQuery, StampsQuery } from '@traq-ing/database';
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  BarElement,
   Tooltip,
   type ChartOptions,
+  LineElement,
+  PointElement,
 } from 'chart.js';
 import { FC, useMemo } from 'react';
-import { Bar } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  LineElement,
+  Tooltip,
+  PointElement
+);
 
 type UserMessageHoursProps = {
   userId: string;
@@ -25,7 +33,7 @@ const hours = Array.from({ length: 24 }).map((_, i) =>
   i.toString().padStart(2, '0')
 );
 
-const option = mergeOptions(commonBarChartOptions, {
+const option = mergeOptions(getCommonLineChartOptions(false), {
   indexAxis: 'x' as const,
   plugins: {
     tooltip: {
@@ -37,20 +45,49 @@ const option = mergeOptions(commonBarChartOptions, {
 }) satisfies ChartOptions;
 
 export const UserMessageHours: FC<UserMessageHoursProps> = ({ userId }) => {
-  const query = useMemo(
+  const messagesQuery = useMemo(
     () => ({ userId, groupBy: 'hour' } satisfies MessagesQuery),
     [userId]
   );
-  const { messages } = useMessages(query);
+  const gaveStampsQuery = useMemo(
+    () => ({ userId, groupBy: 'hour' } satisfies StampsQuery),
+    [userId]
+  );
+  const receivedStampsQuery = useMemo(
+    () => ({ messageUserId: userId, groupBy: 'hour' } satisfies StampsQuery),
+    [userId]
+  );
+  const { messages } = useMessages(messagesQuery);
+  const { stamps: gaveStamps } = useStamps(gaveStampsQuery);
+  const { stamps: receivedStamps } = useStamps(receivedStampsQuery);
 
   const data = {
     labels: hours.map((h) => `${h}:00`),
     datasets: [
       {
         data: hours.map((h) => messages.find((m) => m.hour === h)?.count ?? 0),
+        label: '投稿数',
+        backgroundColor: 'rgba(34, 139, 230, 0.8)',
+        borderColor: 'rgba(34, 139, 230, 0.8)',
+      },
+      {
+        data: hours.map(
+          (h) => gaveStamps.find((s) => s.hour === h)?.count ?? 0
+        ),
+        label: 'つけたスタンプ',
+        backgroundColor: 'rgba(21, 170, 191, 0.8)',
+        borderColor: 'rgba(21, 170, 191, 0.8)',
+      },
+      {
+        data: hours.map(
+          (h) => receivedStamps.find((s) => s.hour === h)?.count ?? 0
+        ),
+        label: 'もらったスタンプ',
+        backgroundColor: 'rgba(76, 110, 245, 0.8)',
+        borderColor: 'rgba(76, 110, 245, 0.8)',
       },
     ],
   };
 
-  return <Bar options={option} data={data} height={300} />;
+  return <Line options={option} data={data} height={300} />;
 };

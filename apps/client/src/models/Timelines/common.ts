@@ -10,7 +10,6 @@ import {
   LineElement,
   Tooltip,
   PointElement,
-  Filler,
 } from 'chart.js';
 
 ChartJS.register(
@@ -18,12 +17,11 @@ ChartJS.register(
   LinearScale,
   LineElement,
   Tooltip,
-  PointElement,
-  Filler
+  PointElement
 );
 
 export const commonTimelineChartOptions = mergeOptions(
-  getCommonLineChartOptions(true),
+  getCommonLineChartOptions(false),
   {
     plugins: {
       tooltip: {

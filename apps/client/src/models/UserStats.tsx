@@ -35,13 +35,20 @@ export const UserGaveStampStat: FC<UserStatsProps> = ({ userId }) => {
   const index = stamps.findIndex((s) => s.user === userId);
 
   if (index === -1) {
-    return <Stat label="つけたスタンプ" value={0} />;
+    return (
+      <Stat
+        label="つけたスタンプ"
+        value={0}
+        valueProps={{ className: 'text-teal-600' }}
+      />
+    );
   }
 
   return (
     <Stat
       label="つけたスタンプ"
       value={stamps[index].count}
+      valueProps={{ className: 'text-teal-600' }}
       annotation={`全体${index + 1}位`}
     />
   );
@@ -54,13 +61,20 @@ export const UserReceivedStampStat: FC<UserStatsProps> = ({ userId }) => {
   const index = stamps.findIndex((s) => s.messageUser === userId);
 
   if (index === -1) {
-    return <Stat label="もらったスタンプ" value={0} />;
+    return (
+      <Stat
+        label="もらったスタンプ"
+        value={0}
+        valueProps={{ className: 'text-indigo-600' }}
+      />
+    );
   }
 
   return (
     <Stat
       label="もらったスタンプ"
       value={stamps[index].count}
+      valueProps={{ className: 'text-indigo-600' }}
       annotation={`全体${index + 1}位`}
     />
   );

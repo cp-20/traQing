@@ -1,7 +1,10 @@
 import { Card } from '@/components/Card';
 import { useUsers } from '@/hooks/useUsers';
-import { UserMessageTimeline } from '@/models/Timelines/UserMessageTimeline';
-import { UserMessageChannels } from '@/models/UserMessageChannels';
+import { UserActionTimeline } from '@/models/Timelines/UserActionTimeline';
+import {
+  UserGaveStampsChannels,
+  UserMessageChannels,
+} from '@/models/UserActionChannels';
 import { UserMessageHours } from '@/models/UserMessageHours';
 import {
   UserGaveStampRanking,
@@ -88,21 +91,29 @@ export const UserDetail: FC<UserDetailProps> = ({ userId }) => {
         </div>
         <div className="flex flex-col sm:gap-8 gap-4">
           <Card>
-            <div className="font-semibold mb-4">投稿数の遷移</div>
+            <div className="font-semibold mb-4">各アクションの時系列遷移</div>
             <div>
-              <UserMessageTimeline userId={userId} />
+              <UserActionTimeline userId={userId} />
             </div>
           </Card>
           <Card>
-            <div className="font-semibold mb-4">投稿する時間帯</div>
+            <div className="font-semibold mb-4">各アクションの時間帯</div>
             <div>
               <UserMessageHours userId={userId} />
             </div>
           </Card>
           <Card>
-            <div className="font-semibold mb-4">投稿するチャンネル</div>
+            <div className="font-semibold mb-4">よく投稿するチャンネル</div>
             <div>
               <UserMessageChannels userId={userId} />
+            </div>
+          </Card>
+          <Card>
+            <div className="font-semibold mb-4">
+              スタンプをよく付けるチャンネル
+            </div>
+            <div>
+              <UserGaveStampsChannels userId={userId} />
             </div>
           </Card>
           <Card className="lg:hidden">
