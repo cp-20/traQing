@@ -2,6 +2,19 @@ import { useUsers } from '@/hooks/useUsers';
 import { TextInput } from '@mantine/core';
 import { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
+import type { User } from 'traq-bot-ts';
+
+const normalize = (str: string) => str.toLowerCase();
+
+const searchUser = (user: User, keyword: string) => {
+  const normalizedKeyword = normalize(keyword);
+  const normalizedName = normalize(user.name);
+  const normalizedDisplayName = normalize(user.displayName);
+  return (
+    normalizedName.includes(normalizedKeyword) ||
+    normalizedDisplayName.includes(normalizedKeyword)
+  );
+};
 
 export const SearchUsers: FC = () => {
   const { users } = useUsers();
@@ -32,11 +45,7 @@ export const SearchUsers: FC = () => {
           )}
         {users &&
           users
-            .filter(
-              (user) =>
-                user.name.includes(keyword) ||
-                user.displayName.includes(keyword)
-            )
+            .filter((user) => searchUser(user, keyword))
             .slice(0, 100)
             .map((user) => (
               <Link
