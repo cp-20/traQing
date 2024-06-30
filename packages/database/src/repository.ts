@@ -176,7 +176,7 @@ export const getStamps = async (query: StampsQuery) => {
 
   const orderBy = {
     date: order(schema.messageStamps.createdAt),
-    count: order(count(schema.messageStamps.stampId)),
+    count: order(count()),
   }[query.orderBy ?? 'count'];
 
   const conditions = [
