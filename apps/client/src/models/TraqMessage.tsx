@@ -105,7 +105,7 @@ export const TraqMessage: FC<TraqMessageProps> = ({
         <div className="flex gap-1 items-center">
           <img
             className="rounded-full"
-            src={`https://q.trap.jp/api/v3/public/icon/${user.name}`}
+            src={`/api/files/${user.iconFileId}`}
             alt=""
             width={24}
             height={24}
@@ -173,7 +173,7 @@ const QuotedMessage: FC<QuotedMessageProps> = ({ messageId, markdownIt }) => {
         <div>
           <img
             className="rounded-full"
-            src={`https://q.trap.jp/api/v3/public/icon/${user.name}`}
+            src={`/api/files/${user.iconFileId}`}
             alt=""
             width={20}
             height={20}
