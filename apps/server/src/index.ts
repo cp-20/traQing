@@ -65,9 +65,34 @@ const routes = app
     if (!res.ok) {
       return c.json({ message: 'Failed to fetch subscriptions' }, 500);
     }
+    const data = (await res.json()) as { channelId: string; level: number }[];
 
-    return c.json(await res.json(), 200);
+    return c.json(data, 200);
   })
+  .put(
+    '/subscriptions/:id',
+    zValidator('json', z.object({ level: z.number().int() })),
+    async (c) => {
+      const token = c.get('token');
+      const id = c.req.param('id');
+      const json = c.req.valid('json');
+      const url = `https://q.trap.jp/api/v3/users/me/subscriptions/${id}`;
+      const res = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(json),
+      });
+
+      if (!res.ok) {
+        return c.json({ message: 'Failed to update subscription' }, 500);
+      }
+
+      return c.json(await res.json(), 200);
+    }
+  )
   .get('/messages', zValidator('query', MessagesQuerySchema), async (c) => {
     const query = c.req.valid('query');
 

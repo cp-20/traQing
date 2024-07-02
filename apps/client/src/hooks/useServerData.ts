@@ -36,6 +36,15 @@ const fetchWrapper = <T>(
   };
 };
 
+export const useSubscriptionsData = () => {
+  return useSWR<{ channelId: string; level: number }[]>(
+    '/api/subscriptions',
+    fetchWrapper<{ channelId: string; level: number }[]>(() =>
+      client.subscriptions.$get()
+    )
+  );
+};
+
 export const useMessagesRanking = () => {
   return useSWR<{ user: string; count: number }[]>(
     '/api/messages-ranking',

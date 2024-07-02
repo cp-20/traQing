@@ -1,3 +1,4 @@
+import { RankingItemSkeleton, RankDisplay } from '@/components/Ranking';
 import {
   useGaveMessageStampsRanking,
   useMessagesRanking,
@@ -5,42 +6,9 @@ import {
 } from '@/hooks/useServerData';
 import { useStamps } from '@/hooks/useStamps';
 import { useUsers } from '@/hooks/useUsers';
-import { Skeleton } from '@mantine/core';
-import { IconCrown } from '@tabler/icons-react';
 import { StampsQuery } from '@traq-ing/database';
 import { FC, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-
-type RankDisplayProps = {
-  rank: number;
-};
-
-const RankDisplay: FC<RankDisplayProps> = ({ rank }) => {
-  if (rank <= 3) {
-    const colors = ['orange', 'silver', 'indianred'];
-    return (
-      <span className="w-8">
-        <IconCrown fill={colors[rank - 1]} color={colors[rank - 1]} />
-      </span>
-    );
-  }
-
-  return <span className="text-lg font-medium w-8">#{rank}</span>;
-};
-
-type UserRankingItemSkeletonProps = {
-  rank: number;
-};
-
-const UserRankingItemSkeleton: FC<UserRankingItemSkeletonProps> = ({
-  rank,
-}) => (
-  <div className="flex items-center gap-2">
-    <RankDisplay rank={rank} />
-    <Skeleton circle w={24} height={24} />
-    <Skeleton h={16} />
-  </div>
-);
 
 type UserRankingItemProps = {
   userId: string;
@@ -53,7 +21,7 @@ const UserRankingItem: FC<UserRankingItemProps> = ({ userId, rank, count }) => {
 
   const user = getUserFromId(userId);
   if (user === undefined) {
-    return <UserRankingItemSkeleton rank={rank} />;
+    return <RankingItemSkeleton rank={rank} />;
   }
 
   return (
@@ -87,7 +55,7 @@ const UserRanking: FC<UserRankingProps> = ({ users, limit }) => {
         {users === undefined &&
           new Array(limit)
             .fill(null)
-            .map((_, i) => <UserRankingItemSkeleton key={i} rank={i + 1} />)}
+            .map((_, i) => <RankingItemSkeleton key={i} rank={i + 1} />)}
         {users &&
           users
             .slice(0, limit)
