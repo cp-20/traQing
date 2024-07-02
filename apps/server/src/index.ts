@@ -5,6 +5,7 @@ import {
   getGaveMessageStampsRanking,
   getMessages,
   getMessagesRanking,
+  getMessagesTimeline,
   getReceivedMessageStampsRanking,
   getStampRelations,
   getStamps,
@@ -81,6 +82,15 @@ const routes = app
   .get('/messages-ranking', async (c) => {
     try {
       const messages = await getMessagesRanking();
+      return c.json(messages, 200);
+    } catch (err) {
+      console.error(err);
+      return c.json({ message: 'Failed to fetch messages' }, 500);
+    }
+  })
+  .get('/messages-timeline', async (c) => {
+    try {
+      const messages = await getMessagesTimeline();
       return c.json(messages, 200);
     } catch (err) {
       console.error(err);

@@ -68,6 +68,13 @@ export const useMessageData = (messageId: string) => {
   );
 };
 
+export const useMessagesTimelineData = () => {
+  return useSWR<{ month: string; count: number }[]>(
+    '/api/messages-timeline',
+    fetchWrapper(() => client['messages-timeline'].$get())
+  );
+};
+
 export const useChannelsData = () => {
   return useSWR<Channel[]>(
     '/api/channels',

@@ -1,5 +1,8 @@
 import { useStamps } from '@/hooks/useStamps';
-import { getCommonLineChartOptions } from '@/models/commonChartOptions';
+import {
+  getCommonLineChartOptions,
+  mergeOptions,
+} from '@/models/commonChartOptions';
 import { StampsQuery } from '@traq-ing/database';
 import { ChartOptions } from 'chart.js';
 import clsx from 'clsx';
@@ -9,8 +12,7 @@ import { Chart as ChartJS, Filler } from 'chart.js';
 
 ChartJS.register(Filler);
 
-const option = {
-  ...getCommonLineChartOptions(true),
+const option = mergeOptions(getCommonLineChartOptions(true), {
   plugins: {
     tooltip: {
       enabled: true,
@@ -18,7 +20,7 @@ const option = {
       displayColors: false,
     },
   },
-} satisfies ChartOptions;
+} satisfies ChartOptions);
 
 type StampTimelineProps = {
   stampId: string | null;

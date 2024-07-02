@@ -1,4 +1,5 @@
-import { count, desc } from 'drizzle-orm';
+import { sqlGetMonth } from '@/util';
+import { asc, count, desc } from 'drizzle-orm';
 import {
   index,
   integer,
@@ -39,6 +40,19 @@ export const messagesRankingView = pgMaterializedView('messages_ranking').as(
       .from(messages)
       .groupBy(messages.userId)
       .orderBy(desc(count()))
+);
+
+export const messagesMonthlyTimelineView = pgMaterializedView(
+  'messages_monthly_timeline'
+).as((qb) =>
+  qb
+    .select({
+      month: sqlGetMonth(messages.createdAt).as('month'),
+      count: count().as('count'),
+    })
+    .from(messages)
+    .groupBy(sqlGetMonth(messages.createdAt))
+    .orderBy(asc(sqlGetMonth(messages.createdAt)))
 );
 
 export const messageStamps = pgTable(

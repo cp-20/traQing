@@ -34,3 +34,36 @@ export const useMessages = <Q extends MessagesQuery>(query: Q) => {
 
   return { messages, loading };
 };
+
+export const useMessagesByMultipleQueries = <Q extends MessagesQuery>(
+  queries: Q[]
+) => {
+  const [messages, setMessages] = useState<Result<Q>[][]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    const fetchMessages = async () => {
+      const res = await Promise.all(
+        queries.map((query) =>
+          client.messages.$get({
+            query: {
+              ...query,
+              limit: query.limit?.toString(),
+              offset: query.offset?.toString(),
+            },
+          })
+        )
+      );
+      const json = (await Promise.all(
+        res.filter((r) => r.ok).map((r) => r.json())
+      )) as Result<Q>[][];
+      setMessages(json);
+      setLoading(false);
+    };
+
+    fetchMessages();
+  }, [queries, setMessages, setLoading]);
+
+  return { messages, loading };
+};

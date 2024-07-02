@@ -15,6 +15,19 @@ GROUP BY
 ORDER BY
   count DESC;
 
+-- Materialized view for messages monthly timeline
+DROP MATERIALIZED VIEW IF EXISTS messages_monthly_timeline;
+CREATE MATERIALIZED VIEW messages_monthly_timeline AS
+SELECT
+  TO_CHAR(created_at, 'YYYY-MM') as month,
+  COUNT(*) AS count
+FROM
+  messages
+GROUP BY
+  TO_CHAR(created_at, 'YYYY-MM')
+ORDER BY
+  TO_CHAR(created_at, 'YYYY-MM') ASC;
+
 -- Materialized view for gave message stamps ranking
 DROP MATERIALIZED VIEW IF EXISTS gave_message_stamps_ranking;
 CREATE MATERIALIZED VIEW gave_message_stamps_ranking AS

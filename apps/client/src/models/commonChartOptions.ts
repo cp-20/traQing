@@ -12,6 +12,11 @@ export const commonChartOptions = {
   },
   responsive: true,
   maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      display: false,
+    },
+  },
   scales: {
     x: {
       grid: {

@@ -1,7 +1,8 @@
 import { db } from '@/db';
 import * as schema from './schema';
-import { and, asc, count, desc, eq, gt, gte, lt, sql } from 'drizzle-orm';
+import { and, asc, count, desc, eq, gt, gte, lt } from 'drizzle-orm';
 import { z } from 'zod';
+import { sqlGetMonth, sqlGetDate, sqlGetHour } from '@/util';
 
 type Message = typeof schema.messages.$inferSelect;
 type MessageStamp = typeof schema.messageStamps.$inferSelect;
@@ -34,10 +35,6 @@ export const MessagesQuerySchema = z
     offset: z.preprocess((x) => Number(x), z.number().int().nonnegative()),
   })
   .partial();
-
-const sqlGetMonth = <T>(date: T) => sql`TO_CHAR(${date}, 'YYYY-MM')`;
-const sqlGetDate = <T>(date: T) => sql`TO_CHAR(${date}, 'YYYY-MM-DD')`;
-const sqlGetHour = <T>(date: T) => sql`TO_CHAR(${date}, 'HH24')`;
 
 export type MessagesQuery = z.infer<typeof MessagesQuerySchema>;
 
@@ -242,6 +239,10 @@ export const getMessagesRanking = async () => {
   return await db.select().from(schema.messagesRankingView).execute();
 };
 
+export const getMessagesTimeline = async () => {
+  return await db.select().from(schema.messagesMonthlyTimelineView).execute();
+};
+
 export const getGaveMessageStampsRanking = async () => {
   return await db.select().from(schema.gaveMessageStampsRankingView).execute();
 };
@@ -255,6 +256,7 @@ export const getReceivedMessageStampsRanking = async () => {
 
 export const updateMaterializedViews = async () => {
   await db.refreshMaterializedView(schema.messagesRankingView);
+  await db.refreshMaterializedView(schema.messagesMonthlyTimelineView);
   await db.refreshMaterializedView(schema.stampRelationsView);
   await db.refreshMaterializedView(schema.gaveMessageStampsRankingView);
   await db.refreshMaterializedView(schema.receivedMessageStampsRankingView);
