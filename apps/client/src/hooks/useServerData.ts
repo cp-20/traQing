@@ -1,4 +1,5 @@
 import { client } from '@/features/api';
+import type { StampRelationsQuery } from '@traq-ing/database';
 import { ClientResponse } from 'hono/client';
 import useSWR from 'swr';
 import type {
@@ -99,6 +100,17 @@ export const useMessageStampsData = () => {
   return useSWR<Stamp[]>(
     '/api/message-stamps',
     fetchWrapper(() => client['message-stamps'].$get())
+  );
+};
+
+export const useStampRelationsData = (query: StampRelationsQuery) => {
+  return useSWR<{ user: string; messageUser: string; count: number }[]>(
+    '/api/stamp-relations',
+    fetchWrapper(() =>
+      client['stamp-relations'].$get({
+        query: { ...query, threshold: query.threshold?.toString() },
+      })
+    )
   );
 };
 

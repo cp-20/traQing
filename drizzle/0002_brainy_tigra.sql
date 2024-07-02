@@ -41,6 +41,21 @@ GROUP BY
 ORDER BY
   count DESC;
 
+-- Materialized view for stamp relations
+DROP MATERIALIZED VIEW IF EXISTS stamp_relations;
+CREATE MATERIALIZED VIEW stamp_relations AS
+SELECT
+  user_id,
+  message_user_id,
+  COUNT(*) AS count
+FROM
+  message_stamps
+GROUP BY
+  user_id,
+  message_user_id
+ORDER BY
+  count DESC;
+
 -- functions
 
 CREATE

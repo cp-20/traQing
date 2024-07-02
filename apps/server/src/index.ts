@@ -1,10 +1,12 @@
 import {
   MessagesQuerySchema,
+  StampRelationsQuerySchema,
   StampsQuerySchema,
   getGaveMessageStampsRanking,
   getMessages,
   getMessagesRanking,
   getReceivedMessageStampsRanking,
+  getStampRelations,
   getStamps,
 } from '@traq-ing/database';
 import { api } from '@/traQ/api';
@@ -124,6 +126,20 @@ const routes = app
       return c.json({ message: 'Failed to fetch stamps' }, 500);
     }
   })
+  .get(
+    '/stamp-relations',
+    zValidator('query', StampRelationsQuerySchema),
+    async (c) => {
+      const query = c.req.valid('query');
+      try {
+        const messages = await getStampRelations(query);
+        return c.json(messages, 200);
+      } catch (err) {
+        console.error(err);
+        return c.json({ message: 'Failed to fetch stamps' }, 500);
+      }
+    }
+  )
   .get('/users', async (c) => {
     try {
       const users = await api.users.getUsers({ 'include-suspended': true });

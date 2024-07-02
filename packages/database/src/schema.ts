@@ -67,6 +67,19 @@ export const messageStamps = pgTable(
   })
 );
 
+export const stampRelationsView = pgMaterializedView('stamp_relations').as(
+  (qb) =>
+    qb
+      .select({
+        messageUser: messageStamps.messageUserId,
+        user: messageStamps.userId,
+        count: count().as('count'),
+      })
+      .from(messageStamps)
+      .groupBy(messageStamps.userId, messageStamps.messageUserId)
+      .orderBy(desc(count()))
+);
+
 export const gaveMessageStampsRankingView = pgMaterializedView(
   'gave_message_stamps_ranking'
 ).as((qb) =>

@@ -1,6 +1,6 @@
 import { db } from '@/db';
 import * as schema from './schema';
-import { and, asc, count, desc, eq, gt, lt, sql } from 'drizzle-orm';
+import { and, asc, count, desc, eq, gt, gte, lt, sql } from 'drizzle-orm';
 import { z } from 'zod';
 
 type Message = typeof schema.messages.$inferSelect;
@@ -214,6 +214,30 @@ export const getStamps = async (query: StampsQuery) => {
   return results;
 };
 
+export const StampRelationsQuerySchema = z
+  .object({
+    userId: z.string(),
+    messageUserId: z.string(),
+    threshold: z.preprocess((x) => Number(x), z.number().int().positive()),
+  })
+  .partial();
+
+export type StampRelationsQuery = z.infer<typeof StampRelationsQuerySchema>;
+
+export const getStampRelations = async (query: StampRelationsQuery) => {
+  const conditions = [
+    query.userId && eq(schema.stampRelationsView.user, query.userId),
+    query.messageUserId &&
+      eq(schema.stampRelationsView.messageUser, query.messageUserId),
+    query.threshold && gte(schema.stampRelationsView.count, query.threshold),
+  ];
+  return await db
+    .select()
+    .from(schema.stampRelationsView)
+    .where(and(...conditions.filter((x) => !!x)))
+    .execute();
+};
+
 export const getMessagesRanking = async () => {
   return await db.select().from(schema.messagesRankingView).execute();
 };
@@ -231,6 +255,7 @@ export const getReceivedMessageStampsRanking = async () => {
 
 export const updateMaterializedViews = async () => {
   await db.refreshMaterializedView(schema.messagesRankingView);
+  await db.refreshMaterializedView(schema.stampRelationsView);
   await db.refreshMaterializedView(schema.gaveMessageStampsRankingView);
   await db.refreshMaterializedView(schema.receivedMessageStampsRankingView);
 };
