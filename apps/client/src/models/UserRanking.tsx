@@ -3,10 +3,12 @@ import {
   useMessagesRanking,
   useReceivedMessageStampsRanking,
 } from '@/hooks/useServerData';
+import { useStamps } from '@/hooks/useStamps';
 import { useUsers } from '@/hooks/useUsers';
 import { Skeleton } from '@mantine/core';
 import { IconCrown } from '@tabler/icons-react';
-import { FC } from 'react';
+import { StampsQuery } from '@traq-ing/database';
+import { FC, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
 type RankDisplayProps = {
@@ -119,4 +121,54 @@ export const UserReceivedStampsRanking: FC = () => {
     count: d.count,
   }));
   return <UserRanking users={formatted} limit={20} />;
+};
+
+type SpecificStampRankingProps = {
+  stampId: string | null;
+  limit?: number;
+};
+
+export const UserGaveSpecificStampRanking: FC<SpecificStampRankingProps> = ({
+  stampId,
+  limit,
+}) => {
+  const query = useMemo(
+    () =>
+      ({
+        stampId: stampId ?? undefined,
+        groupBy: 'user',
+        orderBy: 'count',
+        order: 'desc',
+        limit: limit ?? 10,
+      } satisfies StampsQuery),
+    [stampId]
+  );
+  const { stamps } = useStamps(query);
+  const data = stamps?.map((s) => ({
+    user: s.user,
+    count: s.count,
+  }));
+  return <UserRanking users={data} limit={limit ?? 10} />;
+};
+
+export const UserReceivedSpecificStampRanking: FC<
+  SpecificStampRankingProps
+> = ({ stampId, limit }) => {
+  const query = useMemo(
+    () =>
+      ({
+        stampId: stampId ?? undefined,
+        groupBy: 'messageUser',
+        orderBy: 'count',
+        order: 'desc',
+        limit: limit ?? 10,
+      } satisfies StampsQuery),
+    [stampId]
+  );
+  const { stamps } = useStamps(query);
+  const data = stamps?.map((s) => ({
+    user: s.messageUser,
+    count: s.count,
+  }));
+  return <UserRanking users={data} limit={limit ?? 10} />;
 };
