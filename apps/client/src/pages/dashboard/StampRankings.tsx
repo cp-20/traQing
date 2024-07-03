@@ -63,7 +63,7 @@ export const StampRankings: FC = () => {
         </Card>
       </div>
       <div className="flex flex-col-reverse gap-4 xl:flex-row">
-        <Card className="border flex-1">
+        <Card className="border flex-1 max-h-[560px] overflow-auto">
           <div className="font-medium text mb-4 flex gap-1">
             {StampElement}
             <span>をたくさんつけられたメッセージ</span>
