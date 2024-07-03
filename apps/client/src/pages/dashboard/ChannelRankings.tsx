@@ -97,7 +97,7 @@ const ChannelRankingItem: FC<ChannelRankingItemProps> = ({
       <div className="text-right w-28">
         <span className="font-medium">{count}</span>
         <span className="ml-1 text-gray-500 text-sm">
-          ({((count * 1000) / total).toFixed(1)}%)
+          ({((count * 100) / total).toFixed(1)}%)
         </span>
       </div>
     </div>
