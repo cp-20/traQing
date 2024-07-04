@@ -12,6 +12,8 @@ COPY ./drizzle/ /app/drizzle
 
 RUN bun i --frozen-lockfile
 
+RUN timeout --preserve-status 20s bun run build:database || true
+
 EXPOSE 8080
 
 CMD ["bun", "run", "start:server"]
