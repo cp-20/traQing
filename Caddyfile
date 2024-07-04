@@ -1,0 +1,19 @@
+{
+	admin off
+}
+
+:80 {
+	encode zstd gzip
+
+	handle_path /api/* {
+		reverse_proxy traq-ing-server:8080
+	}
+
+	file_server {
+		precompressed br gzip
+	}
+
+	root * /usr/share/caddy
+
+	# try_files {path} /index.html
+}

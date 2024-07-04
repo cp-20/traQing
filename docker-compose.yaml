@@ -1,14 +1,28 @@
 services:
-  traq-ing:
-    container_name: traq-ing
+  traq-ing-client:
+    container_name: traq-ing-client
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: client.Dockerfile
+    restart: always
+    networks:
+      - traq-ing-network
+    ports:
+      - '5002:80'
+  traq-ing-server:
+    container_name: traq-ing-server
+    build:
+      context: .
+      dockerfile: server.Dockerfile
     restart: always
     ports:
-      - '4173:4173'
-      - '5000:5000'
+      - '5001:8080'
+    networks:
+      - traq-ing-network
     environment:
       - TRAQ_AUTH_CLIENT_ID=${TRAQ_AUTH_CLIENT_ID}
       - TRAQ_TOKEN=${TRAQ_TOKEN}
       - DATABASE_URL=postgressql://user:password@host.docker.internal:5432/traq_ing
+
+networks:
+  traq-ing-network:
