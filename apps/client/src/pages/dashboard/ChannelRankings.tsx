@@ -1,13 +1,44 @@
 import { Card } from '@/components/Card';
 import { NotificationIcon } from '@/components/NotificationIcon';
-import { RankDisplay, RankingItemSkeleton } from '@/components/Ranking';
+import { RankDisplay } from '@/components/Ranking';
 import { useChannels } from '@/hooks/useChannels';
 import { useMessages } from '@/hooks/useMessages';
 import { useSubscriptions } from '@/hooks/useSubscriptions';
 import { useUsers } from '@/hooks/useUsers';
 import { Skeleton } from '@mantine/core';
+import { useIntersection } from '@mantine/hooks';
 import { MessagesQuery } from '@traq-ing/database';
-import { type FC, type ReactNode, useMemo } from 'react';
+import {
+  type FC,
+  type ReactNode,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+
+type ChannelRankingItemSkeletonProps = {
+  rank: number;
+};
+
+const ChannelRankingItemSkeleton: FC<ChannelRankingItemSkeletonProps> = ({
+  rank,
+}) => (
+  <div className="flex items-center gap-2 px-2 py-1">
+    <RankDisplay rank={rank} />
+    <Skeleton circle w={24} height={24} />
+    <div className="flex-1 flex @2xl:items-center justify-between gap-1 flex-col @2xl:flex-row">
+      <Skeleton h={16} />
+      <div className="flex items-center -space-x-2">
+        {new Array(10).fill(0).map((_, i) => (
+          <div key={i} style={{ zIndex: 10 - i }}>
+            <Skeleton circle w={20} height={20} />
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
 
 type ChannelRankingItemProps = {
   rank: number;
@@ -50,6 +81,7 @@ const ChannelRankingItem: FC<ChannelRankingItemProps> = ({
           width={24}
           height={24}
           className="rounded-full"
+          loading="lazy"
           title={`${firstUser.displayName} (@${firstUser.name})`}
         />
       ) : (
@@ -70,6 +102,12 @@ const ChannelRankingItem: FC<ChannelRankingItemProps> = ({
         </div>
 
         <div className="flex items-center -space-x-2">
+          {messages.length === 0 &&
+            new Array(10).fill(0).map((_, i) => (
+              <div key={i} style={{ zIndex: 10 - i }}>
+                <Skeleton circle w={20} height={20} />
+              </div>
+            ))}
           {messages.slice(0, 10).map((m, i, arr) => (
             <div key={m.user} style={{ zIndex: arr.length - i }}>
               <img
@@ -106,7 +144,7 @@ const ChannelRankingItem: FC<ChannelRankingItemProps> = ({
 
 type ChannelRankingProps = {
   channels: { channel: string; count: number }[];
-  limit: number;
+  limit?: number;
   label: ReactNode;
 };
 
@@ -116,6 +154,18 @@ const ChannelRanking: FC<ChannelRankingProps> = ({
   label,
 }) => {
   const { getSubscriptionLevel } = useSubscriptions();
+  const [currentLimit, setCurrentLimit] = useState(Math.min(limit ?? 20, 20));
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { ref: loaderRef, entry } = useIntersection({
+    root: containerRef.current,
+    threshold: 0.1,
+  });
+
+  useEffect(() => {
+    if (entry?.isIntersecting) {
+      setCurrentLimit((prev) => prev + 20);
+    }
+  }, [entry]);
 
   const stats = channels.length > 0 && {
     total: channels.reduce((acc, { count }) => acc + count, 0),
@@ -125,7 +175,7 @@ const ChannelRanking: FC<ChannelRankingProps> = ({
   };
 
   return (
-    <Card className="border">
+    <Card className="border max-h-[768px] overflow-auto" ref={containerRef}>
       <div className="font-medium mb-2 flex justify-between">
         <div>{label}</div>
         {stats && (
@@ -142,16 +192,24 @@ const ChannelRanking: FC<ChannelRankingProps> = ({
       </div>
       <div className="flex flex-col">
         {channels.length === 0 &&
-          new Array(limit)
+          new Array(limit ?? 20)
             .fill(null)
-            .map((_, i) => <RankingItemSkeleton rank={i + 1} key={i} />)}
-        {channels.slice(0, limit).map((c, i) => (
+            .map((_, i) => <ChannelRankingItemSkeleton rank={i + 1} key={i} />)}
+        {channels.slice(0, currentLimit).map((c, i) => (
           <ChannelRankingItem
+            key={`${c.channel}-${i}-${stats}`}
             rank={i + 1}
             channel={c}
             total={stats ? stats.total : 0}
           />
         ))}
+        <div ref={loaderRef} />
+        {channels.length > currentLimit &&
+          new Array(10)
+            .fill(0)
+            .map((_, i) => (
+              <ChannelRankingItemSkeleton rank={currentLimit + i + 1} />
+            ))}
       </div>
     </Card>
   );
@@ -169,7 +227,7 @@ const ChannelOverallRanking: FC = () => {
   );
   const { messages } = useMessages(query);
 
-  return <ChannelRanking channels={messages} limit={20} label="全体" />;
+  return <ChannelRanking channels={messages} label="全体" />;
 };
 
 const ChannelYearlyRanking: FC = () => {
@@ -185,7 +243,7 @@ const ChannelYearlyRanking: FC = () => {
   );
   const { messages } = useMessages(query);
 
-  return <ChannelRanking channels={messages} limit={20} label="過去1年間" />;
+  return <ChannelRanking channels={messages} label="過去1年間" />;
 };
 
 const ChannelMonthlyRanking: FC = () => {
@@ -201,7 +259,7 @@ const ChannelMonthlyRanking: FC = () => {
   );
   const { messages } = useMessages(query);
 
-  return <ChannelRanking channels={messages} limit={20} label="過去1か月" />;
+  return <ChannelRanking channels={messages} label="過去1か月" />;
 };
 
 const ChannelDailyRanking: FC = () => {
@@ -217,7 +275,7 @@ const ChannelDailyRanking: FC = () => {
   );
   const { messages } = useMessages(query);
 
-  return <ChannelRanking channels={messages} limit={20} label="過去24時間" />;
+  return <ChannelRanking channels={messages} label="過去24時間" />;
 };
 
 export const ChannelRankings: FC = () => {
