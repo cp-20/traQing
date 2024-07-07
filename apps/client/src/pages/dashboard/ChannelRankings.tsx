@@ -28,11 +28,13 @@ const ChannelRankingItemSkeleton: FC<ChannelRankingItemSkeletonProps> = ({
     <RankDisplay rank={rank} />
     <Skeleton circle w={24} height={24} />
     <div className="flex-1 flex @2xl:items-center justify-between gap-1 flex-col @2xl:flex-row">
-      <Skeleton h={16} />
-      <div className="flex items-center -space-x-2">
+      <div className="h-6 py-1">
+        <Skeleton h={16} />
+      </div>
+      <div className="flex items-center -space-x-1">
         {new Array(10).fill(0).map((_, i) => (
           <div key={i} style={{ zIndex: 10 - i }}>
-            <Skeleton circle w={20} height={20} />
+            <Skeleton circle w={16} height={16} />
           </div>
         ))}
       </div>
@@ -101,11 +103,11 @@ const ChannelRankingItem: FC<ChannelRankingItemProps> = ({
           </button>
         </div>
 
-        <div className="flex items-center -space-x-2">
+        <div className="flex items-center -space-x-1">
           {messages.length === 0 &&
             new Array(10).fill(0).map((_, i) => (
               <div key={i} style={{ zIndex: 10 - i }}>
-                <Skeleton circle w={20} height={20} />
+                <Skeleton circle w={16} height={16} />
               </div>
             ))}
           {messages.slice(0, 10).map((m, i, arr) => (
@@ -113,8 +115,8 @@ const ChannelRankingItem: FC<ChannelRankingItemProps> = ({
               <img
                 src={`/api/files/${getUserFromId(m.user)!.iconFileId}`}
                 alt=""
-                width={20}
-                height={20}
+                width={16}
+                height={16}
                 className="rounded-full border-2 border-white bg-white"
                 title={`${getUserFromId(m.user)!.displayName} (@${
                   getUserFromId(m.user)!.name

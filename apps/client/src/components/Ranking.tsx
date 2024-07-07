@@ -10,13 +10,13 @@ export const RankDisplay: FC<RankDisplayProps> = ({ rank }) => {
   if (rank <= 3) {
     const colors = ['orange', 'silver', 'indianred'];
     return (
-      <span className="w-8">
+      <span className="w-9">
         <IconCrown fill={colors[rank - 1]} color={colors[rank - 1]} />
       </span>
     );
   }
 
-  return <span className="text-lg font-medium w-8">#{rank}</span>;
+  return <span className="text-lg font-medium w-9 text-right">#{rank}</span>;
 };
 
 export type RankingItemSkeletonProps = {

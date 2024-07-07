@@ -5,7 +5,6 @@ import { DailyRankings } from '@/pages/dashboard/DailyRankings';
 import { MonthlyRankings } from '@/pages/dashboard/MonthlyRankings';
 import { UserRankings } from '@/pages/dashboard/UserRankings';
 import { StampRankings } from '@/pages/dashboard/StampRankings';
-import { ChannelRankings } from '@/pages/dashboard/ChannelRankings';
 
 export const Dashboard: FC = () => {
   return (
@@ -20,7 +19,6 @@ export const Dashboard: FC = () => {
         <SearchUsers />
         <UserRankings />
         <StampRankings />
-        <ChannelRankings />
       </div>
     </div>
   );
