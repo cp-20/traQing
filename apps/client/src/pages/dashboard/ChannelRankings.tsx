@@ -177,7 +177,7 @@ const ChannelRanking: FC<ChannelRankingProps> = ({
   };
 
   return (
-    <Card className="border max-h-[768px] overflow-auto" ref={containerRef}>
+    <Card className="border max-h-[740px] overflow-auto" ref={containerRef}>
       <div className="font-medium mb-2 flex justify-between">
         <div>{label}</div>
         {stats && (
