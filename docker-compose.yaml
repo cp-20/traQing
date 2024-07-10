@@ -9,6 +9,10 @@ services:
       - traq-ing-network
     ports:
       - '5002:80'
+    develop:
+      watch:
+        - path: ./Caddyfile
+          action: rebuild
   traq-ing-server:
     container_name: traq-ing-server
     build:

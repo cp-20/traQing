@@ -9,11 +9,11 @@
 		reverse_proxy traq-ing-server:8080
 	}
 
-	file_server {
-		precompressed br gzip
+	route * {
+		root * /usr/share/caddy
+		try_files {path} /index.html
+		file_server {
+			precompressed br gzip
+		}
 	}
-
-	root * /usr/share/caddy
-
-	# try_files {path} /index.html
 }
