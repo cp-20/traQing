@@ -12,20 +12,20 @@
   "dependencies": {
     "@traq-ing/database": "workspace:*",
     "@traq-ing/server": "workspace:*",
-    "@mantine/core": "^7.11.0",
-    "@mantine/hooks": "^7.11.0",
-    "@tabler/icons-react": "^3.7.0",
+    "@mantine/core": "^7.11.2",
+    "@mantine/hooks": "^7.11.2",
+    "@tabler/icons-react": "^3.11.0",
     "@tailwindcss/container-queries": "^0.1.1",
     "@traptitech/traq-markdown-it": "^6.3.0",
     "chart.js": "^4.4.3",
     "clsx": "^2.1.1",
     "deepmerge": "^4.3.1",
-    "hono": "^4.4.9",
-    "jotai": "^2.8.3",
+    "hono": "^4.5.3",
+    "jotai": "^2.9.1",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.24.0",
+    "react-router-dom": "^6.25.1",
     "swr": "^2.2.5",
     "vite-tsconfig-paths": "^4.3.2"
   },
@@ -34,10 +34,10 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react-swc": "^3.7.0",
     "autoprefixer": "^10.4.19",
-    "postcss": "^8.4.38",
-    "postcss-preset-mantine": "^1.15.0",
+    "postcss": "^8.4.40",
+    "postcss-preset-mantine": "^1.17.0",
     "postcss-simple-vars": "^7.0.1",
-    "tailwindcss": "^3.4.4",
-    "vite": "^5.3.2"
+    "tailwindcss": "^3.4.7",
+    "vite": "^5.3.5"
   }
 }
