@@ -1,6 +1,6 @@
 import { Skeleton } from '@mantine/core';
 import { FC } from 'react';
-import { Stamp } from 'traq-bot-ts';
+import type { Stamp } from 'traq-bot-ts';
 
 type Props = {
   stats: {
