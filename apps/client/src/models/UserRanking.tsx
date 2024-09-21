@@ -1,4 +1,4 @@
-import { RankingItemSkeleton, RankDisplay } from '@/components/Ranking';
+import { RankingItemRank, RankingItemSkeleton } from '@/components/rankings';
 import {
   useGaveMessageStampsRanking,
   useMessagesRanking,
@@ -29,7 +29,7 @@ const UserRankingItem: FC<UserRankingItemProps> = ({ userId, rank, count }) => {
       to={`/users/${encodeURIComponent(user.name)}`}
       className="flex items-center gap-2 hover:bg-gray-100 rounded-md px-2 py-1 transition-all duration-200"
     >
-      <RankDisplay rank={rank} />
+      <RankingItemRank rank={rank} />
       <img
         src={`/api/files/${user.iconFileId}`}
         width={24}

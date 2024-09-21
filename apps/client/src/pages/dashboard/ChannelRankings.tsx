@@ -1,6 +1,7 @@
 import { Card } from '@/components/Card';
 import { NotificationIcon } from '@/components/NotificationIcon';
-import { RankDisplay } from '@/components/Ranking';
+import { RankingItemRank } from '@/components/rankings';
+import { UserAvatar } from '@/components/UserAvatar';
 import { useChannels } from '@/hooks/useChannels';
 import { useMessages } from '@/hooks/useMessages';
 import { useSubscriptions } from '@/hooks/useSubscriptions';
@@ -24,19 +25,22 @@ type ChannelRankingItemSkeletonProps = {
 const ChannelRankingItemSkeleton: FC<ChannelRankingItemSkeletonProps> = ({
   rank,
 }) => (
-  <div className="flex items-center gap-2 px-2 py-1">
-    <RankDisplay rank={rank} />
+  <div className="flex items-center gap-2 px-2 py-1 @container">
+    <RankingItemRank rank={rank} />
     <Skeleton circle w={24} height={24} />
     <div className="flex-1 flex @2xl:items-center justify-between gap-1 flex-col @2xl:flex-row">
       <div className="h-6 py-1">
-        <Skeleton h={16} />
+        <Skeleton w={240} h={16} />
       </div>
-      <div className="flex items-center -space-x-1">
-        {new Array(10).fill(0).map((_, i) => (
-          <div key={i} style={{ zIndex: 10 - i }}>
-            <Skeleton circle w={16} height={16} />
-          </div>
-        ))}
+      <div className="flex gap-4">
+        <div className="flex items-center -space-x-1">
+          {new Array(10).fill(0).map((_, i) => (
+            <div key={i} style={{ zIndex: 10 - i }}>
+              <Skeleton circle w={16} height={16} />
+            </div>
+          ))}
+        </div>
+        <Skeleton w={96} h={16} />
       </div>
     </div>
   </div>
@@ -62,7 +66,7 @@ const ChannelRankingItem: FC<ChannelRankingItemProps> = ({
         orderBy: 'count',
         order: 'desc',
       } satisfies MessagesQuery),
-    []
+    [channel]
   );
   const { messages, loading } = useMessages(query);
   const { getUserFromId, users } = useUsers();
@@ -73,26 +77,26 @@ const ChannelRankingItem: FC<ChannelRankingItemProps> = ({
 
   return (
     <div className="flex items-center gap-2 px-2 py-1 @container">
-      <RankDisplay rank={rank} />
+      <RankingItemRank rank={rank} />
       {loading || users === undefined ? (
         <Skeleton circle w={24} height={24} />
       ) : firstUser ? (
-        <img
-          src={`/api/files/${firstUser.iconFileId}`}
-          alt=""
-          width={24}
-          height={24}
-          className="rounded-full"
-          loading="lazy"
+        <UserAvatar
+          userId={firstUser.id}
+          size={24}
           title={`${firstUser.displayName} (@${firstUser.name})`}
         />
       ) : (
-        <div className="rounded-full w-6 h-6" />
+        <div className="rounded-full size-6" />
       )}
       <div className="flex-1 flex @2xl:items-center justify-between gap-1 flex-col @2xl:flex-row">
         <div className="flex items-center gap-2">
           <div className="font-semibold">
-            {`#${getChannelName(channel)}` ?? <Skeleton h={16} />}
+            {getChannelName(channel) ? (
+              `#${getChannelName(channel)}`
+            ) : (
+              <Skeleton w={240} h={16} />
+            )}
           </div>
           <button
             onClick={() => {
@@ -112,12 +116,10 @@ const ChannelRankingItem: FC<ChannelRankingItemProps> = ({
             ))}
           {messages.slice(0, 10).map((m, i, arr) => (
             <div key={m.user} style={{ zIndex: arr.length - i }}>
-              <img
-                src={`/api/files/${getUserFromId(m.user)!.iconFileId}`}
-                alt=""
-                width={16}
-                height={16}
-                className="rounded-full border-2 border-white bg-white"
+              <UserAvatar
+                userId={m.user}
+                size={16}
+                className="border-2 border-white bg-white"
                 title={`${getUserFromId(m.user)!.displayName} (@${
                   getUserFromId(m.user)!.name
                 })`}
