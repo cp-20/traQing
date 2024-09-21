@@ -38,8 +38,8 @@ const SubscribedIcon: FC = () => (
       fill="currentColor"
     />
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M18.5 10.5V16L20.5 18V19H3.5V18L5.5 16V10.5C5.5 7.43 7.63 4.86 10.5 4.18V3.5C10.5 3.10218 10.658 2.72064 10.9393 2.43934C11.2206 2.15804 11.6022 2 12 2C12.3978 2 12.7794 2.15804 13.0607 2.43934C13.342 2.72064 13.5 3.10218 13.5 3.5V4.18C16.36 4.86 18.5 7.43 18.5 10.5ZM7.5 10.5V17H16.5V10.5C16.5 8 14.5 6 12 6C9.5 6 7.5 8 7.5 10.5Z"
       fill="currentColor"
     />
@@ -59,8 +59,8 @@ const NotifiedIcon: FC = () => (
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M18.5 10.5V16L20.5 18V19H3.5V18L5.5 16V10.5C5.5 7.43 7.63 4.86 10.5 4.18V3.5C10.5 3.10218 10.658 2.72064 10.9393 2.43934C11.2206 2.15804 11.6022 2 12 2C12.3978 2 12.7794 2.15804 13.0607 2.43934C13.342 2.72064 13.5 3.10218 13.5 3.5V4.18C16.36 4.86 18.5 7.43 18.5 10.5Z"
       fill="currentColor"
     />
