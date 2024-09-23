@@ -5,11 +5,11 @@ import { useMessage } from '@/hooks/useMessage';
 import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { useUsers } from '@/hooks/useUsers';
 import { Skeleton, Text } from '@mantine/core';
-import { type FC, type ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import type { Store, traQMarkdownIt } from '@traptitech/traq-markdown-it';
+import { type FC, type ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import './TraqMessage.css';
-import clsx from 'clsx';
 import { useOpenGraph } from '@/hooks/useOpenGraph';
+import clsx from 'clsx';
 
 const formatDate = (date: Date) => {
   const year = date.getFullYear();
@@ -45,11 +45,17 @@ export const TraqMessage: FC<TraqMessageProps> = ({ messageId, annotation }) => 
       return null;
 
     return {
+      // biome-ignore lint/style/noNonNullAssertion: 簡便のため
       getUser: (userId) => users.find((u) => u.id === userId)!,
+      // biome-ignore lint/style/noNonNullAssertion: 簡便のため
       getChannel: (channelId: string) => channels.find((c) => c.id === channelId)!,
+      // biome-ignore lint/style/noNonNullAssertion: 簡便のため
       getUserGroup: (groupId: string) => groups.find((g) => g.id === groupId)!,
+      // biome-ignore lint/style/noNonNullAssertion: 簡便のため
       getMe: () => me!,
+      // biome-ignore lint/style/noNonNullAssertion: 簡便のため
       getStampByName: (name: string) => stamps.find((s) => s.name === name)!,
+      // biome-ignore lint/style/noNonNullAssertion: 簡便のため
       getUserByName: (name: string) => users.find((u) => u.name === name)!,
       generateUserHref: (id: string) => `https://q.trap.jp/user/${id}`,
       generateUserGroupHref: (id: string) => `https://q.trap.jp/group/${id}`,
@@ -106,6 +112,7 @@ export const TraqMessage: FC<TraqMessageProps> = ({ messageId, annotation }) => 
           <div className="ml-auto">{annotation}</div>
         </div>
         <div className="flex flex-col gap-1 min-w-0 flex-1">
+          {/* biome-ignore lint/security/noDangerouslySetInnerHtml: Markdownレンダリング処理を外部でやるため */}
           <div className="traq-markdown" dangerouslySetInnerHTML={{ __html: markdown.renderedText }} />
           <div>{quotedMessages}</div>
           <div
@@ -160,6 +167,7 @@ const QuotedMessage: FC<QuotedMessageProps> = ({ messageId, markdownIt }) => {
         </Text>
         <Text fz="sm">(@{user.name})</Text>
       </div>
+      {/* biome-ignore lint/security/noDangerouslySetInnerHtml: Markdownレンダリング処理を外部でやるため */}
       <div className="traq-markdown traq-markdown-quoted" dangerouslySetInnerHTML={{ __html: markdown.renderedText }} />
       <Text c="dimmed" fz="xs" className="flex gap-1">
         <span>#{channel}</span>
@@ -189,7 +197,7 @@ const TraqMessageSkeleton: FC = () => {
           <Skeleton h={12} radius="md" width="70%" />
         </div>
       </div>
-      <a className="text-blue-600 font-medium hover:underline">traQで開く</a>
+      <span className="text-blue-600 font-medium hover:underline">traQで開く</span>
     </div>
   );
 };

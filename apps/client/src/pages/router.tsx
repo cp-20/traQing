@@ -2,7 +2,7 @@ import { ChannelsOverviewPage } from '@/pages/channels-overview';
 import { Dashboard } from '@/pages/dashboard';
 import { RankingsPage } from '@/pages/rankings';
 import { UserDetailPage } from '@/pages/user-detail';
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { Navigate, createBrowserRouter } from 'react-router-dom';
 
 export const router = createBrowserRouter([
   {

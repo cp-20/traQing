@@ -1,7 +1,7 @@
-import type { FC, ReactNode } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Loader } from '@mantine/core';
 import clsx from 'clsx';
+import type { FC, ReactNode } from 'react';
 
 type Props = {
   component: ReactNode;

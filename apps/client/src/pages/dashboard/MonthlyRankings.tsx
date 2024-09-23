@@ -1,4 +1,4 @@
-import { useMonthlySwitcher, DateSwitcher } from '@/models/DateSwitcher';
+import { DateSwitcher, useMonthlySwitcher } from '@/models/DateSwitcher';
 import { MonthlyChannelRanking } from '@/models/Rankings/MonthlyChannelRanking';
 import { MonthlyStampRanking } from '@/models/Rankings/MonthlyStampRanking';
 import { MonthlyUserRanking } from '@/models/Rankings/MonthlyUserRanking';

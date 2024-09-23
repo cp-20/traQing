@@ -1,6 +1,6 @@
-import { useId, useState } from 'react';
-import { DatePicker } from '@mantine/dates';
 import { Button, Popover } from '@mantine/core';
+import { DatePicker } from '@mantine/dates';
+import { useId, useState } from 'react';
 
 export type DateRange = [Date, Date];
 
@@ -14,7 +14,7 @@ const formatDate = (date: Date) => {
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString();
   const day = date.getDate().toString();
-  return `${year === thisYear ? '' : year + '/'}${month}/${day}`;
+  return `${year === thisYear ? '' : `${year}/`}${month}/${day}`;
 };
 
 const msInDay = 24 * 60 * 60 * 1000;
@@ -113,8 +113,8 @@ export const useDateRangePicker = (defaultType: Type, defaultRange?: DateRange) 
                   <input
                     className="peer"
                     type="radio"
-                    id={'date-range-picker' + id + key}
-                    name={'date-range-picker' + id}
+                    id={`date-range-picker${id}${key}`}
+                    name={`date-range-picker${id}`}
                     hidden
                     checked={settingType === key}
                     onChange={() => {
@@ -123,7 +123,7 @@ export const useDateRangePicker = (defaultType: Type, defaultRange?: DateRange) 
                     }}
                   />
                   <label
-                    htmlFor={'date-range-picker' + id + key}
+                    htmlFor={`date-range-picker${id}${key}`}
                     className="peer-checked:font-bold peer-checked:text-blue-500 peer-checked:bg-blue-100 px-2 py-1 rounded-sm w-full block"
                   >
                     {label}

@@ -33,23 +33,22 @@ export const SearchUsers: FC = () => {
             users.filter((user) => user.name.includes(keyword) || user.displayName.includes(keyword)).length === 0 && (
               <div className="text-gray-500 text-center">お探しのユーザーは見つかりません</div>
             )}
-          {users &&
-            users
-              .filter((user) => searchUser(user, keyword))
-              .slice(0, 100)
-              .map((user) => (
-                <Link
-                  to={`/users/${encodeURIComponent(user.name)}`}
-                  key={user.id}
-                  className="flex gap-2 px-4 py-1 items-center hover:bg-gray-100 rounded-md transition-all duration-200"
-                >
-                  <img src={`/api/files/${user.iconFileId}`} alt="" width={32} height={32} className="rounded-full" />
-                  <span className="space-x-1">
-                    <span className="font-medium">{user.displayName}</span>
-                    <span className="text-gray-500">@{user.name}</span>
-                  </span>
-                </Link>
-              ))}
+          {users
+            ?.filter((user) => searchUser(user, keyword))
+            .slice(0, 100)
+            .map((user) => (
+              <Link
+                to={`/users/${encodeURIComponent(user.name)}`}
+                key={user.id}
+                className="flex gap-2 px-4 py-1 items-center hover:bg-gray-100 rounded-md transition-all duration-200"
+              >
+                <img src={`/api/files/${user.iconFileId}`} alt="" width={32} height={32} className="rounded-full" />
+                <span className="space-x-1">
+                  <span className="font-medium">{user.displayName}</span>
+                  <span className="text-gray-500">@{user.name}</span>
+                </span>
+              </Link>
+            ))}
         </div>
       </div>
     </Card>

@@ -1,12 +1,12 @@
 import { getCommonLineChartOptions, mergeOptions } from '@/models/commonChartOptions';
 import {
-  Chart as ChartJS,
   CategoryScale,
+  Chart as ChartJS,
   type ChartOptions,
-  LinearScale,
   LineElement,
-  Tooltip,
+  LinearScale,
   PointElement,
+  Tooltip,
 } from 'chart.js';
 
 ChartJS.register(CategoryScale, LinearScale, LineElement, Tooltip, PointElement);

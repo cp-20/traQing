@@ -1,15 +1,15 @@
 import { sqlGetMonth } from '@/util';
 import { asc, count, desc } from 'drizzle-orm';
 import {
+  boolean,
   index,
   integer,
+  pgMaterializedView,
   pgTable,
   primaryKey,
   text,
-  uuid,
   timestamp,
-  boolean,
-  pgMaterializedView,
+  uuid,
 } from 'drizzle-orm/pg-core';
 
 export const messages = pgTable(

@@ -1,4 +1,4 @@
-import { useDailySwitcher, DateSwitcher } from '@/models/DateSwitcher';
+import { DateSwitcher, useDailySwitcher } from '@/models/DateSwitcher';
 import { DailyChannelRanking } from '@/models/Rankings/DailyChannelRanking';
 import { DailyStampRanking } from '@/models/Rankings/DailyStampRanking';
 import { DailyUserRanking } from '@/models/Rankings/DailyUserRanking';

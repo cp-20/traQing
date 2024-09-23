@@ -1,10 +1,10 @@
 import { useMessages } from '@/hooks/useMessages';
 import { dailyTimeRangeToTime, nextDay } from '@/hooks/useTimeRange';
-import { type FC, useMemo } from 'react';
-import { channelRankingQuery, useChannelRankingData } from './channel';
 import { type DailyRankingProps, getCommonRankingChartOptions } from '@/models/Rankings/common';
-import { Bar } from 'react-chartjs-2';
 import clsx from 'clsx';
+import { type FC, useMemo } from 'react';
+import { Bar } from 'react-chartjs-2';
+import { channelRankingQuery, useChannelRankingData } from './channel';
 
 export const DailyChannelRanking: FC<DailyRankingProps> = ({ range }) => {
   const query = useMemo(

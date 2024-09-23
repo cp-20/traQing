@@ -2,10 +2,10 @@ import { useStamps } from '@/hooks/useStamps';
 import { getCommonLineChartOptions, mergeOptions } from '@/models/commonChartOptions';
 import type { StampsQuery } from '@traq-ing/database';
 import type { ChartOptions } from 'chart.js';
-import clsx from 'clsx';
-import { useMemo, type FC } from 'react';
-import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, Filler } from 'chart.js';
+import clsx from 'clsx';
+import { type FC, useMemo } from 'react';
+import { Line } from 'react-chartjs-2';
 
 ChartJS.register(Filler);
 

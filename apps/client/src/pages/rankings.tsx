@@ -1,8 +1,8 @@
-import { useDateRangePicker } from '@/models/useDateRangePicker';
-import type { FC } from 'react';
-import { UserPostRanking } from '@/models/Rankings/UserPostRanking';
 import { Card } from '@/components/Card';
 import { ChannelPostRanking } from '@/models/Rankings/ChannelPostRanking';
+import { UserPostRanking } from '@/models/Rankings/UserPostRanking';
+import { useDateRangePicker } from '@/models/useDateRangePicker';
+import type { FC } from 'react';
 
 export const RankingsPage: FC = () => {
   const dateRange = useDateRangePicker('last-7-days');

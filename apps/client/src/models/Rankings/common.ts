@@ -1,7 +1,7 @@
 import type { DailyTimeRange, MonthlyTimeRange } from '@/hooks/useTimeRange';
 import { commonBarChartOptions, mergeOptions } from '@/models/commonChartOptions';
 import type { ChartOptions } from 'chart.js';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip } from 'chart.js';
+import { BarElement, CategoryScale, Chart as ChartJS, LinearScale, Tooltip } from 'chart.js';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 

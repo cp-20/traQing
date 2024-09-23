@@ -26,7 +26,7 @@ export const useStamps = <Q extends StampsQuery>(query: Q) => {
     };
 
     fetchStamps();
-  }, [query, setStamps, setLoading]);
+  }, [query]);
 
   return { stamps, loading };
 };

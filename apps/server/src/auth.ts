@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
+import { deleteCookie, getCookie, setCookie } from 'hono/cookie';
 import { sha256 } from 'js-sha256';
-import { getCookie, setCookie, deleteCookie } from 'hono/cookie';
 
 const baseUrl = 'https://q.trap.jp/api/v3/oauth2';
 
@@ -31,7 +31,7 @@ const getCodeChallenge = (codeVerifier: string) => {
 };
 
 export const getTraqAuthCodeRequestUrl = () => {
-  const url = baseUrl + '/authorize';
+  const url = `${baseUrl}/authorize`;
 
   const state = randomString(10);
   const codeVerifier = randomString(43);
@@ -45,13 +45,13 @@ export const getTraqAuthCodeRequestUrl = () => {
     code_challenge_method: 'S256',
   });
 
-  const redirectUri = url + '?' + params.toString();
+  const redirectUri = `${url}?${params.toString()}`;
 
   return { redirectUri, codeVerifier, state };
 };
 
 export const sendTraqAuthTokenRequest = (code: string, codeVerifier: string) => {
-  const url = baseUrl + '/token';
+  const url = `${baseUrl}/token`;
 
   const body = new URLSearchParams({
     grant_type: 'authorization_code',

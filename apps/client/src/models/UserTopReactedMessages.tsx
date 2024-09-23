@@ -22,7 +22,7 @@ export const UserTopReactedMessages: FC<UserTopReactedMessagesProps> = ({ userId
         orderBy: 'count',
         limit: 10,
       }) satisfies StampsQuery,
-    [stampId],
+    [stampId, userId],
   );
   const { stamps, loading } = useStamps(query);
   const stamp = stampId && getStamp(stampId);

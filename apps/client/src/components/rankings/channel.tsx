@@ -1,3 +1,4 @@
+import { UserAvatar } from '@/components/UserAvatar';
 import {
   RankingItemBar,
   RankingItemRank,
@@ -5,7 +6,6 @@ import {
   RankingItemValue,
   RankingItemWithLink,
 } from '@/components/rankings';
-import { UserAvatar } from '@/components/UserAvatar';
 import { useChannels } from '@/hooks/useChannels';
 import { useMessages } from '@/hooks/useMessages';
 import { useUsers } from '@/hooks/useUsers';
@@ -58,7 +58,7 @@ export const ChannelRankingWithUsers: FC<ChannelRankingWithUsersProps> = ({ rang
         limit: 1,
         ...dateRangeToQuery(range),
       }) satisfies MessagesQuery,
-    [],
+    [channelId, range],
   );
   const { messages, loading } = useMessages(query);
   const firstUser = messages.length > 0 ? getUserFromId(messages[0]?.user) : undefined;

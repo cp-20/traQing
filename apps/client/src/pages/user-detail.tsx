@@ -1,14 +1,16 @@
 import { useUsers } from '@/hooks/useUsers';
+import { assert } from '@/lib/invariant';
 import { UserDetail } from '@/models/UserDetail';
-import type { FC } from 'react';
-import { Link, useParams } from 'react-router-dom';
 import { Loader } from '@mantine/core';
 import clsx from 'clsx';
+import type { FC } from 'react';
+import { Link, useParams } from 'react-router-dom';
 
 export const UserDetailPage: FC = () => {
   const params = useParams<{ username: string }>();
   const { getUserId, users } = useUsers();
-  const userId = getUserId(params.username!);
+  assert(params.username);
+  const userId = getUserId(params.username);
 
   return (
     <div className="bg-gray-100 min-h-screen relative">

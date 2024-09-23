@@ -1,7 +1,7 @@
-import { Button } from '@mantine/core';
-import { type FC, useMemo } from 'react';
-import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import { useDailyTimeRange, useMonthlyTimeRange } from '@/hooks/useTimeRange';
+import { Button } from '@mantine/core';
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import { type FC, useMemo } from 'react';
 
 type SwitcherProps = {
   switcher: {
@@ -50,10 +50,7 @@ export const useMonthlySwitcher = () => {
   const month = range.month.toString().padStart(2, '0');
   const currentRange = `${range.year}-${month}`;
 
-  const switcher = useMemo(
-    () => ({ prev, next, currentRange, canGoNext }),
-    [range, canGoNext, currentRange, prev, next],
-  );
+  const switcher = useMemo(() => ({ prev, next, currentRange, canGoNext }), [canGoNext, currentRange, prev, next]);
 
   return { switcher, range };
 };
@@ -66,10 +63,7 @@ export const useDailySwitcher = () => {
   const day = range.day.toString().padStart(2, '0');
   const currentRange = `${range.year}-${month}-${day}`;
 
-  const switcher = useMemo(
-    () => ({ prev, next, currentRange, canGoNext }),
-    [range, canGoNext, currentRange, prev, next],
-  );
+  const switcher = useMemo(() => ({ prev, next, currentRange, canGoNext }), [canGoNext, currentRange, prev, next]);
 
   return { switcher, range };
 };

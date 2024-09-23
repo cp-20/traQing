@@ -1,5 +1,5 @@
-import type { MessagesQuery } from '@traq-ing/database';
 import { useUsers } from '@/hooks/useUsers';
+import type { MessagesQuery } from '@traq-ing/database';
 
 export const userRankingQuery = {
   groupBy: 'user',

@@ -1,10 +1,10 @@
 import { useMessages } from '@/hooks/useMessages';
-import { nextMonth, monthlyTimeRangeToTime } from '@/hooks/useTimeRange';
-import { type FC, useMemo } from 'react';
-import { useChannelRankingData, channelRankingQuery } from './channel';
+import { monthlyTimeRangeToTime, nextMonth } from '@/hooks/useTimeRange';
 import { type MonthlyRankingProps, getCommonRankingChartOptions } from '@/models/Rankings/common';
-import { Bar } from 'react-chartjs-2';
 import clsx from 'clsx';
+import { type FC, useMemo } from 'react';
+import { Bar } from 'react-chartjs-2';
+import { channelRankingQuery, useChannelRankingData } from './channel';
 
 export const MonthlyChannelRanking: FC<MonthlyRankingProps> = ({ range }) => {
   const query = useMemo(

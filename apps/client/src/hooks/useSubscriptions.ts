@@ -33,7 +33,7 @@ export const useSubscriptions = () => {
         { optimisticData: newSubscriptions },
       );
     },
-    [subscriptionsMap],
+    [mutate, subscriptions],
   );
 
   return {

@@ -28,7 +28,7 @@ export const useChannels = () => {
 
       return name.replaceAll(/([^/])[^/]*\//g, '$1/');
     },
-    [channels, getChannelName],
+    [getChannelName],
   );
 
   return { channels, getChannelName, getSummedChannelName };

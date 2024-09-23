@@ -1,10 +1,10 @@
-import type { FC } from 'react';
 import LogoImage from '@/assets/logo.svg';
-import { SearchUsers } from '@/pages/dashboard/SearchUsers';
 import { DailyRankings } from '@/pages/dashboard/DailyRankings';
 import { MonthlyRankings } from '@/pages/dashboard/MonthlyRankings';
-import { UserRankings } from '@/pages/dashboard/UserRankings';
+import { SearchUsers } from '@/pages/dashboard/SearchUsers';
 import { StampRankings } from '@/pages/dashboard/StampRankings';
+import { UserRankings } from '@/pages/dashboard/UserRankings';
+import type { FC } from 'react';
 
 export const Dashboard: FC = () => {
   return (

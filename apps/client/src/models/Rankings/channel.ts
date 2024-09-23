@@ -1,5 +1,5 @@
-import type { MessagesQuery } from '@traq-ing/database';
 import { useChannels } from '@/hooks/useChannels';
+import type { MessagesQuery } from '@traq-ing/database';
 
 export const channelRankingQuery = {
   groupBy: 'channel',

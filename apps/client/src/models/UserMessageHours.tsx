@@ -3,13 +3,13 @@ import { useStamps } from '@/hooks/useStamps';
 import { getCommonLineChartOptions, mergeOptions } from '@/models/commonChartOptions';
 import type { MessagesQuery, StampsQuery } from '@traq-ing/database';
 import {
-  Chart as ChartJS,
   CategoryScale,
-  LinearScale,
-  Tooltip,
+  Chart as ChartJS,
   type ChartOptions,
   LineElement,
+  LinearScale,
   PointElement,
+  Tooltip,
 } from 'chart.js';
 import { type FC, useMemo } from 'react';
 import { Line } from 'react-chartjs-2';

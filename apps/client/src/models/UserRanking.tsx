@@ -30,7 +30,7 @@ const UserRankingItem: FC<UserRankingItemProps> = ({ userId, rank, count }) => {
       className="flex items-center gap-2 hover:bg-gray-100 rounded-md px-2 py-1 transition-all duration-200"
     >
       <RankingItemRank rank={rank} />
-      <img src={`/api/files/${user.iconFileId}`} width={24} height={24} className="rounded-full" />
+      <img src={`/api/files/${user.iconFileId}`} width={24} height={24} alt="" className="rounded-full" />
       <span className="font-medium">{user.displayName}</span>
       <span className="text-gray-500">@{user.name}</span>
       <span className="text-right font-medium ml-auto">{count}</span>
@@ -48,12 +48,9 @@ const UserRanking: FC<UserRankingProps> = ({ users, limit }) => {
     <div className="space-y-4">
       <div className="flex flex-col">
         {users === undefined && new Array(limit).fill(null).map((_, i) => <RankingItemSkeleton key={i} rank={i + 1} />)}
-        {users &&
-          users
-            .slice(0, limit)
-            .map((message, i) => (
-              <UserRankingItem key={message.user} userId={message.user} rank={i + 1} count={message.count} />
-            ))}
+        {users?.slice(0, limit).map((message, i) => (
+          <UserRankingItem key={message.user} userId={message.user} rank={i + 1} count={message.count} />
+        ))}
       </div>
     </div>
   );
@@ -93,7 +90,7 @@ export const UserGaveSpecificStampRanking: FC<SpecificStampRankingProps> = ({ st
         order: 'desc',
         limit: limit ?? 10,
       }) satisfies StampsQuery,
-    [stampId],
+    [stampId, limit],
   );
   const { stamps } = useStamps(query);
   const data = stamps?.map((s) => ({
@@ -113,7 +110,7 @@ export const UserReceivedSpecificStampRanking: FC<SpecificStampRankingProps> = (
         order: 'desc',
         limit: limit ?? 10,
       }) satisfies StampsQuery,
-    [stampId],
+    [stampId, limit],
   );
   const { stamps } = useStamps(query);
   const data = stamps?.map((s) => ({

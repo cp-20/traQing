@@ -1,7 +1,7 @@
 import { Card } from '@/components/Card';
 import { NotificationIcon } from '@/components/NotificationIcon';
-import { RankingItemRank } from '@/components/rankings';
 import { UserAvatar } from '@/components/UserAvatar';
+import { RankingItemRank } from '@/components/rankings';
 import { useChannels } from '@/hooks/useChannels';
 import { useMessages } from '@/hooks/useMessages';
 import { useSubscriptions } from '@/hooks/useSubscriptions';
@@ -77,6 +77,7 @@ const ChannelRankingItem: FC<ChannelRankingItemProps> = ({ rank, channel: { chan
             {getChannelName(channel) ? `#${getChannelName(channel)}` : <Skeleton w={240} h={16} />}
           </div>
           <button
+            type="button"
             onClick={() => {
               setSubscriptionLevel(channel, (subscriptionLevel + 1) % 3);
             }}
@@ -86,22 +87,26 @@ const ChannelRankingItem: FC<ChannelRankingItemProps> = ({ rank, channel: { chan
         </div>
 
         <div className="flex items-center -space-x-1">
-          {messages.length === 0 &&
-            new Array(10).fill(0).map((_, i) => (
-              <div key={i} style={{ zIndex: 10 - i }}>
-                <Skeleton circle w={16} height={16} />
+          {messages.length === 0 ||
+            (users === undefined &&
+              new Array(10).fill(0).map((_, i) => (
+                <div key={i} style={{ zIndex: 10 - i }}>
+                  <Skeleton circle w={16} height={16} />
+                </div>
+              )))}
+          {messages.slice(0, 10).map((m, i, arr) => {
+            const user = getUserFromId(m.user);
+            return (
+              <div key={m.user} style={{ zIndex: arr.length - i }}>
+                <UserAvatar
+                  userId={m.user}
+                  size={16}
+                  className="border-2 border-white bg-white"
+                  title={user && `${user.displayName} (@${user.name})`}
+                />
               </div>
-            ))}
-          {messages.slice(0, 10).map((m, i, arr) => (
-            <div key={m.user} style={{ zIndex: arr.length - i }}>
-              <UserAvatar
-                userId={m.user}
-                size={16}
-                className="border-2 border-white bg-white"
-                title={`${getUserFromId(m.user)!.displayName} (@${getUserFromId(m.user)!.name})`}
-              />
-            </div>
-          ))}
+            );
+          })}
           {messages.length > 10 && (
             <div>
               <div className="ml-2 text-xs font-medium grid place-content-center text-gray-400">
@@ -174,7 +179,7 @@ const ChannelRanking: FC<ChannelRankingProps> = ({ channels, limit, label }) => 
         ))}
         <div ref={loaderRef} />
         {channels.length > currentLimit &&
-          new Array(10).fill(0).map((_, i) => <ChannelRankingItemSkeleton rank={currentLimit + i + 1} />)}
+          new Array(10).fill(0).map((_, i) => <ChannelRankingItemSkeleton key={i} rank={currentLimit + i + 1} />)}
       </div>
     </Card>
   );

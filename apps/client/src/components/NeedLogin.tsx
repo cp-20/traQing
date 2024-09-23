@@ -1,7 +1,7 @@
-import { Button, Text } from '@mantine/core';
-import type { FC } from 'react';
 import LogoImage from '@/assets/logo.svg';
 import { useAuth } from '@/hooks/useAuth';
+import { Button, Text } from '@mantine/core';
+import type { FC } from 'react';
 
 export const NeedLogin: FC = () => {
   const { login } = useAuth();

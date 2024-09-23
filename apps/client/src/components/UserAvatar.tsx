@@ -22,8 +22,8 @@ export const UserAvatar: FC<Props> = ({ userId, size = 24, ...props }) => {
       width={size}
       height={size}
       loading="lazy"
-      alt=""
       {...props}
+      alt=""
       className={clsx('rounded-full', props.className)}
     />
   );

@@ -67,6 +67,7 @@ export const StampPicker: FC<StampPickerProps> = ({ setStampId }) => {
             <div className="flex flex-wrap gap-2 w-fit">
               {filteredStamps?.slice(0, 100).map((s) => (
                 <button
+                  type="button"
                   title={s.name}
                   key={s.id}
                   onClick={() => {
@@ -75,7 +76,7 @@ export const StampPicker: FC<StampPickerProps> = ({ setStampId }) => {
                     setOpened(false);
                   }}
                 >
-                  <div className="bg-gray-400 animate-pulse"></div>
+                  <div className="bg-gray-400 animate-pulse" />
                   <StampImage fileId={s.fileId} />
                 </button>
               ))}

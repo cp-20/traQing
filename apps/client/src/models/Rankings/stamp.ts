@@ -1,5 +1,5 @@
-import type { StampsQuery } from '@traq-ing/database';
 import { useMessageStamps } from '@/hooks/useMessageStamps';
+import type { StampsQuery } from '@traq-ing/database';
 
 export const stampRankingQuery = {
   groupBy: 'stamp',

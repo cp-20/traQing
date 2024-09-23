@@ -2,8 +2,9 @@ import { client } from '@/features/api';
 import type { StampRelationsQuery } from '@traq-ing/database';
 import type { ClientResponse } from 'hono/client';
 import useSWR from 'swr';
-import type { Channel, Message, UserGroup, MyUserDetail, Stamp, User } from 'traq-bot-ts';
+import type { Channel, Message, MyUserDetail, Stamp, User, UserGroup } from 'traq-bot-ts';
 
+// biome-ignore lint/suspicious/noExplicitAny: 型パズルに必要なany
 type BlankRecordToNever<T> = T extends any ? (T extends null ? null : keyof T extends never ? never : T) : never;
 
 const fetchWrapper = <T>(

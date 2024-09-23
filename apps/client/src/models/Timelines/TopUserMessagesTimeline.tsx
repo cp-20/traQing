@@ -2,11 +2,11 @@ import { useMessagesByMultipleQueries } from '@/hooks/useMessages';
 import { useMessagesRanking } from '@/hooks/useServerData';
 import { useUsers } from '@/hooks/useUsers';
 import { commonTimelineChartOptions } from '@/models/Timelines/common';
+import { mergeOptions } from '@/models/commonChartOptions';
 import type { MessagesQuery } from '@traq-ing/database';
+import { Chart as ChartJS, type ChartOptions, Legend } from 'chart.js';
 import { type FC, useMemo } from 'react';
 import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, type ChartOptions, Legend } from 'chart.js';
-import { mergeOptions } from '@/models/commonChartOptions';
 
 ChartJS.register(Legend);
 

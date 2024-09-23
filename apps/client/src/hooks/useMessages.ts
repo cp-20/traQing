@@ -26,7 +26,7 @@ export const useMessages = <Q extends MessagesQuery>(query: Q) => {
     };
 
     fetchMessages();
-  }, [query, setMessages, setLoading]);
+  }, [query]);
 
   return { messages, loading };
 };
@@ -55,7 +55,7 @@ export const useMessagesByMultipleQueries = <Q extends MessagesQuery>(queries: Q
     };
 
     fetchMessages();
-  }, [queries, setMessages, setLoading]);
+  }, [queries]);
 
   return { messages, loading };
 };
