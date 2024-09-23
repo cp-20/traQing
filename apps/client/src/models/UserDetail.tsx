@@ -1,23 +1,13 @@
 import { Card } from '@/components/Card';
 import { useUsers } from '@/hooks/useUsers';
 import { UserActionTimeline } from '@/models/Timelines/UserActionTimeline';
-import {
-  UserGaveStampsChannels,
-  UserMessageChannels,
-} from '@/models/UserActionChannels';
+import { UserGaveStampsChannels, UserMessageChannels } from '@/models/UserActionChannels';
 import { UserMessageHours } from '@/models/UserMessageHours';
-import {
-  UserGaveStampRanking,
-  UserReceivedStampRanking,
-} from '@/models/UserStampRanking';
-import {
-  UserGaveStampStat,
-  UserMessageCountStat,
-  UserReceivedStampStat,
-} from '@/models/UserStats';
+import { UserGaveStampRanking, UserReceivedStampRanking } from '@/models/UserStampRanking';
+import { UserGaveStampStat, UserMessageCountStat, UserReceivedStampStat } from '@/models/UserStats';
 import { UserTopReactedMessages } from '@/models/UserTopReactedMessages';
 import { IconChevronLeft } from '@tabler/icons-react';
-import { FC } from 'react';
+import type { FC } from 'react';
 import { Link } from 'react-router-dom';
 
 type UserDetailProps = {
@@ -109,9 +99,7 @@ export const UserDetail: FC<UserDetailProps> = ({ userId }) => {
             </div>
           </Card>
           <Card>
-            <div className="font-semibold mb-4">
-              スタンプをよく付けるチャンネル
-            </div>
+            <div className="font-semibold mb-4">スタンプをよく付けるチャンネル</div>
             <div>
               <UserGaveStampsChannels userId={userId} />
             </div>

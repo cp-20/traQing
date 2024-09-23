@@ -3,14 +3,11 @@ import { useStamps } from '@/hooks/useStamps';
 import { StampImage, StampPicker } from '@/models/StampPicker';
 import { StampTimeline } from '@/models/Timelines/StampTimeline';
 import { TraqMessage } from '@/models/TraqMessage';
-import {
-  UserGaveSpecificStampRanking,
-  UserReceivedSpecificStampRanking,
-} from '@/models/UserRanking';
+import { UserGaveSpecificStampRanking, UserReceivedSpecificStampRanking } from '@/models/UserRanking';
 import { Card } from '@mantine/core';
-import { StampsQuery } from '@traq-ing/database';
+import type { StampsQuery } from '@traq-ing/database';
 import clsx from 'clsx';
-import { FC, useMemo, useState } from 'react';
+import { type FC, useMemo, useState } from 'react';
 
 export const StampRankings: FC = () => {
   const [stampId, setStampId] = useState<string | null>(null);
@@ -22,27 +19,20 @@ export const StampRankings: FC = () => {
         groupBy: 'message',
         orderBy: 'count',
         limit: 10,
-      } satisfies StampsQuery),
-    [stampId]
+      }) satisfies StampsQuery,
+    [stampId],
   );
   const { stamps, loading } = useStamps(query);
   const stamp = stampId && getStamp(stampId);
   const StampElement = stamp ? (
-    <img
-      src={`/api/files/${stamp.fileId}`}
-      width={24}
-      height={24}
-      alt={stamp.name}
-    />
+    <img src={`/api/files/${stamp.fileId}`} width={24} height={24} alt={stamp.name} />
   ) : (
     'スタンプ'
   );
 
   return (
     <Card className="space-y-4">
-      <div className="font-semibold text-xl">
-        スタンプをつけた/もらったランキング
-      </div>
+      <div className="font-semibold text-xl">スタンプをつけた/もらったランキング</div>
       <div>
         <StampPicker setStampId={(id) => setStampId(id)} />
       </div>

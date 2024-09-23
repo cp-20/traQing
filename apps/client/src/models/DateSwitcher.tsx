@@ -1,5 +1,5 @@
 import { Button } from '@mantine/core';
-import { FC, useMemo } from 'react';
+import { type FC, useMemo } from 'react';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import { useDailyTimeRange, useMonthlyTimeRange } from '@/hooks/useTimeRange';
 
@@ -25,12 +25,7 @@ export const DateSwitcher: FC<SwitcherProps> = ({ switcher }) => {
       >
         <IconChevronLeft />
       </Button>
-      <Button
-        color="gray"
-        variant="outline"
-        size="compact-md"
-        className="text-sm"
-      >
+      <Button color="gray" variant="outline" size="compact-md" className="text-sm">
         {switcher.currentRange}
       </Button>
       <Button
@@ -57,7 +52,7 @@ export const useMonthlySwitcher = () => {
 
   const switcher = useMemo(
     () => ({ prev, next, currentRange, canGoNext }),
-    [range, canGoNext, currentRange, prev, next]
+    [range, canGoNext, currentRange, prev, next],
   );
 
   return { switcher, range };
@@ -65,8 +60,7 @@ export const useMonthlySwitcher = () => {
 
 export const useDailySwitcher = () => {
   const { range, prev, next } = useDailyTimeRange();
-  const canGoNext =
-    new Date() > new Date(range.year, range.month - 1, range.day + 1);
+  const canGoNext = new Date() > new Date(range.year, range.month - 1, range.day + 1);
 
   const month = range.month.toString().padStart(2, '0');
   const day = range.day.toString().padStart(2, '0');
@@ -74,7 +68,7 @@ export const useDailySwitcher = () => {
 
   const switcher = useMemo(
     () => ({ prev, next, currentRange, canGoNext }),
-    [range, canGoNext, currentRange, prev, next]
+    [range, canGoNext, currentRange, prev, next],
   );
 
   return { switcher, range };

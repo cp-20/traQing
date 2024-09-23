@@ -2,17 +2,15 @@ import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { useStamps } from '@/hooks/useStamps';
 import { StampImage, StampPicker } from '@/models/StampPicker';
 import { TraqMessage } from '@/models/TraqMessage';
-import { StampsQuery } from '@traq-ing/database';
+import type { StampsQuery } from '@traq-ing/database';
 import clsx from 'clsx';
-import { FC, useMemo, useState } from 'react';
+import { type FC, useMemo, useState } from 'react';
 
 type UserTopReactedMessagesProps = {
   userId: string;
 };
 
-export const UserTopReactedMessages: FC<UserTopReactedMessagesProps> = ({
-  userId,
-}) => {
+export const UserTopReactedMessages: FC<UserTopReactedMessagesProps> = ({ userId }) => {
   const [stampId, setStampId] = useState<string | null>(null);
   const { getStamp } = useMessageStamps();
   const query = useMemo(
@@ -23,8 +21,8 @@ export const UserTopReactedMessages: FC<UserTopReactedMessagesProps> = ({
         groupBy: 'message',
         orderBy: 'count',
         limit: 10,
-      } satisfies StampsQuery),
-    [stampId]
+      }) satisfies StampsQuery,
+    [stampId],
   );
   const { stamps, loading } = useStamps(query);
   const stamp = stampId && getStamp(stampId);

@@ -1,13 +1,10 @@
 import { useStamps } from '@/hooks/useStamps';
 import { dailyTimeRangeToTime, nextDay } from '@/hooks/useTimeRange';
 import { StampRanking } from '@/models/Rankings/StampRanking';
-import { DailyRankingProps } from '@/models/Rankings/common';
-import {
-  stampRankingQuery,
-  useStampRankingData,
-} from '@/models/Rankings/stamp';
+import type { DailyRankingProps } from '@/models/Rankings/common';
+import { stampRankingQuery, useStampRankingData } from '@/models/Rankings/stamp';
 import clsx from 'clsx';
-import { FC, useMemo } from 'react';
+import { type FC, useMemo } from 'react';
 
 export const DailyStampRanking: FC<DailyRankingProps> = ({ range }) => {
   const query = useMemo(
@@ -16,7 +13,7 @@ export const DailyStampRanking: FC<DailyRankingProps> = ({ range }) => {
       after: dailyTimeRangeToTime(range),
       before: dailyTimeRangeToTime(nextDay(range)),
     }),
-    [range]
+    [range],
   );
   const { stamps, loading } = useStamps(query);
   const stats = useStampRankingData(stamps);

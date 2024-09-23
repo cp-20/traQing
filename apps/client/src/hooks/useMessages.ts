@@ -1,13 +1,9 @@
 import { client } from '@/features/api';
-import { MessagesQuery } from '@traq-ing/database';
+import type { MessagesQuery } from '@traq-ing/database';
 import { useEffect, useState } from 'react';
 
 type Result<Q extends MessagesQuery> = {
-  [K in Q extends { groupBy: infer U }
-    ? U extends undefined
-      ? 'day'
-      : U
-    : 'day']: string;
+  [K in Q extends { groupBy: infer U } ? (U extends undefined ? 'day' : U) : 'day']: string;
 } & { count: number };
 
 export const useMessages = <Q extends MessagesQuery>(query: Q) => {
@@ -35,9 +31,7 @@ export const useMessages = <Q extends MessagesQuery>(query: Q) => {
   return { messages, loading };
 };
 
-export const useMessagesByMultipleQueries = <Q extends MessagesQuery>(
-  queries: Q[]
-) => {
+export const useMessagesByMultipleQueries = <Q extends MessagesQuery>(queries: Q[]) => {
   const [messages, setMessages] = useState<Result<Q>[][]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -52,12 +46,10 @@ export const useMessagesByMultipleQueries = <Q extends MessagesQuery>(
               limit: query.limit?.toString(),
               offset: query.offset?.toString(),
             },
-          })
-        )
+          }),
+        ),
       );
-      const json = (await Promise.all(
-        res.filter((r) => r.ok).map((r) => r.json())
-      )) as Result<Q>[][];
+      const json = (await Promise.all(res.filter((r) => r.ok).map((r) => r.json()))) as Result<Q>[][];
       setMessages(json);
       setLoading(false);
     };

@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Loader } from '@mantine/core';
 import clsx from 'clsx';
@@ -17,7 +17,7 @@ export const RouteAuthGuard: FC<Props> = ({ component, fallback, loading }) => {
       <div
         className={clsx(
           'bg-gray-100 inset-0 grid place-content-center fixed transition-all duration-200 ease-in',
-          !isLoading && 'invisible opacity-0'
+          !isLoading && 'invisible opacity-0',
         )}
       >
         {loading || <Loader type="bars" size="xl" />}

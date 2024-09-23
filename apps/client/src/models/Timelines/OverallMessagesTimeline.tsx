@@ -1,9 +1,6 @@
 import { useMessagesTimelineData } from '@/hooks/useServerData';
-import {
-  getCommonLineChartOptions,
-  mergeOptions,
-} from '@/models/commonChartOptions';
-import { Chart as ChartJS, ChartOptions, Filler } from 'chart.js';
+import { getCommonLineChartOptions, mergeOptions } from '@/models/commonChartOptions';
+import { Chart as ChartJS, type ChartOptions, Filler } from 'chart.js';
 import type { FC } from 'react';
 import { Line } from 'react-chartjs-2';
 
@@ -27,11 +24,8 @@ export const OverallMessagesTimeline: FC = () => {
       {
         label: '投稿数',
         data:
-          messages
-            ?.map((m) => m.count)
-            .map((_, i, arr) =>
-              arr.slice(0, i + 1).reduce((acc, cur) => acc + cur, 0)
-            ) ?? [],
+          messages?.map((m) => m.count).map((_, i, arr) => arr.slice(0, i + 1).reduce((acc, cur) => acc + cur, 0)) ??
+          [],
       },
     ],
   };

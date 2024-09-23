@@ -1,6 +1,6 @@
 import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { Popover, TextInput } from '@mantine/core';
-import { FC, useState } from 'react';
+import { type FC, useState } from 'react';
 import type { Stamp } from 'traq-bot-ts';
 
 const searchStamps = (stamps: Stamp[], keyword: string) => {
@@ -12,16 +12,16 @@ const searchStamps = (stamps: Stamp[], keyword: string) => {
       return aIndex > bIndex
         ? 1
         : aIndex < bIndex
-        ? -1
-        : a.name.length > b.name.length
-        ? 1
-        : a.name.length < b.name.length
-        ? -1
-        : a.name > b.name
-        ? 1
-        : a.name < b.name
-        ? -1
-        : 0;
+          ? -1
+          : a.name.length > b.name.length
+            ? 1
+            : a.name.length < b.name.length
+              ? -1
+              : a.name > b.name
+                ? 1
+                : a.name < b.name
+                  ? -1
+                  : 0;
     });
 };
 
@@ -40,13 +40,7 @@ export const StampPicker: FC<StampPickerProps> = ({ setStampId }) => {
 
   return (
     <div>
-      <Popover
-        width="target"
-        position="bottom"
-        shadow="sm"
-        opened={opened}
-        onChange={setOpened}
-      >
+      <Popover width="target" position="bottom" shadow="sm" opened={opened} onChange={setOpened}>
         <Popover.Target>
           <TextInput
             placeholder="スタンプ名を入力"
@@ -69,9 +63,7 @@ export const StampPicker: FC<StampPickerProps> = ({ setStampId }) => {
         </Popover.Target>
         <Popover.Dropdown>
           <div className="max-h-40 overflow-y-auto -my-3 p-4 -mx-4">
-            {filteredStamps?.length === 0 && (
-              <div className="text-gray-400">スタンプが見つかりません</div>
-            )}
+            {filteredStamps?.length === 0 && <div className="text-gray-400">スタンプが見つかりません</div>}
             <div className="flex flex-wrap gap-2 w-fit">
               {filteredStamps?.slice(0, 100).map((s) => (
                 <button
@@ -100,13 +92,5 @@ type StampProps = {
 };
 
 export const StampImage: FC<StampProps> = ({ fileId }) => {
-  return (
-    <img
-      src={`/api/files/${fileId}`}
-      alt=""
-      width={24}
-      height={24}
-      loading="lazy"
-    />
-  );
+  return <img src={`/api/files/${fileId}`} alt="" width={24} height={24} loading="lazy" />;
 };

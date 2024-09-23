@@ -1,7 +1,7 @@
 import { useUsers } from '@/hooks/useUsers';
 import { Skeleton } from '@mantine/core';
 import clsx from 'clsx';
-import { FC } from 'react';
+import type { FC } from 'react';
 
 type Props = {
   userId: string;

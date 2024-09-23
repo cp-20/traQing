@@ -148,12 +148,8 @@
           "name": "message_stamps_message_id_messages_id_fk",
           "tableFrom": "message_stamps",
           "tableTo": "messages",
-          "columnsFrom": [
-            "message_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["message_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -161,11 +157,7 @@
       "compositePrimaryKeys": {
         "message_stamps_user_id_stamp_id_message_id_pk": {
           "name": "message_stamps_user_id_stamp_id_message_id_pk",
-          "columns": [
-            "user_id",
-            "stamp_id",
-            "message_id"
-          ]
+          "columns": ["user_id", "stamp_id", "message_id"]
         }
       },
       "uniqueConstraints": {}

@@ -1,5 +1,5 @@
 import { Button, Text } from '@mantine/core';
-import { FC } from 'react';
+import type { FC } from 'react';
 import LogoImage from '@/assets/logo.svg';
 import { useAuth } from '@/hooks/useAuth';
 

@@ -14,15 +14,13 @@ export const useSubscriptions = () => {
     (channelId: string) => {
       return subscriptionsMap.get(channelId) ?? 0;
     },
-    [subscriptionsMap]
+    [subscriptionsMap],
   );
 
   const setSubscriptionLevel = useCallback(
     async (channelId: string, level: number) => {
       if (!subscriptions) return;
-      const newSubscriptions = subscriptions.map((s) =>
-        s.channelId === channelId ? { ...s, level } : s
-      );
+      const newSubscriptions = subscriptions.map((s) => (s.channelId === channelId ? { ...s, level } : s));
       await mutate(
         (async () => {
           const res = await client.subscriptions[':id'].$put({
@@ -32,10 +30,10 @@ export const useSubscriptions = () => {
           if (!res.ok) throw new Error('Failed to update subscription');
           return newSubscriptions;
         })(),
-        { optimisticData: newSubscriptions }
+        { optimisticData: newSubscriptions },
       );
     },
-    [subscriptionsMap]
+    [subscriptionsMap],
   );
 
   return {

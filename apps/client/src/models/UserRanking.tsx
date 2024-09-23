@@ -6,8 +6,8 @@ import {
 } from '@/hooks/useServerData';
 import { useStamps } from '@/hooks/useStamps';
 import { useUsers } from '@/hooks/useUsers';
-import { StampsQuery } from '@traq-ing/database';
-import { FC, useMemo } from 'react';
+import type { StampsQuery } from '@traq-ing/database';
+import { type FC, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
 type UserRankingItemProps = {
@@ -30,12 +30,7 @@ const UserRankingItem: FC<UserRankingItemProps> = ({ userId, rank, count }) => {
       className="flex items-center gap-2 hover:bg-gray-100 rounded-md px-2 py-1 transition-all duration-200"
     >
       <RankingItemRank rank={rank} />
-      <img
-        src={`/api/files/${user.iconFileId}`}
-        width={24}
-        height={24}
-        className="rounded-full"
-      />
+      <img src={`/api/files/${user.iconFileId}`} width={24} height={24} className="rounded-full" />
       <span className="font-medium">{user.displayName}</span>
       <span className="text-gray-500">@{user.name}</span>
       <span className="text-right font-medium ml-auto">{count}</span>
@@ -52,20 +47,12 @@ const UserRanking: FC<UserRankingProps> = ({ users, limit }) => {
   return (
     <div className="space-y-4">
       <div className="flex flex-col">
-        {users === undefined &&
-          new Array(limit)
-            .fill(null)
-            .map((_, i) => <RankingItemSkeleton key={i} rank={i + 1} />)}
+        {users === undefined && new Array(limit).fill(null).map((_, i) => <RankingItemSkeleton key={i} rank={i + 1} />)}
         {users &&
           users
             .slice(0, limit)
             .map((message, i) => (
-              <UserRankingItem
-                key={message.user}
-                userId={message.user}
-                rank={i + 1}
-                count={message.count}
-              />
+              <UserRankingItem key={message.user} userId={message.user} rank={i + 1} count={message.count} />
             ))}
       </div>
     </div>
@@ -96,10 +83,7 @@ type SpecificStampRankingProps = {
   limit?: number;
 };
 
-export const UserGaveSpecificStampRanking: FC<SpecificStampRankingProps> = ({
-  stampId,
-  limit,
-}) => {
+export const UserGaveSpecificStampRanking: FC<SpecificStampRankingProps> = ({ stampId, limit }) => {
   const query = useMemo(
     () =>
       ({
@@ -108,8 +92,8 @@ export const UserGaveSpecificStampRanking: FC<SpecificStampRankingProps> = ({
         orderBy: 'count',
         order: 'desc',
         limit: limit ?? 10,
-      } satisfies StampsQuery),
-    [stampId]
+      }) satisfies StampsQuery,
+    [stampId],
   );
   const { stamps } = useStamps(query);
   const data = stamps?.map((s) => ({
@@ -119,9 +103,7 @@ export const UserGaveSpecificStampRanking: FC<SpecificStampRankingProps> = ({
   return <UserRanking users={data} limit={limit ?? 10} />;
 };
 
-export const UserReceivedSpecificStampRanking: FC<
-  SpecificStampRankingProps
-> = ({ stampId, limit }) => {
+export const UserReceivedSpecificStampRanking: FC<SpecificStampRankingProps> = ({ stampId, limit }) => {
   const query = useMemo(
     () =>
       ({
@@ -130,8 +112,8 @@ export const UserReceivedSpecificStampRanking: FC<
         orderBy: 'count',
         order: 'desc',
         limit: limit ?? 10,
-      } satisfies StampsQuery),
-    [stampId]
+      }) satisfies StampsQuery,
+    [stampId],
   );
   const { stamps } = useStamps(query);
   const data = stamps?.map((s) => ({

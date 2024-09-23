@@ -1,6 +1,6 @@
 import { Card } from '@/components/Card';
 import clsx from 'clsx';
-import { ComponentProps, FC, ReactNode } from 'react';
+import type { ComponentProps, FC, ReactNode } from 'react';
 
 export type StatProps = {
   label: ReactNode;
@@ -10,25 +10,13 @@ export type StatProps = {
   annotation?: ReactNode;
 };
 
-export const Stat: FC<StatProps> = ({
-  label,
-  value,
-  unit,
-  annotation,
-  valueProps,
-}) => {
+export const Stat: FC<StatProps> = ({ label, value, unit, annotation, valueProps }) => {
   return (
     <Card>
       <div>
         <div className="text-sm font-bold">{label}</div>
         <div>
-          <span
-            {...valueProps}
-            className={clsx(
-              'text-4xl text-blue-600 font-medium',
-              valueProps?.className
-            )}
-          >
+          <span {...valueProps} className={clsx('text-4xl text-blue-600 font-medium', valueProps?.className)}>
             {value}
           </span>
           {unit && <span>{unit}</span>}

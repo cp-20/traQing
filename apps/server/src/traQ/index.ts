@@ -48,7 +48,7 @@ export const updateMessages = async () => {
         messageUserId: m.userId,
         count: s.count,
         createdAt: new Date(s.createdAt),
-      }))
+      })),
     );
 
     if (stamps.length > 0) {

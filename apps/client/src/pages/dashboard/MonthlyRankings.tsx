@@ -6,8 +6,7 @@ import { Card } from '@mantine/core';
 import type { FC } from 'react';
 
 export const MonthlyRankings: FC = () => {
-  const { switcher: monthlySwitcher, range: monthlyRange } =
-    useMonthlySwitcher();
+  const { switcher: monthlySwitcher, range: monthlyRange } = useMonthlySwitcher();
 
   return (
     <Card className="space-y-4">

@@ -16,12 +16,7 @@ export type UserRankingItemProps = {
   rate?: number;
 };
 
-export const UserRankingItem: FC<UserRankingItemProps> = ({
-  userId,
-  rank,
-  value,
-  rate,
-}) => {
+export const UserRankingItem: FC<UserRankingItemProps> = ({ userId, rank, value, rate }) => {
   const { getUserFromId } = useUsers();
 
   const user = getUserFromId(userId);

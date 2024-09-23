@@ -1,10 +1,7 @@
 import { useStamps } from '@/hooks/useStamps';
-import {
-  getCommonLineChartOptions,
-  mergeOptions,
-} from '@/models/commonChartOptions';
-import { StampsQuery } from '@traq-ing/database';
-import { ChartOptions } from 'chart.js';
+import { getCommonLineChartOptions, mergeOptions } from '@/models/commonChartOptions';
+import type { StampsQuery } from '@traq-ing/database';
+import type { ChartOptions } from 'chart.js';
 import clsx from 'clsx';
 import { useMemo, type FC } from 'react';
 import { Line } from 'react-chartjs-2';
@@ -34,8 +31,8 @@ export const StampTimeline: FC<StampTimelineProps> = ({ stampId }) => {
         groupBy: 'month',
         orderBy: 'date',
         order: 'asc',
-      } satisfies StampsQuery),
-    [stampId]
+      }) satisfies StampsQuery,
+    [stampId],
   );
   const { stamps, loading } = useStamps(query);
   const data = {
@@ -48,12 +45,5 @@ export const StampTimeline: FC<StampTimelineProps> = ({ stampId }) => {
     ],
   };
 
-  return (
-    <Line
-      options={option}
-      data={data}
-      height={300}
-      className={clsx(loading && 'opacity-60')}
-    />
-  );
+  return <Line options={option} data={data} height={300} className={clsx(loading && 'opacity-60')} />;
 };

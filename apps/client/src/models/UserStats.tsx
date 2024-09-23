@@ -5,7 +5,7 @@ import {
   useReceivedMessageStampsRanking,
 } from '@/hooks/useServerData';
 import { Skeleton } from '@mantine/core';
-import { FC, ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 
 type UserStatsProps = {
   userId: string;
@@ -20,13 +20,7 @@ export const UserMessageCountStat: FC<UserStatsProps> = ({ userId }) => {
     return <Stat label="投稿数" value={0} />;
   }
 
-  return (
-    <Stat
-      label="投稿数"
-      value={messages[index].count}
-      annotation={`全体${index + 1}位`}
-    />
-  );
+  return <Stat label="投稿数" value={messages[index].count} annotation={`全体${index + 1}位`} />;
 };
 
 export const UserGaveStampStat: FC<UserStatsProps> = ({ userId }) => {
@@ -35,13 +29,7 @@ export const UserGaveStampStat: FC<UserStatsProps> = ({ userId }) => {
   const index = stamps.findIndex((s) => s.user === userId);
 
   if (index === -1) {
-    return (
-      <Stat
-        label="つけたスタンプ"
-        value={0}
-        valueProps={{ className: 'text-teal-600' }}
-      />
-    );
+    return <Stat label="つけたスタンプ" value={0} valueProps={{ className: 'text-teal-600' }} />;
   }
 
   return (
@@ -56,18 +44,11 @@ export const UserGaveStampStat: FC<UserStatsProps> = ({ userId }) => {
 
 export const UserReceivedStampStat: FC<UserStatsProps> = ({ userId }) => {
   const { data: stamps } = useReceivedMessageStampsRanking();
-  if (stamps === undefined)
-    return <UserStatSkeleton label="もらったスタンプ" />;
+  if (stamps === undefined) return <UserStatSkeleton label="もらったスタンプ" />;
   const index = stamps.findIndex((s) => s.messageUser === userId);
 
   if (index === -1) {
-    return (
-      <Stat
-        label="もらったスタンプ"
-        value={0}
-        valueProps={{ className: 'text-indigo-600' }}
-      />
-    );
+    return <Stat label="もらったスタンプ" value={0} valueProps={{ className: 'text-indigo-600' }} />;
   }
 
   return (

@@ -8,10 +8,7 @@ export type RankingItemSkeletonProps = {
   showIcon?: boolean;
 };
 
-export const RankingItemSkeleton: FC<RankingItemSkeletonProps> = ({
-  rank,
-  showIcon = true,
-}) => (
+export const RankingItemSkeleton: FC<RankingItemSkeletonProps> = ({ rank, showIcon = true }) => (
   <div className="flex items-center gap-2 px-2 py-1">
     <RankingItemRank rank={rank} />
     {showIcon && <Skeleton circle w={24} height={24} />}
@@ -24,10 +21,7 @@ export type RankingItemWithLinkProps = {
   children: ReactNode;
 };
 
-export const RankingItemWithLink: FC<RankingItemWithLinkProps> = ({
-  to,
-  children,
-}) => {
+export const RankingItemWithLink: FC<RankingItemWithLinkProps> = ({ to, children }) => {
   return (
     <Link
       to={to}

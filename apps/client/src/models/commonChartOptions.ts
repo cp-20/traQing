@@ -1,10 +1,8 @@
-import { ChartOptions } from 'chart.js';
+import type { ChartOptions } from 'chart.js';
 import deepmerge from 'deepmerge';
 
-export const mergeOptions = <T extends ChartOptions, K extends ChartOptions>(
-  opt1: T,
-  opt2: K
-): T & K => deepmerge(opt1, opt2) as T & K;
+export const mergeOptions = <T extends ChartOptions, K extends ChartOptions>(opt1: T, opt2: K): T & K =>
+  deepmerge(opt1, opt2) as T & K;
 
 export const commonChartOptions = {
   font: {

@@ -2,7 +2,7 @@ import { RankingItemSkeleton } from '@/components/rankings';
 import { UserRankingItem } from '@/components/rankings/user';
 import { useMessages } from '@/hooks/useMessages';
 import { userRankingQuery } from '@/models/Rankings/user';
-import { DateRange, dateRangeToQuery } from '@/models/useDateRangePicker';
+import { type DateRange, dateRangeToQuery } from '@/models/useDateRangePicker';
 import type { MessagesQuery } from '@traq-ing/database';
 import clsx from 'clsx';
 import { Fragment, useMemo } from 'react';
@@ -18,8 +18,8 @@ export const UserPostRanking: FC<Props> = ({ range }) => {
       ({
         ...userRankingQuery,
         ...dateRangeToQuery(range),
-      } satisfies MessagesQuery),
-    [range]
+      }) satisfies MessagesQuery,
+    [range],
   );
   const { messages, loading } = useMessages(query);
 
@@ -37,12 +37,7 @@ export const UserPostRanking: FC<Props> = ({ range }) => {
     <div className={clsx('flex flex-col', loading && 'opacity-80')}>
       {messages.map((m, i) => (
         <Fragment key={m.user}>
-          <UserRankingItem
-            userId={m.user}
-            rank={i + 1}
-            value={m.count}
-            rate={m.count / messages[0].count}
-          />
+          <UserRankingItem userId={m.user} rank={i + 1} value={m.count} rate={m.count / messages[0].count} />
         </Fragment>
       ))}
     </div>

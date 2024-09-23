@@ -1,5 +1,5 @@
 import { Skeleton } from '@mantine/core';
-import { FC } from 'react';
+import type { FC } from 'react';
 import type { Stamp } from 'traq-bot-ts';
 
 type Props = {
@@ -24,12 +24,7 @@ export const StampRanking: FC<Props> = ({ stats }) => {
             {stamp.stamp !== undefined && (
               <>
                 <td className="min-w-10 w-10">
-                  <img
-                    width="24"
-                    height="24"
-                    src={`/api/files/${stamp.stamp?.fileId}`}
-                    alt=""
-                  />
+                  <img width="24" height="24" src={`/api/files/${stamp.stamp?.fileId}`} alt="" />
                 </td>
                 <td>
                   <code className="text-sm px-1 py-[0.05rem] bg-gray-200 rounded-sm font-mono">

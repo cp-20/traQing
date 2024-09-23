@@ -1,4 +1,4 @@
-import { MessagesQuery } from '@traq-ing/database';
+import type { MessagesQuery } from '@traq-ing/database';
 import { useUsers } from '@/hooks/useUsers';
 
 export const userRankingQuery = {
@@ -8,9 +8,7 @@ export const userRankingQuery = {
   limit: 10,
 } satisfies MessagesQuery;
 
-export const useUserRankingData = (
-  messages: { user: string; count: number }[]
-) => {
+export const useUserRankingData = (messages: { user: string; count: number }[]) => {
   const { getUsername, users } = useUsers();
   if (messages.length === 0 || users === undefined) {
     const emptyArray = new Array(userRankingQuery.limit);

@@ -1,5 +1,5 @@
 import { useDateRangePicker } from '@/models/useDateRangePicker';
-import { FC } from 'react';
+import type { FC } from 'react';
 import { UserPostRanking } from '@/models/Rankings/UserPostRanking';
 import { Card } from '@/components/Card';
 import { ChannelPostRanking } from '@/models/Rankings/ChannelPostRanking';

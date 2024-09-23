@@ -9,10 +9,10 @@ import { UserAvatar } from '@/components/UserAvatar';
 import { useChannels } from '@/hooks/useChannels';
 import { useMessages } from '@/hooks/useMessages';
 import { useUsers } from '@/hooks/useUsers';
-import { DateRange, dateRangeToQuery } from '@/models/useDateRangePicker';
+import { type DateRange, dateRangeToQuery } from '@/models/useDateRangePicker';
 import { Skeleton } from '@mantine/core';
-import { MessagesQuery } from '@traq-ing/database';
-import { FC, useMemo } from 'react';
+import type { MessagesQuery } from '@traq-ing/database';
+import { type FC, useMemo } from 'react';
 
 export type ChannelRankingItemProps = {
   channelId: string;
@@ -21,17 +21,11 @@ export type ChannelRankingItemProps = {
   rate?: number;
 };
 
-export const ChannelRankingItem: FC<ChannelRankingItemProps> = ({
-  channelId,
-  rank,
-  value,
-  rate,
-}) => {
+export const ChannelRankingItem: FC<ChannelRankingItemProps> = ({ channelId, rank, value, rate }) => {
   const { getChannelName } = useChannels();
 
   const channel = getChannelName(channelId);
-  if (channel === undefined)
-    return <RankingItemSkeleton rank={rank} showIcon={false} />;
+  if (channel === undefined) return <RankingItemSkeleton rank={rank} showIcon={false} />;
 
   return (
     <RankingItemWithLink to={`/channels/${encodeURIComponent(channel)}`}>
@@ -51,13 +45,7 @@ export type ChannelRankingWithUsersProps = {
   rate?: number;
 };
 
-export const ChannelRankingWithUsers: FC<ChannelRankingWithUsersProps> = ({
-  range,
-  channelId,
-  rank,
-  value,
-  rate,
-}) => {
+export const ChannelRankingWithUsers: FC<ChannelRankingWithUsersProps> = ({ range, channelId, rank, value, rate }) => {
   const { getUserFromId, users } = useUsers();
   const { getChannelName } = useChannels();
   const query = useMemo(
@@ -69,12 +57,11 @@ export const ChannelRankingWithUsers: FC<ChannelRankingWithUsersProps> = ({
         order: 'desc',
         limit: 1,
         ...dateRangeToQuery(range),
-      } satisfies MessagesQuery),
-    []
+      }) satisfies MessagesQuery,
+    [],
   );
   const { messages, loading } = useMessages(query);
-  const firstUser =
-    messages.length > 0 ? getUserFromId(messages[0]?.user) : undefined;
+  const firstUser = messages.length > 0 ? getUserFromId(messages[0]?.user) : undefined;
 
   const icon = firstUser ? (
     <UserAvatar userId={firstUser.id} size={24} />
@@ -90,11 +77,7 @@ export const ChannelRankingWithUsers: FC<ChannelRankingWithUsersProps> = ({
       <RankingItemRank rank={rank} />
       {icon}
       <div className="font-semibold">
-        {getChannelName(channelId) ? (
-          `#${getChannelName(channelId)}`
-        ) : (
-          <Skeleton h={16} />
-        )}
+        {getChannelName(channelId) ? `#${getChannelName(channelId)}` : <Skeleton h={16} />}
       </div>
       <RankingItemValue value={value} />
     </RankingItemWithLink>

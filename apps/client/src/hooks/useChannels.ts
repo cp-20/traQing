@@ -18,7 +18,7 @@ export const useChannels = () => {
 
       return channel.name;
     },
-    [channels]
+    [channels],
   );
 
   const getSummedChannelName = useCallback(
@@ -28,7 +28,7 @@ export const useChannels = () => {
 
       return name.replaceAll(/([^/])[^/]*\//g, '$1/');
     },
-    [channels, getChannelName]
+    [channels, getChannelName],
   );
 
   return { channels, getChannelName, getSummedChannelName };

@@ -1,13 +1,10 @@
 import { useChannels } from '@/hooks/useChannels';
 import { useMessages } from '@/hooks/useMessages';
 import { useStamps } from '@/hooks/useStamps';
-import {
-  commonBarChartOptions,
-  mergeOptions,
-} from '@/models/commonChartOptions';
-import { MessagesQuery, StampsQuery } from '@traq-ing/database';
+import { commonBarChartOptions, mergeOptions } from '@/models/commonChartOptions';
+import type { MessagesQuery, StampsQuery } from '@traq-ing/database';
 import type { ChartOptions } from 'chart.js';
-import { FC, useMemo } from 'react';
+import { type FC, useMemo } from 'react';
 import { Bar } from 'react-chartjs-2';
 
 const useChartOptions = <T extends { channel: string }>(data: T[]) => {
@@ -21,8 +18,7 @@ const useChartOptions = <T extends { channel: string }>(data: T[]) => {
         axis: 'y',
         displayColors: false,
         callbacks: {
-          title: (items) =>
-            `#${getChannelName(data[items[0].dataIndex].channel)}`,
+          title: (items) => `#${getChannelName(data[items[0].dataIndex].channel)}`,
         },
       },
     },
@@ -42,9 +38,7 @@ type UserActionChannelsProps = {
   userId: string;
 };
 
-export const UserMessageChannels: FC<UserActionChannelsProps> = ({
-  userId,
-}) => {
+export const UserMessageChannels: FC<UserActionChannelsProps> = ({ userId }) => {
   const { getSummedChannelName } = useChannels();
   const query = useMemo(
     () =>
@@ -52,8 +46,8 @@ export const UserMessageChannels: FC<UserActionChannelsProps> = ({
         userId: userId,
         groupBy: 'channel',
         limit: 20,
-      } satisfies MessagesQuery),
-    [userId]
+      }) satisfies MessagesQuery,
+    [userId],
   );
   const { messages } = useMessages(query);
   const { option } = useChartOptions(messages);
@@ -66,9 +60,7 @@ export const UserMessageChannels: FC<UserActionChannelsProps> = ({
   return <Bar options={option} data={data} height={600} />;
 };
 
-export const UserGaveStampsChannels: FC<UserActionChannelsProps> = ({
-  userId,
-}) => {
+export const UserGaveStampsChannels: FC<UserActionChannelsProps> = ({ userId }) => {
   const { getSummedChannelName } = useChannels();
   const query = useMemo(
     () =>
@@ -76,8 +68,8 @@ export const UserGaveStampsChannels: FC<UserActionChannelsProps> = ({
         userId: userId,
         groupBy: 'channel',
         limit: 20,
-      } satisfies StampsQuery),
-    [userId]
+      }) satisfies StampsQuery,
+    [userId],
   );
   const { stamps } = useStamps(query);
   const { option } = useChartOptions(stamps);

@@ -41,18 +41,12 @@ export type MessagesQuery = z.infer<typeof MessagesQuerySchema>;
 type GetMessagesResult<Q extends MessagesQuery> = Promise<
   Array<
     {
-      [K in Q extends { groupBy: infer U }
-        ? U extends undefined
-          ? never
-          : U
-        : never]: string;
+      [K in Q extends { groupBy: infer U } ? (U extends undefined ? never : U) : never]: string;
     } & { count: number }
   >
 >;
 
-export const getMessages = async (
-  query: MessagesQuery
-): GetMessagesResult<MessagesQuery> => {
+export const getMessages = async (query: MessagesQuery): GetMessagesResult<MessagesQuery> => {
   const select = {
     month: sqlGetMonth(schema.messages.createdAt),
     day: sqlGetDate(schema.messages.createdAt),
@@ -94,9 +88,7 @@ export const getMessages = async (
     .limit(Math.min(query?.limit ?? 10000, 10000))
     .offset(query?.offset ?? 0);
 
-  const finalQuery = query.groupBy
-    ? initialQuery.groupBy(groupBy)
-    : initialQuery;
+  const finalQuery = query.groupBy ? initialQuery.groupBy(groupBy) : initialQuery;
 
   const results = await finalQuery.execute();
 
@@ -115,11 +107,7 @@ export const getLastMessageCreatedAt = async () => {
 };
 
 export const insertMessageStamps = async (stamps: MessageStamp[]) => {
-  await db
-    .insert(schema.messageStamps)
-    .values(stamps)
-    .onConflictDoNothing()
-    .execute();
+  await db.insert(schema.messageStamps).values(stamps).onConflictDoNothing().execute();
 };
 
 export const StampsQuerySchema = z
@@ -181,8 +169,7 @@ export const getStamps = async (query: StampsQuery) => {
 
   const conditions = [
     query.userId && eq(schema.messageStamps.userId, query.userId),
-    query.messageUserId &&
-      eq(schema.messageStamps.messageUserId, query.messageUserId),
+    query.messageUserId && eq(schema.messageStamps.messageUserId, query.messageUserId),
     query.channelId && eq(schema.messageStamps.channelId, query.channelId),
     query.stampId && eq(schema.messageStamps.stampId, query.stampId),
     query.after && gt(schema.messageStamps.createdAt, new Date(query.after)),
@@ -196,9 +183,7 @@ export const getStamps = async (query: StampsQuery) => {
     })
     .from(schema.messageStamps);
 
-  const groupedQuery = query.groupBy
-    ? initialQuery.groupBy(groupBy)
-    : initialQuery;
+  const groupedQuery = query.groupBy ? initialQuery.groupBy(groupBy) : initialQuery;
 
   const resultQuery = groupedQuery
     .where(and(...conditions.filter((x) => !!x)))
@@ -224,8 +209,7 @@ export type StampRelationsQuery = z.infer<typeof StampRelationsQuerySchema>;
 export const getStampRelations = async (query: StampRelationsQuery) => {
   const conditions = [
     query.userId && eq(schema.stampRelationsView.user, query.userId),
-    query.messageUserId &&
-      eq(schema.stampRelationsView.messageUser, query.messageUserId),
+    query.messageUserId && eq(schema.stampRelationsView.messageUser, query.messageUserId),
     query.threshold && gte(schema.stampRelationsView.count, query.threshold),
   ];
   return await db
@@ -248,10 +232,7 @@ export const getGaveMessageStampsRanking = async () => {
 };
 
 export const getReceivedMessageStampsRanking = async () => {
-  return await db
-    .select()
-    .from(schema.receivedMessageStampsRankingView)
-    .execute();
+  return await db.select().from(schema.receivedMessageStampsRankingView).execute();
 };
 
 export const updateMaterializedViews = async () => {

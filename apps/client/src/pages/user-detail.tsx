@@ -1,6 +1,6 @@
 import { useUsers } from '@/hooks/useUsers';
 import { UserDetail } from '@/models/UserDetail';
-import { FC } from 'react';
+import type { FC } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Loader } from '@mantine/core';
 import clsx from 'clsx';
@@ -15,7 +15,7 @@ export const UserDetailPage: FC = () => {
       <div
         className={clsx(
           'grid place-content-center absolute inset-0 bg-gray-100 duration-200 transition-all ease-in',
-          userId && 'invisible opacity-0'
+          userId && 'invisible opacity-0',
         )}
       >
         <Loader type="bars" size="xl" />

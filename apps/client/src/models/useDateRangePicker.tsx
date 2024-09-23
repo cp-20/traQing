@@ -48,10 +48,7 @@ const dateRangeKinds = {
   },
   'last-week': {
     label: '先週',
-    range: adjustDate([
-      daysBeforeNow(new Date().getDay() + 7),
-      daysBeforeNow(new Date().getDay() + 1),
-    ]),
+    range: adjustDate([daysBeforeNow(new Date().getDay() + 7), daysBeforeNow(new Date().getDay() + 1)]),
   },
   'last-30-days': {
     label: '過去1か月',
@@ -60,9 +57,7 @@ const dateRangeKinds = {
   'last-month': {
     label: '先月',
     range: adjustDate([
-      daysBeforeNow(
-        daysBeforeNow(new Date().getDate()).getDate() + new Date().getDate() - 1
-      ),
+      daysBeforeNow(daysBeforeNow(new Date().getDate()).getDate() + new Date().getDate() - 1),
       daysBeforeNow(new Date().getDate()),
     ]),
   },
@@ -76,20 +71,15 @@ type Type = keyof typeof dateRangeKinds;
 
 const fallbackRange: DateRange = dateRangeKinds['last-7-days'].range;
 
-export const useDateRangePicker = (
-  defaultType: Type,
-  defaultRange?: DateRange
-) => {
+export const useDateRangePicker = (defaultType: Type, defaultRange?: DateRange) => {
   const id = useId();
   const [opened, setOpened] = useState(false);
   const [type, setType] = useState<Type>(defaultType);
   const [settingType, setSettingType] = useState<Type>(defaultType);
   const label = dateRangeKinds[type].label;
-  const [value, setValue] = useState<DateRange>(
-    defaultRange ?? dateRangeKinds[type].range ?? fallbackRange
-  );
+  const [value, setValue] = useState<DateRange>(defaultRange ?? dateRangeKinds[type].range ?? fallbackRange);
   const [settingValue, setSettingValue] = useState<[Date | null, Date | null]>(
-    defaultRange ?? dateRangeKinds[settingType].range ?? [null, null]
+    defaultRange ?? dateRangeKinds[settingType].range ?? [null, null],
   );
 
   const render = () => (

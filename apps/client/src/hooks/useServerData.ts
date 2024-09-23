@@ -1,30 +1,15 @@
 import { client } from '@/features/api';
 import type { StampRelationsQuery } from '@traq-ing/database';
-import { ClientResponse } from 'hono/client';
+import type { ClientResponse } from 'hono/client';
 import useSWR from 'swr';
-import type {
-  Channel,
-  Message,
-  UserGroup,
-  MyUserDetail,
-  Stamp,
-  User,
-} from 'traq-bot-ts';
+import type { Channel, Message, UserGroup, MyUserDetail, Stamp, User } from 'traq-bot-ts';
 
-type BlankRecordToNever<T> = T extends any
-  ? T extends null
-    ? null
-    : keyof T extends never
-    ? never
-    : T
-  : never;
+type BlankRecordToNever<T> = T extends any ? (T extends null ? null : keyof T extends never ? never : T) : never;
 
 const fetchWrapper = <T>(
   fetcher: () => Promise<
-    | ClientResponse<T, 200, 'json'>
-    | ClientResponse<unknown, 400, 'json'>
-    | ClientResponse<unknown, 500, 'json'>
-  >
+    ClientResponse<T, 200, 'json'> | ClientResponse<unknown, 400, 'json'> | ClientResponse<unknown, 500, 'json'>
+  >,
 ): (() => Promise<BlankRecordToNever<T>>) => {
   return async () => {
     const res = await fetcher();
@@ -39,30 +24,28 @@ const fetchWrapper = <T>(
 export const useSubscriptionsData = () => {
   return useSWR<{ channelId: string; level: number }[]>(
     '/api/subscriptions',
-    fetchWrapper<{ channelId: string; level: number }[]>(() =>
-      client.subscriptions.$get()
-    )
+    fetchWrapper<{ channelId: string; level: number }[]>(() => client.subscriptions.$get()),
   );
 };
 
 export const useMessagesRanking = () => {
   return useSWR<{ user: string; count: number }[]>(
     '/api/messages-ranking',
-    fetchWrapper(() => client['messages-ranking'].$get())
+    fetchWrapper(() => client['messages-ranking'].$get()),
   );
 };
 
 export const useGaveMessageStampsRanking = () => {
   return useSWR<{ user: string; count: number }[]>(
     '/api/gave-stamps-ranking',
-    fetchWrapper(() => client['gave-stamps-ranking'].$get())
+    fetchWrapper(() => client['gave-stamps-ranking'].$get()),
   );
 };
 
 export const useReceivedMessageStampsRanking = () => {
   return useSWR<{ messageUser: string; count: number }[]>(
     '/api/received-stamps-ranking',
-    fetchWrapper(() => client['received-stamps-ranking'].$get())
+    fetchWrapper(() => client['received-stamps-ranking'].$get()),
   );
 };
 
@@ -72,50 +55,50 @@ export const useMessageData = (messageId: string) => {
     fetchWrapper(() =>
       client.messages[':id'].$get({
         param: { id: messageId },
-      })
-    )
+      }),
+    ),
   );
 };
 
 export const useMessagesTimelineData = () => {
   return useSWR<{ month: string; count: number }[]>(
     '/api/messages-timeline',
-    fetchWrapper(() => client['messages-timeline'].$get())
+    fetchWrapper(() => client['messages-timeline'].$get()),
   );
 };
 
 export const useChannelsData = () => {
   return useSWR<Channel[]>(
     '/api/channels',
-    fetchWrapper(() => client.channels.$get())
+    fetchWrapper(() => client.channels.$get()),
   );
 };
 
 export const useGroupsData = () => {
   return useSWR<UserGroup[]>(
     '/api/groups',
-    fetchWrapper(() => client.groups.$get())
+    fetchWrapper(() => client.groups.$get()),
   );
 };
 
 export const useUsersData = () => {
   return useSWR<User[]>(
     '/api/users',
-    fetchWrapper(() => client.users.$get())
+    fetchWrapper(() => client.users.$get()),
   );
 };
 
 export const useMeData = () => {
   return useSWR<MyUserDetail>(
     '/api/me',
-    fetchWrapper(() => client.me.$get())
+    fetchWrapper(() => client.me.$get()),
   );
 };
 
 export const useMessageStampsData = () => {
   return useSWR<Stamp[]>(
     '/api/message-stamps',
-    fetchWrapper(() => client['message-stamps'].$get())
+    fetchWrapper(() => client['message-stamps'].$get()),
   );
 };
 
@@ -125,8 +108,8 @@ export const useStampRelationsData = (query: StampRelationsQuery) => {
     fetchWrapper(() =>
       client['stamp-relations'].$get({
         query: { ...query, threshold: query.threshold?.toString() },
-      })
-    )
+      }),
+    ),
   );
 };
 
@@ -140,6 +123,6 @@ export type OpenGraph = {
 export const useOpenGraphData = (url: string) => {
   return useSWR<OpenGraph>(
     `/api/open-graph?url=${encodeURIComponent(url)}`,
-    fetchWrapper(() => client.og.$get({ query: { url } }))
+    fetchWrapper(() => client.og.$get({ query: { url } })),
   );
 };

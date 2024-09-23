@@ -9,10 +9,7 @@ import { RouterProvider } from 'react-router-dom';
 const App = () => {
   return (
     <MantineProvider>
-      <RouteAuthGuard
-        component={<RouterProvider router={router} />}
-        fallback={<NeedLogin />}
-      />
+      <RouteAuthGuard component={<RouterProvider router={router} />} fallback={<NeedLogin />} />
     </MantineProvider>
   );
 };

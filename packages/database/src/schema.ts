@@ -27,24 +27,21 @@ export const messages = pgTable(
     channelIdIndex: index('messages_channel_id_idx').on(t.channelId),
     createdAtIndex: index('messages_created_at_idx').on(t.createdAt),
     pinnedIndex: index('messages_pinned_idx').on(t.pinned),
-  })
+  }),
 );
 
-export const messagesRankingView = pgMaterializedView('messages_ranking').as(
-  (qb) =>
-    qb
-      .select({
-        user: messages.userId,
-        count: count().as('count'),
-      })
-      .from(messages)
-      .groupBy(messages.userId)
-      .orderBy(desc(count()))
+export const messagesRankingView = pgMaterializedView('messages_ranking').as((qb) =>
+  qb
+    .select({
+      user: messages.userId,
+      count: count().as('count'),
+    })
+    .from(messages)
+    .groupBy(messages.userId)
+    .orderBy(desc(count())),
 );
 
-export const messagesMonthlyTimelineView = pgMaterializedView(
-  'messages_monthly_timeline'
-).as((qb) =>
+export const messagesMonthlyTimelineView = pgMaterializedView('messages_monthly_timeline').as((qb) =>
   qb
     .select({
       month: sqlGetMonth(messages.createdAt).as('month'),
@@ -52,7 +49,7 @@ export const messagesMonthlyTimelineView = pgMaterializedView(
     })
     .from(messages)
     .groupBy(sqlGetMonth(messages.createdAt))
-    .orderBy(asc(sqlGetMonth(messages.createdAt)))
+    .orderBy(asc(sqlGetMonth(messages.createdAt))),
 );
 
 export const messageStamps = pgTable(
@@ -74,29 +71,24 @@ export const messageStamps = pgTable(
     stampIdIndex: index('message_stamps_stamp_id_idx').on(t.stampId),
     channelIdIndex: index('message_stamps_channel_id_idx').on(t.channelId),
     messageIdIndex: index('message_stamps_message_id_idx').on(t.messageId),
-    messageUserIndex: index('message_stamps_message_user_id_idx').on(
-      t.messageUserId
-    ),
+    messageUserIndex: index('message_stamps_message_user_id_idx').on(t.messageUserId),
     createdAtIndex: index('message_stamps_created_at_idx').on(t.createdAt),
-  })
+  }),
 );
 
-export const stampRelationsView = pgMaterializedView('stamp_relations').as(
-  (qb) =>
-    qb
-      .select({
-        messageUser: messageStamps.messageUserId,
-        user: messageStamps.userId,
-        count: count().as('count'),
-      })
-      .from(messageStamps)
-      .groupBy(messageStamps.userId, messageStamps.messageUserId)
-      .orderBy(desc(count()))
+export const stampRelationsView = pgMaterializedView('stamp_relations').as((qb) =>
+  qb
+    .select({
+      messageUser: messageStamps.messageUserId,
+      user: messageStamps.userId,
+      count: count().as('count'),
+    })
+    .from(messageStamps)
+    .groupBy(messageStamps.userId, messageStamps.messageUserId)
+    .orderBy(desc(count())),
 );
 
-export const gaveMessageStampsRankingView = pgMaterializedView(
-  'gave_message_stamps_ranking'
-).as((qb) =>
+export const gaveMessageStampsRankingView = pgMaterializedView('gave_message_stamps_ranking').as((qb) =>
   qb
     .select({
       user: messageStamps.userId,
@@ -104,12 +96,10 @@ export const gaveMessageStampsRankingView = pgMaterializedView(
     })
     .from(messageStamps)
     .groupBy(messageStamps.userId)
-    .orderBy(desc(count()))
+    .orderBy(desc(count())),
 );
 
-export const receivedMessageStampsRankingView = pgMaterializedView(
-  'received_message_stamps_ranking'
-).as((qb) =>
+export const receivedMessageStampsRankingView = pgMaterializedView('received_message_stamps_ranking').as((qb) =>
   qb
     .select({
       messageUser: messageStamps.messageUserId,
@@ -117,5 +107,5 @@ export const receivedMessageStampsRankingView = pgMaterializedView(
     })
     .from(messageStamps)
     .groupBy(messageStamps.messageUserId)
-    .orderBy(desc(count()))
+    .orderBy(desc(count())),
 );

@@ -1,4 +1,4 @@
-import { StampsQuery } from '@traq-ing/database';
+import type { StampsQuery } from '@traq-ing/database';
 import { useMessageStamps } from '@/hooks/useMessageStamps';
 
 export const stampRankingQuery = {
@@ -8,9 +8,7 @@ export const stampRankingQuery = {
   limit: 10,
 } satisfies StampsQuery;
 
-export const useStampRankingData = (
-  stamps: { stamp: string; count: number }[]
-) => {
+export const useStampRankingData = (stamps: { stamp: string; count: number }[]) => {
   const { stamps: messageStamps, getStamp } = useMessageStamps();
 
   if (stamps.length === 0 || messageStamps === undefined) {

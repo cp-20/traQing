@@ -5,7 +5,7 @@ import { useMessage } from '@/hooks/useMessage';
 import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { useUsers } from '@/hooks/useUsers';
 import { Skeleton, Text } from '@mantine/core';
-import { FC, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import { type FC, type ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import type { Store, traQMarkdownIt } from '@traptitech/traq-markdown-it';
 import './TraqMessage.css';
 import clsx from 'clsx';
@@ -25,10 +25,7 @@ type TraqMessageProps = {
   annotation: ReactNode;
 };
 
-export const TraqMessage: FC<TraqMessageProps> = ({
-  messageId,
-  annotation,
-}) => {
+export const TraqMessage: FC<TraqMessageProps> = ({ messageId, annotation }) => {
   const messageContainerRef = useRef<HTMLDivElement>(null);
   const { getUserFromId, users } = useUsers();
   const { me } = useAuth();
@@ -49,8 +46,7 @@ export const TraqMessage: FC<TraqMessageProps> = ({
 
     return {
       getUser: (userId) => users.find((u) => u.id === userId)!,
-      getChannel: (channelId: string) =>
-        channels.find((c) => c.id === channelId)!,
+      getChannel: (channelId: string) => channels.find((c) => c.id === channelId)!,
       getUserGroup: (groupId: string) => groups.find((g) => g.id === groupId)!,
       getMe: () => me!,
       getStampByName: (name: string) => stamps.find((s) => s.name === name)!,
@@ -86,9 +82,7 @@ export const TraqMessage: FC<TraqMessageProps> = ({
 
   const quotedMessages = markdown.embeddings
     .filter((e) => e.type === 'message')
-    .map((e) => (
-      <QuotedMessage key={e.id} messageId={e.id} markdownIt={markdownIt} />
-    ));
+    .map((e) => <QuotedMessage key={e.id} messageId={e.id} markdownIt={markdownIt} />);
   const attachedImages = markdown.embeddings
     .filter((e) => e.type === 'file')
     .map((e, i) => <img key={i} src={`/api/files/${e.id}`} alt="" />);
@@ -103,13 +97,7 @@ export const TraqMessage: FC<TraqMessageProps> = ({
     <div className="border p-4 rounded-md flex flex-col">
       <div className="flex flex-col gap-2" ref={messageContainerRef}>
         <div className="flex gap-1 items-center">
-          <img
-            className="rounded-full"
-            src={`/api/files/${user.iconFileId}`}
-            alt=""
-            width={24}
-            height={24}
-          />
+          <img className="rounded-full" src={`/api/files/${user.iconFileId}`} alt="" width={24} height={24} />
           <Text fw="bold">{user.displayName}</Text>
           <Text>(@{user.name})</Text>
           <Text c="dimmed" fz="sm">
@@ -118,17 +106,14 @@ export const TraqMessage: FC<TraqMessageProps> = ({
           <div className="ml-auto">{annotation}</div>
         </div>
         <div className="flex flex-col gap-1 min-w-0 flex-1">
-          <div
-            className="traq-markdown"
-            dangerouslySetInnerHTML={{ __html: markdown.renderedText }}
-          />
+          <div className="traq-markdown" dangerouslySetInnerHTML={{ __html: markdown.renderedText }} />
           <div>{quotedMessages}</div>
           <div
             className={clsx(
               'grid',
               attachedImages.length === 1 && 'grid-cols-1',
               attachedImages.length === 2 && 'grid-cols-2',
-              attachedImages.length > 2 && 'grid-cols-3'
+              attachedImages.length > 2 && 'grid-cols-3',
             )}
           >
             {attachedImages}
@@ -137,10 +122,7 @@ export const TraqMessage: FC<TraqMessageProps> = ({
         </div>
       </div>
       <div className="flex gap-1 justify-between text-gray-500">
-        <a
-          href={`https://q.trap.jp/messages/${messageId}`}
-          className="text-blue-600 font-medium hover:underline"
-        >
+        <a href={`https://q.trap.jp/messages/${messageId}`} className="text-blue-600 font-medium hover:underline">
           traQで開く
         </a>
         <span>#{channel}</span>
@@ -171,31 +153,19 @@ const QuotedMessage: FC<QuotedMessageProps> = ({ messageId, markdownIt }) => {
     <div className="border-l-4 pl-2 py-1">
       <div className="flex gap-1">
         <div>
-          <img
-            className="rounded-full"
-            src={`/api/files/${user.iconFileId}`}
-            alt=""
-            width={20}
-            height={20}
-          />
+          <img className="rounded-full" src={`/api/files/${user.iconFileId}`} alt="" width={20} height={20} />
         </div>
         <Text fz="sm" fw="bold">
           {user.displayName}
         </Text>
         <Text fz="sm">(@{user.name})</Text>
       </div>
-      <div
-        className="traq-markdown traq-markdown-quoted"
-        dangerouslySetInnerHTML={{ __html: markdown.renderedText }}
-      />
+      <div className="traq-markdown traq-markdown-quoted" dangerouslySetInnerHTML={{ __html: markdown.renderedText }} />
       <Text c="dimmed" fz="xs" className="flex gap-1">
         <span>#{channel}</span>
         <span> - </span>
         <span>{formatDate(new Date(message.createdAt))}</span>
-        <a
-          className="font-semibold ml-2"
-          href={`https://q.trap.jp/messages/${message.id}`}
-        >
+        <a className="font-semibold ml-2" href={`https://q.trap.jp/messages/${message.id}`}>
           メッセージへ
         </a>
       </Text>
@@ -244,9 +214,7 @@ const UrlRichPreview: FC<UrlRichPreviewProps> = ({ url }) => {
       )}
       <div className="flex items-center">
         {ogp.type === 'summary' && ogp.image && (
-          <div className="border-r max-w-24">
-            {<img src={ogp.image} alt="" />}
-          </div>
+          <div className="border-r max-w-24">{<img src={ogp.image} alt="" />}</div>
         )}
         <div className="px-4 py-2">
           <Text fz="sm" className="font-semibold">

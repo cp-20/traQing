@@ -8,23 +8,14 @@ import { useSubscriptions } from '@/hooks/useSubscriptions';
 import { useUsers } from '@/hooks/useUsers';
 import { Skeleton } from '@mantine/core';
 import { useIntersection } from '@mantine/hooks';
-import { MessagesQuery } from '@traq-ing/database';
-import {
-  type FC,
-  type ReactNode,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import type { MessagesQuery } from '@traq-ing/database';
+import { type FC, type ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 
 type ChannelRankingItemSkeletonProps = {
   rank: number;
 };
 
-const ChannelRankingItemSkeleton: FC<ChannelRankingItemSkeletonProps> = ({
-  rank,
-}) => (
+const ChannelRankingItemSkeleton: FC<ChannelRankingItemSkeletonProps> = ({ rank }) => (
   <div className="flex items-center gap-2 px-2 py-1 @container">
     <RankingItemRank rank={rank} />
     <Skeleton circle w={24} height={24} />
@@ -52,11 +43,7 @@ type ChannelRankingItemProps = {
   total: number;
 };
 
-const ChannelRankingItem: FC<ChannelRankingItemProps> = ({
-  rank,
-  channel: { channel, count },
-  total,
-}) => {
+const ChannelRankingItem: FC<ChannelRankingItemProps> = ({ rank, channel: { channel, count }, total }) => {
   const { setSubscriptionLevel, getSubscriptionLevel } = useSubscriptions();
   const query = useMemo(
     () =>
@@ -65,13 +52,12 @@ const ChannelRankingItem: FC<ChannelRankingItemProps> = ({
         groupBy: 'user',
         orderBy: 'count',
         order: 'desc',
-      } satisfies MessagesQuery),
-    [channel]
+      }) satisfies MessagesQuery,
+    [channel],
   );
   const { messages, loading } = useMessages(query);
   const { getUserFromId, users } = useUsers();
-  const firstUser =
-    messages.length > 0 ? getUserFromId(messages[0]?.user) : undefined;
+  const firstUser = messages.length > 0 ? getUserFromId(messages[0]?.user) : undefined;
   const { getChannelName } = useChannels();
   const subscriptionLevel = getSubscriptionLevel(channel);
 
@@ -81,22 +67,14 @@ const ChannelRankingItem: FC<ChannelRankingItemProps> = ({
       {loading || users === undefined ? (
         <Skeleton circle w={24} height={24} />
       ) : firstUser ? (
-        <UserAvatar
-          userId={firstUser.id}
-          size={24}
-          title={`${firstUser.displayName} (@${firstUser.name})`}
-        />
+        <UserAvatar userId={firstUser.id} size={24} title={`${firstUser.displayName} (@${firstUser.name})`} />
       ) : (
         <div className="rounded-full size-6" />
       )}
       <div className="flex-1 flex @2xl:items-center justify-between gap-1 flex-col @2xl:flex-row">
         <div className="flex items-center gap-2">
           <div className="font-semibold">
-            {getChannelName(channel) ? (
-              `#${getChannelName(channel)}`
-            ) : (
-              <Skeleton w={240} h={16} />
-            )}
+            {getChannelName(channel) ? `#${getChannelName(channel)}` : <Skeleton w={240} h={16} />}
           </div>
           <button
             onClick={() => {
@@ -120,9 +98,7 @@ const ChannelRankingItem: FC<ChannelRankingItemProps> = ({
                 userId={m.user}
                 size={16}
                 className="border-2 border-white bg-white"
-                title={`${getUserFromId(m.user)!.displayName} (@${
-                  getUserFromId(m.user)!.name
-                })`}
+                title={`${getUserFromId(m.user)!.displayName} (@${getUserFromId(m.user)!.name})`}
               />
             </div>
           ))}
@@ -138,9 +114,7 @@ const ChannelRankingItem: FC<ChannelRankingItemProps> = ({
 
       <div className="text-right w-28">
         <span className="font-medium">{count}</span>
-        <span className="ml-1 text-gray-500 text-sm">
-          ({((count * 100) / total).toFixed(1)}%)
-        </span>
+        <span className="ml-1 text-gray-500 text-sm">({((count * 100) / total).toFixed(1)}%)</span>
       </div>
     </div>
   );
@@ -152,11 +126,7 @@ type ChannelRankingProps = {
   label: ReactNode;
 };
 
-const ChannelRanking: FC<ChannelRankingProps> = ({
-  channels,
-  limit,
-  label,
-}) => {
+const ChannelRanking: FC<ChannelRankingProps> = ({ channels, limit, label }) => {
   const { getSubscriptionLevel } = useSubscriptions();
   const [currentLimit, setCurrentLimit] = useState(Math.min(limit ?? 20, 20));
   const containerRef = useRef<HTMLDivElement>(null);
@@ -187,18 +157,13 @@ const ChannelRanking: FC<ChannelRankingProps> = ({
             <span>{stats.totalUnreads}</span>
             <span> / </span>
             <span>{stats.total}</span>
-            <span>
-              {' '}
-              ({((stats.totalUnreads * 100) / stats.total).toFixed(1)}%)
-            </span>
+            <span> ({((stats.totalUnreads * 100) / stats.total).toFixed(1)}%)</span>
           </div>
         )}
       </div>
       <div className="flex flex-col">
         {channels.length === 0 &&
-          new Array(limit ?? 20)
-            .fill(null)
-            .map((_, i) => <ChannelRankingItemSkeleton rank={i + 1} key={i} />)}
+          new Array(limit ?? 20).fill(null).map((_, i) => <ChannelRankingItemSkeleton rank={i + 1} key={i} />)}
         {channels.slice(0, currentLimit).map((c, i) => (
           <ChannelRankingItem
             key={`${c.channel}-${i}-${stats}`}
@@ -209,11 +174,7 @@ const ChannelRanking: FC<ChannelRankingProps> = ({
         ))}
         <div ref={loaderRef} />
         {channels.length > currentLimit &&
-          new Array(10)
-            .fill(0)
-            .map((_, i) => (
-              <ChannelRankingItemSkeleton rank={currentLimit + i + 1} />
-            ))}
+          new Array(10).fill(0).map((_, i) => <ChannelRankingItemSkeleton rank={currentLimit + i + 1} />)}
       </div>
     </Card>
   );
@@ -226,8 +187,8 @@ const ChannelOverallRanking: FC = () => {
         groupBy: 'channel',
         orderBy: 'count',
         order: 'desc',
-      } satisfies MessagesQuery),
-    []
+      }) satisfies MessagesQuery,
+    [],
   );
   const { messages } = useMessages(query);
 
@@ -242,8 +203,8 @@ const ChannelYearlyRanking: FC = () => {
         orderBy: 'count',
         order: 'desc',
         after: new Date(Date.now() - 1000 * 60 * 60 * 24 * 365).toISOString(),
-      } satisfies MessagesQuery),
-    []
+      }) satisfies MessagesQuery,
+    [],
   );
   const { messages } = useMessages(query);
 
@@ -258,8 +219,8 @@ const ChannelMonthlyRanking: FC = () => {
         orderBy: 'count',
         order: 'desc',
         after: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30).toISOString(),
-      } satisfies MessagesQuery),
-    []
+      }) satisfies MessagesQuery,
+    [],
   );
   const { messages } = useMessages(query);
 
@@ -274,8 +235,8 @@ const ChannelDailyRanking: FC = () => {
         orderBy: 'count',
         order: 'desc',
         after: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
-      } satisfies MessagesQuery),
-    []
+      }) satisfies MessagesQuery,
+    [],
   );
   const { messages } = useMessages(query);
 

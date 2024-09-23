@@ -1,34 +1,22 @@
-import {
-  getCommonLineChartOptions,
-  mergeOptions,
-} from '@/models/commonChartOptions';
+import { getCommonLineChartOptions, mergeOptions } from '@/models/commonChartOptions';
 import {
   Chart as ChartJS,
   CategoryScale,
-  ChartOptions,
+  type ChartOptions,
   LinearScale,
   LineElement,
   Tooltip,
   PointElement,
 } from 'chart.js';
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  LineElement,
-  Tooltip,
-  PointElement
-);
+ChartJS.register(CategoryScale, LinearScale, LineElement, Tooltip, PointElement);
 
-export const commonTimelineChartOptions = mergeOptions(
-  getCommonLineChartOptions(false),
-  {
-    plugins: {
-      tooltip: {
-        enabled: true,
-        axis: 'y',
-        displayColors: false,
-      },
+export const commonTimelineChartOptions = mergeOptions(getCommonLineChartOptions(false), {
+  plugins: {
+    tooltip: {
+      enabled: true,
+      axis: 'y',
+      displayColors: false,
     },
-  }
-) satisfies ChartOptions;
+  },
+}) satisfies ChartOptions;

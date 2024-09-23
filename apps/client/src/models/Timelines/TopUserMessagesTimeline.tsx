@@ -2,10 +2,10 @@ import { useMessagesByMultipleQueries } from '@/hooks/useMessages';
 import { useMessagesRanking } from '@/hooks/useServerData';
 import { useUsers } from '@/hooks/useUsers';
 import { commonTimelineChartOptions } from '@/models/Timelines/common';
-import { MessagesQuery } from '@traq-ing/database';
-import { FC, useMemo } from 'react';
+import type { MessagesQuery } from '@traq-ing/database';
+import { type FC, useMemo } from 'react';
 import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, ChartOptions, Legend } from 'chart.js';
+import { Chart as ChartJS, type ChartOptions, Legend } from 'chart.js';
 import { mergeOptions } from '@/models/commonChartOptions';
 
 ChartJS.register(Legend);
@@ -41,10 +41,7 @@ const options = mergeOptions(commonTimelineChartOptions, {
 export const TopUserMessagesTimeline: FC = () => {
   const { getUsername } = useUsers();
   const { data: rankings } = useMessagesRanking();
-  const topUsers = useMemo(
-    () => rankings?.slice(0, 10).map((u) => u.user) ?? [],
-    [rankings]
-  );
+  const topUsers = useMemo(() => rankings?.slice(0, 10).map((u) => u.user) ?? [], [rankings]);
   const queries = useMemo(
     () =>
       topUsers.map(
@@ -54,23 +51,17 @@ export const TopUserMessagesTimeline: FC = () => {
             groupBy: 'month',
             orderBy: 'date',
             order: 'asc',
-          } satisfies MessagesQuery)
+          }) satisfies MessagesQuery,
       ),
-    [topUsers]
+    [topUsers],
   );
   const { messages } = useMessagesByMultipleQueries(queries);
-  const labels = [
-    ...new Set(messages.flatMap((m) => m.map((m) => m.month))),
-  ].toSorted((a, b) => a.localeCompare(b));
+  const labels = [...new Set(messages.flatMap((m) => m.map((m) => m.month)))].toSorted((a, b) => a.localeCompare(b));
   const data = {
     labels,
     datasets: messages.map((message, i) => ({
       label: `@${getUsername(topUsers[i])}`,
-      data: labels.map((l) =>
-        message
-          .filter((m) => m.month <= l)
-          .reduce((acc, cur) => acc + cur.count, 0)
-      ),
+      data: labels.map((l) => message.filter((m) => m.month <= l).reduce((acc, cur) => acc + cur.count, 0)),
       borderColor: colors[i],
       backgroundColor: colors[i],
     })),

@@ -2,7 +2,7 @@ import { OverallMessagesTimeline } from '@/models/Timelines/OverallMessagesTimel
 import { TopUserMessagesTimeline } from '@/models/Timelines/TopUserMessagesTimeline';
 import { UserMessagesRanking } from '@/models/UserRanking';
 import { Card } from '@mantine/core';
-import { FC } from 'react';
+import type { FC } from 'react';
 
 export const UserRankings: FC = () => (
   <Card>

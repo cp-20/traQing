@@ -1,13 +1,10 @@
 import { useStamps } from '@/hooks/useStamps';
 import { monthlyTimeRangeToTime, nextMonth } from '@/hooks/useTimeRange';
 import { StampRanking } from '@/models/Rankings/StampRanking';
-import { MonthlyRankingProps } from '@/models/Rankings/common';
-import {
-  stampRankingQuery,
-  useStampRankingData,
-} from '@/models/Rankings/stamp';
+import type { MonthlyRankingProps } from '@/models/Rankings/common';
+import { stampRankingQuery, useStampRankingData } from '@/models/Rankings/stamp';
 import clsx from 'clsx';
-import { FC, useMemo } from 'react';
+import { type FC, useMemo } from 'react';
 
 export const MonthlyStampRanking: FC<MonthlyRankingProps> = ({ range }) => {
   const query = useMemo(
@@ -16,7 +13,7 @@ export const MonthlyStampRanking: FC<MonthlyRankingProps> = ({ range }) => {
       after: monthlyTimeRangeToTime(range),
       before: monthlyTimeRangeToTime(nextMonth(range)),
     }),
-    [range]
+    [range],
   );
   const { stamps, loading } = useStamps(query);
   const stats = useStampRankingData(stamps);

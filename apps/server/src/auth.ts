@@ -11,8 +11,7 @@ const clientId = process.env.TRAQ_AUTH_CLIENT_ID;
 if (!clientId) throw new Error('TRAQ_AUTH_CLIENT_ID is not set');
 
 const randomString = (len: number) => {
-  const characters =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const charactersLength = characters.length;
 
   let array = crypto.getRandomValues(new Uint32Array(len));
@@ -24,13 +23,10 @@ const getCodeChallenge = (codeVerifier: string) => {
   const sha256Result = sha256(codeVerifier);
   const bytes = new Uint8Array(sha256Result.length / 2);
   for (let i = 0; i < sha256Result.length; i += 2) {
-    bytes[i / 2] = parseInt(sha256Result.substring(i, i + 2), 16);
+    bytes[i / 2] = Number.parseInt(sha256Result.substring(i, i + 2), 16);
   }
   const base64 = btoa(String.fromCharCode(...bytes));
-  const base64url = base64
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-    .replace(/=/g, '');
+  const base64url = base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
   return base64url;
 };
 
@@ -54,10 +50,7 @@ export const getTraqAuthCodeRequestUrl = () => {
   return { redirectUri, codeVerifier, state };
 };
 
-export const sendTraqAuthTokenRequest = (
-  code: string,
-  codeVerifier: string
-) => {
+export const sendTraqAuthTokenRequest = (code: string, codeVerifier: string) => {
   const url = baseUrl + '/token';
 
   const body = new URLSearchParams({

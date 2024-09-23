@@ -26,7 +26,7 @@ export const useMonthlyTimeRange = (initial?: MonthlyTimeRange) => {
     initial ?? {
       year: new Date().getFullYear(),
       month: new Date().getMonth() + 1,
-    }
+    },
   );
 
   const next = () => setRange(nextMonth);
@@ -72,7 +72,7 @@ export const useDailyTimeRange = (initial?: DailyTimeRange) => {
       year: new Date().getFullYear(),
       month: new Date().getMonth() + 1,
       day: new Date().getDate(),
-    }
+    },
   );
 
   const next = () => setRange(nextDay);

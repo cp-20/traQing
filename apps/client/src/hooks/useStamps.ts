@@ -1,13 +1,9 @@
 import { client } from '@/features/api';
-import { StampsQuery } from '@traq-ing/database';
+import type { StampsQuery } from '@traq-ing/database';
 import { useEffect, useState } from 'react';
 
 type Result<Q extends StampsQuery> = {
-  [K in Q extends { groupBy: infer U }
-    ? U extends undefined
-      ? 'day'
-      : U
-    : 'day']: string;
+  [K in Q extends { groupBy: infer U } ? (U extends undefined ? 'day' : U) : 'day']: string;
 } & { count: number };
 
 export const useStamps = <Q extends StampsQuery>(query: Q) => {

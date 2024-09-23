@@ -1,4 +1,4 @@
-import { MessagesQuery } from '@traq-ing/database';
+import type { MessagesQuery } from '@traq-ing/database';
 import { useChannels } from '@/hooks/useChannels';
 
 export const channelRankingQuery = {
@@ -8,9 +8,7 @@ export const channelRankingQuery = {
   limit: 10,
 } satisfies MessagesQuery;
 
-export const useChannelRankingData = (
-  messages: { channel: string; count: number }[]
-) => {
+export const useChannelRankingData = (messages: { channel: string; count: number }[]) => {
   const { getChannelName, getSummedChannelName, channels } = useChannels();
 
   if (messages.length === 0 || channels === undefined) {
