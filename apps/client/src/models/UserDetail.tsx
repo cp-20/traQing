@@ -5,7 +5,7 @@ import { UserActionTimeline } from '@/models/Timelines/UserActionTimeline';
 import { UserGaveStampsChannels, UserMessageChannels } from '@/models/UserActionChannels';
 import { UserMessageHours } from '@/models/UserMessageHours';
 import { UserGaveStampRanking, UserReceivedStampRanking } from '@/models/UserStampRanking';
-import { UserGaveStampStat, UserMessageCountStat, UserReceivedStampStat } from '@/models/UserStats';
+import { UserGaveStampStat, UserMessageCountStat, UserReceivedStampStat } from '@/components/stats/UserStats';
 import { UserTopReactedMessages } from '@/models/UserTopReactedMessages';
 import { IconChevronLeft } from '@tabler/icons-react';
 import type { FC } from 'react';
