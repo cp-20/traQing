@@ -7,7 +7,7 @@ export const NotFoundPage: FC = () => {
     <div className="min-h-screen flex flex-col justify-center items-center gap-4">
       <div className="text-2xl font-semibold">
         <span>{location.pathname}</span>
-        <span>というページは見つかりませんでした</span>
+        <span> というページは見つかりませんでした</span>
       </div>
       <div>
         <Link to="/" className="underline text-blue-500">
