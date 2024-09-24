@@ -84,7 +84,7 @@ export const ChannelRankingItemWithUsers: FC<ChannelRankingItemWithUsersProps> =
       {rate && <RankingItemBar rate={rate} />}
       <RankingItemRank rank={rank} />
       {icon}
-      <div className="flex-1 flex @lg:flex-row flex-col @lg:items-center @lg:gap-2 gap-1 justify-between">
+      <div className="flex-1 flex @2xl:flex-row flex-col @2xl:items-center @2xl:gap-2 gap-1 justify-between">
         <div className="font-semibold">
           {getChannelName(channelId) ? `#${getChannelName(channelId)}` : <Skeleton h={16} />}
         </div>
