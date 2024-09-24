@@ -10,6 +10,12 @@ export default {
       xl: '1280px',
       '2xl': '1536px',
     },
+    colors: {
+      ...require('tailwindcss/colors'),
+      text: {
+        primary: '#49535b',
+      },
+    },
     extend: {
       fontFamily: {
         mono: 'SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace',
