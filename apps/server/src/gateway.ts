@@ -76,3 +76,24 @@ export const getFile = memorize(
     return new File([compressed], fileId, { type: 'image/webp' });
   },
 );
+
+export const getOgInfo = memorize(0, async (url: string) => {
+  const res = await fetch(url, { headers: { 'User-Agent': 'bot' } });
+  if (!res.ok) throw new Error('Failed to fetch og');
+  const data = await res.text();
+  const metaTags = data.match(/<meta [^>]+>/g) ?? [];
+  const parsedMetaTags = metaTags.map((tag) => {
+    const properties = tag.matchAll(/([a-z]+)="([^"]+)"/g);
+    const props = Array.from(properties).map((prop) => [prop[1], prop[2]] as const);
+    const propMap = Object.fromEntries(props);
+    return propMap;
+  });
+
+  const title = parsedMetaTags.find((tag) => tag.property === 'og:title')?.content;
+  const description = parsedMetaTags.find((tag) => tag.property === 'og:description')?.content;
+  const image = parsedMetaTags.find((tag) => tag.property === 'og:image')?.content;
+  const origin = new URL(url).host;
+  const type = ['twitter.com', 'x.com'].includes(origin) ? ('summary' as const) : ('article' as const);
+
+  return { title, description, image, origin, type };
+});

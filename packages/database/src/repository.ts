@@ -231,6 +231,10 @@ export const getMessagesTimeline = async () => {
   return await db.select().from(schema.messagesMonthlyTimelineView).execute();
 };
 
+export const getStampRanking = async () => {
+  return await db.select().from(schema.stampRankingView).execute();
+};
+
 export const getChannelStampsRanking = async () => {
   return await db.select().from(schema.channelStampsRankingView).execute();
 };
@@ -248,6 +252,7 @@ export const updateMaterializedViews = async () => {
   await db.refreshMaterializedView(schema.messagesRankingView);
   await db.refreshMaterializedView(schema.messagesMonthlyTimelineView);
   await db.refreshMaterializedView(schema.stampRelationsView);
+  await db.refreshMaterializedView(schema.stampRankingView);
   await db.refreshMaterializedView(schema.channelStampsRankingView);
   await db.refreshMaterializedView(schema.gaveMessageStampsRankingView);
   await db.refreshMaterializedView(schema.receivedMessageStampsRankingView);

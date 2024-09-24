@@ -12,6 +12,7 @@ import {
   getMessagesRanking,
   getMessagesTimeline,
   getReceivedMessageStampsRanking,
+  getStampRanking,
   getStampRelations,
   getStamps,
 } from '@traq-ing/database';
@@ -25,16 +26,23 @@ import {
   getFile,
   getMe,
   getMessageStamps,
+  getOgInfo,
   getSubscriptions,
   getUserGroups,
   getUsers,
   setSubscriptionLevel,
 } from '@/gateway';
 import { HTTPException } from 'hono/http-exception';
+import { createMiddleware } from 'hono/factory';
 
 const app = new Hono<{
   Variables: { token: string };
 }>();
+
+const cacheMiddleware = createMiddleware(async (c, next) => {
+  c.header('Cache-Control', 'private, max-age=60, stale-while-revalidate=86400');
+  await next();
+});
 
 const routes = app
   .use(async (c, next) => {
@@ -68,87 +76,47 @@ const routes = app
       return c.status(200);
     },
   )
-  .get('/messages', zValidator('query', MessagesQuerySchema), async (c) => {
-    const query = c.req.valid('query');
-    const messages = await getMessages(query);
-    c.header('Cache-Control', 'private, max-age=60, stale-while-revalidate=86400');
-    return c.json(messages, 200);
-  })
-  .get('/channel-messages-ranking', async (c) => {
-    const data = await getChannelMessageRanking();
-    c.header('Cache-Control', 'private, max-age=60, stale-while-revalidate=86400');
-    return c.json(data, 200);
-  })
-  .get('/messages-ranking', async (c) => {
-    const data = await getMessagesRanking();
-    c.header('Cache-Control', 'private, max-age=60, stale-while-revalidate=86400');
-    return c.json(data, 200);
-  })
-  .get('/messages-timeline', async (c) => {
-    const data = await getMessagesTimeline();
-    c.header('Cache-Control', 'private, max-age=60, stale-while-revalidate=86400');
-    return c.json(data, 200);
-  })
-  .get('/channel-stamps-ranking', async (c) => {
+  .get('/messages', zValidator('query', MessagesQuerySchema), cacheMiddleware, async (c) =>
+    c.json(await getMessages(c.req.valid('query')), 200),
+  )
+  .get('/channel-messages-ranking', cacheMiddleware, async (c) => c.json(await getChannelMessageRanking(), 200))
+  .get('/messages-ranking', cacheMiddleware, async (c) => c.json(await getMessagesRanking(), 200))
+  .get('/messages-timeline', cacheMiddleware, async (c) => c.json(await getMessagesTimeline(), 200))
+  .get('/stamp-ranking', cacheMiddleware, async (c) => c.json(await getStampRanking(), 200))
+  .get('/channel-stamps-ranking', cacheMiddleware, async (c) => {
     const data = await getChannelStampsRanking();
-    c.header('Cache-Control', 'private, max-age=60, stale-while-revalidate=86400');
     return c.json(data, 200);
   })
-  .get('/gave-stamps-ranking', async (c) => {
+  .get('/gave-stamps-ranking', cacheMiddleware, async (c) => {
     const data = await getGaveMessageStampsRanking();
-    c.header('Cache-Control', 'private, max-age=60, stale-while-revalidate=86400');
     return c.json(data, 200);
   })
-  .get('/received-stamps-ranking', async (c) => {
+  .get('/received-stamps-ranking', cacheMiddleware, async (c) => {
     const data = await getReceivedMessageStampsRanking();
-    c.header('Cache-Control', 'private, max-age=60, stale-while-revalidate=86400');
     return c.json(data, 200);
   })
-  .get('/messages/:id', async (c) => {
+  .get('/messages/:id', cacheMiddleware, async (c) => {
     const id = c.req.param('id');
     const messages = await api.messages.getMessage(id);
     if (!messages.ok) throw new Error('Failed to fetch messages');
-    c.header('Cache-Control', 'private, max-age=60, stale-while-revalidate=86400');
     return c.json(messages.data, 200);
   })
-  .get('/stamps', zValidator('query', StampsQuerySchema), async (c) => {
-    const query = c.req.valid('query');
-    const data = await getStamps(query);
-    c.header('Cache-Control', 'private, max-age=60, stale-while-revalidate=86400');
-    return c.json(data, 200);
-  })
-  .get('/stamp-relations', zValidator('query', StampRelationsQuerySchema), async (c) => {
-    const query = c.req.valid('query');
-    const data = await getStampRelations(query);
-    c.header('Cache-Control', 'private, max-age=60, stale-while-revalidate=86400');
-    return c.json(data, 200);
-  })
-  .get('/users', async (c) => c.json(await getUsers(), 200))
-  .get('/groups', async (c) => c.json(await getUserGroups(), 200))
-  .get('/channels', async (c) => c.json(await getChannels(), 200))
-  .get('/channels/:id/subscribers', async (c) => c.json(await getChannelSubscribers(c.req.param('id')), 200))
-  .get('/message-stamps', async (c) => c.json(await getMessageStamps(), 200))
-  .get('/og', zValidator('query', z.object({ url: z.string() })), async (c) => {
-    const { url } = c.req.valid('query');
-    const res = await fetch(url, { headers: { 'User-Agent': 'bot' } });
-    if (!res.ok) throw new Error('Failed to fetch og');
-    const data = await res.text();
-    const metaTags = data.match(/<meta [^>]+>/g) ?? [];
-    const parsedMetaTags = metaTags.map((tag) => {
-      const properties = tag.matchAll(/([a-z]+)="([^"]+)"/g);
-      const props = Array.from(properties).map((prop) => [prop[1], prop[2]] as const);
-      const propMap = Object.fromEntries(props);
-      return propMap;
-    });
-
-    const title = parsedMetaTags.find((tag) => tag.property === 'og:title')?.content;
-    const description = parsedMetaTags.find((tag) => tag.property === 'og:description')?.content;
-    const image = parsedMetaTags.find((tag) => tag.property === 'og:image')?.content;
-    const origin = new URL(url).host;
-    const type = ['twitter.com', 'x.com'].includes(origin) ? ('summary' as const) : ('article' as const);
-
-    return c.json({ title, description, image, origin, type }, 200);
-  })
+  .get('/stamps', zValidator('query', StampsQuerySchema), async (c) =>
+    c.json(await getStamps(c.req.valid('query')), 200),
+  )
+  .get('/stamp-relations', zValidator('query', StampRelationsQuerySchema), async (c) =>
+    c.json(await getStampRelations(c.req.valid('query')), 200),
+  )
+  .get('/users', cacheMiddleware, async (c) => c.json(await getUsers(), 200))
+  .get('/groups', cacheMiddleware, async (c) => c.json(await getUserGroups(), 200))
+  .get('/channels', cacheMiddleware, async (c) => c.json(await getChannels(), 200))
+  .get('/channels/:id/subscribers', cacheMiddleware, async (c) =>
+    c.json(await getChannelSubscribers(c.req.param('id')), 200),
+  )
+  .get('/message-stamps', cacheMiddleware, async (c) => c.json(await getMessageStamps(), 200))
+  .get('/og', zValidator('query', z.object({ url: z.string() })), cacheMiddleware, async (c) =>
+    c.json(await getOgInfo(c.req.valid('query').url), 200),
+  )
   .onError((err) => {
     if (err instanceof HTTPException) return err.getResponse();
     console.error(err);

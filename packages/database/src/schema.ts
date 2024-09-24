@@ -99,6 +99,17 @@ export const stampRelationsView = pgMaterializedView('stamp_relations').as((qb) 
     .orderBy(desc(count())),
 );
 
+export const stampRankingView = pgMaterializedView('stamp_ranking').as((qb) =>
+  qb
+    .select({
+      stamp: messageStamps.stampId,
+      count: count().as('count'),
+    })
+    .from(messageStamps)
+    .groupBy(messageStamps.stampId)
+    .orderBy(desc(count())),
+);
+
 export const channelStampsRankingView = pgMaterializedView('channel_stamps_ranking').as((qb) =>
   qb
     .select({
