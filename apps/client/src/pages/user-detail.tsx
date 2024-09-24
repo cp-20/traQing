@@ -17,7 +17,7 @@ export const UserDetailPage: FC = () => {
       <div
         className={clsx(
           'grid place-content-center absolute inset-0 bg-gray-100 duration-200 transition-all ease-in',
-          userId && 'invisible opacity-0',
+          users !== undefined && 'invisible opacity-0',
         )}
       >
         <Loader type="bars" size="xl" />
