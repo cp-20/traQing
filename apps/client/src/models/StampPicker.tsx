@@ -25,11 +25,8 @@ const searchStamps = (stamps: Stamp[], keyword: string) => {
     });
 };
 
-type StampPickerProps = {
-  setStampId: (stampId: string | null) => void;
-};
-
-export const StampPicker: FC<StampPickerProps> = ({ setStampId }) => {
+export const useStampPicker = () => {
+  const [stampId, setStampId] = useState<string | null>(null);
   const [keyword, setKeyword] = useState<string>('');
   const [opened, setOpened] = useState(false);
   const { stamps } = useMessageStamps();
@@ -38,7 +35,7 @@ export const StampPicker: FC<StampPickerProps> = ({ setStampId }) => {
 
   const filteredStamps = stamps && searchStamps(stamps, keyword);
 
-  return (
+  const render = () => (
     <div>
       <Popover width="target" position="bottom" shadow="sm" opened={opened} onChange={setOpened}>
         <Popover.Target>
@@ -86,12 +83,16 @@ export const StampPicker: FC<StampPickerProps> = ({ setStampId }) => {
       </Popover>
     </div>
   );
+
+  return { stampId, render };
 };
 
 type StampProps = {
   fileId: string;
-};
+} & JSX.IntrinsicElements['img'];
 
-export const StampImage: FC<StampProps> = ({ fileId }) => {
-  return <img src={`/api/files/${fileId}`} alt="" width={24} height={24} loading="lazy" />;
+export const StampImage: FC<StampProps> = ({ fileId, ...props }) => {
+  return (
+    <img src={`/api/files/${fileId}?width=48&height=48`} width={24} height={24} loading="lazy" {...props} alt="" />
+  );
 };

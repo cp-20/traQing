@@ -5,11 +5,12 @@ import { UserActionTimeline } from '@/models/Timelines/UserActionTimeline';
 import { UserGaveStampsChannels, UserMessageChannels } from '@/models/UserActionChannels';
 import { UserMessageHours } from '@/models/UserMessageHours';
 import { UserGaveStampStat, UserMessageCountStat, UserReceivedStampStat } from '@/components/stats/UserStats';
-import { UserTopReactedMessages } from '@/models/UserTopReactedMessages';
 import { IconChevronLeft } from '@tabler/icons-react';
 import type { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { StampRanking } from '@/components/rankings/StampRanking';
+import { TopReactedMessages } from '@/components/messages/TopReactedMessages';
+import { useStampPicker } from '@/models/StampPicker';
 
 type UserDetailProps = {
   userId: string;
@@ -17,6 +18,7 @@ type UserDetailProps = {
 };
 
 export const UserDetail: FC<UserDetailProps> = ({ userId }) => {
+  const stampPicker = useStampPicker();
   const { getUserFromId } = useUsers();
   const user = getUserFromId(userId);
 
@@ -68,7 +70,10 @@ export const UserDetail: FC<UserDetailProps> = ({ userId }) => {
           </div>
           <Card className="max-lg:hidden">
             <div className="font-semibold mb-4">リアクションの多い投稿</div>
-            <UserTopReactedMessages userId={userId} />
+            <div className="space-y-2">
+              {stampPicker.render()}
+              <TopReactedMessages stampId={stampPicker.stampId} receivedUserId={userId} />
+            </div>
           </Card>
         </div>
         <div className="flex flex-col sm:gap-8 gap-4">
@@ -98,7 +103,10 @@ export const UserDetail: FC<UserDetailProps> = ({ userId }) => {
           </Card>
           <Card className="lg:hidden">
             <div className="font-semibold mb-4">リアクションの多い投稿</div>
-            <UserTopReactedMessages userId={userId} />
+            <div className="space-y-2">
+              {stampPicker.render()}
+              <TopReactedMessages stampId={stampPicker.stampId} receivedUserId={userId} />
+            </div>
           </Card>
         </div>
       </div>
