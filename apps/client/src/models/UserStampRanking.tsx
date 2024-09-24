@@ -1,6 +1,8 @@
+import { RankingItemSkeleton } from '@/components/rankings';
 import { StampRankingItem } from '@/components/rankings/stamp';
 import { useStamps } from '@/hooks/useStamps';
 import type { StampsQuery } from '@traq-ing/database';
+import clsx from 'clsx';
 import { type FC, useMemo } from 'react';
 
 type UserStampRankingProps = {
@@ -18,10 +20,20 @@ export const UserGaveStampRanking: FC<UserStampRankingProps> = ({ userId }) => {
       }) satisfies StampsQuery,
     [userId],
   );
-  const { stamps } = useStamps(query);
+  const { stamps, loading } = useStamps(query);
+
+  if (loading && stamps.length === 0) {
+    return (
+      <div>
+        {[...Array(10)].map((_, i) => (
+          <RankingItemSkeleton key={i} rank={i + 1} showIcon={false} />
+        ))}
+      </div>
+    );
+  }
 
   return (
-    <div>
+    <div className={clsx(loading && 'opacity-80')}>
       {stamps.map((s, i) => (
         <StampRankingItem
           key={s.stamp}
@@ -46,10 +58,20 @@ export const UserReceivedStampRanking: FC<UserStampRankingProps> = ({ userId }) 
       }) satisfies StampsQuery,
     [userId],
   );
-  const { stamps } = useStamps(query);
+  const { stamps, loading } = useStamps(query);
+
+  if (loading && stamps.length === 0) {
+    return (
+      <div>
+        {[...Array(10)].map((_, i) => (
+          <RankingItemSkeleton key={i} rank={i + 1} showIcon={false} />
+        ))}
+      </div>
+    );
+  }
 
   return (
-    <div>
+    <div className={clsx(loading && 'opacity-80')}>
       {stamps.map((s, i) => (
         <StampRankingItem
           key={s.stamp}
