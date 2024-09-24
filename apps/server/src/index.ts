@@ -170,8 +170,10 @@ const update = async () => {
   console.log('Finished updating.');
 };
 
-setInterval(update, 1000 * 60 * 5);
-update();
+setInterval(update, 1000 * 60 * 60);
+if (process.env.NODE_ENV === 'production') {
+  update();
+}
 
 export default {
   port: 8080,

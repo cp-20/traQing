@@ -15,5 +15,6 @@ RUN bun i --frozen-lockfile
 RUN timeout --preserve-status 20s bun run build:database || true
 
 EXPOSE 8080
+ENV NODE_ENV=production
 
 CMD ["bun", "run", "start:server"]

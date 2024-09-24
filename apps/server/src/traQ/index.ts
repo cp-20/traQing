@@ -10,7 +10,7 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const updateMessages = async () => {
   const lastMessage = await getLastMessageCreatedAt();
-  const after = lastMessage ? new Date(lastMessage).toISOString() : undefined;
+  const after = lastMessage ? new Date(lastMessage.getTime() - 1000 * 60 * 60 * 24 * 7).toISOString() : undefined;
 
   let before = new Date().toISOString();
 
