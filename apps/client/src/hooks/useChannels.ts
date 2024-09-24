@@ -4,6 +4,18 @@ import { useCallback } from 'react';
 export const useChannels = () => {
   const { data: channels } = useChannelsData();
 
+  const getChannelId = useCallback(
+    (name: string): string | undefined => {
+      if (!channels) return undefined;
+
+      const channel = channels.find((c) => getChannelName(c.id) === name);
+      if (!channel) return undefined;
+
+      return channel.id;
+    },
+    [channels],
+  );
+
   const getChannelName = useCallback(
     (id: string): string | undefined => {
       if (!channels) return undefined;
@@ -31,5 +43,5 @@ export const useChannels = () => {
     [getChannelName],
   );
 
-  return { channels, getChannelName, getSummedChannelName };
+  return { channels, getChannelId, getChannelName, getSummedChannelName };
 };

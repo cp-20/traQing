@@ -1,29 +1,31 @@
-import { Card } from '@/components/Card';
-import { UserAvatar } from '@/components/UserAvatar';
-import { useUsers } from '@/hooks/useUsers';
-import { UserGaveStampsChannels } from '@/models/UserActionChannels';
-import { UserGaveStampStat, UserMessageCountStat, UserReceivedStampStat } from '@/components/stats/UserStats';
+import { ChannelIcon } from '@/components/icons/ChannelIcon';
+import { useChannels } from '@/hooks/useChannels';
+import { Card } from '@mantine/core';
 import { IconChevronLeft } from '@tabler/icons-react';
 import type { FC } from 'react';
 import { Link } from 'react-router-dom';
+import {
+  ChannelMessageCountStat,
+  ChannelStampCountStat,
+  ChannelSubscribersCountStat,
+} from '@/components/stats/ChannelStats';
 import { StampRanking } from '@/components/rankings/StampRanking';
-import { TopReactedMessages } from '@/components/messages/TopReactedMessages';
 import { useStampPicker } from '@/models/StampPicker';
-import { UserActionTimeline } from '@/components/timelines/UserActionTimeline';
-import { UserActionHours } from '@/components/hours/UserActionHours';
-import { MessagesChannelRanking } from '@/components/rankings/ChannelRanking';
+import { TopReactedMessages } from '@/components/messages/TopReactedMessages';
+import { ChannelActionTimeline } from '@/components/timelines/ChannelActionTimeline';
+import { ChannelActionHours } from '@/components/hours/ChannelActionHours';
+import { MessagesUserRanking, StampsUserRanking } from '@/components/rankings/UserRanking';
 
-type UserDetailProps = {
-  userId: string;
-  subscriptions?: string[];
+type Props = {
+  channelId: string;
 };
 
-export const UserDetail: FC<UserDetailProps> = ({ userId }) => {
+export const ChannelDetail: FC<Props> = ({ channelId }) => {
   const stampPicker = useStampPicker();
-  const { getUserFromId } = useUsers();
-  const user = getUserFromId(userId);
+  const { getChannelName } = useChannels();
+  const channelName = getChannelName(channelId);
 
-  if (user === undefined) return null;
+  if (channelName === undefined) return null;
 
   return (
     <div className="bg-gray-100 min-h-screen sm:p-8 p-4 flex flex-col sm:gap-8 gap-4">
@@ -44,36 +46,27 @@ export const UserDetail: FC<UserDetailProps> = ({ userId }) => {
           <IconChevronLeft />
           <span>ホームに戻る</span>
         </Link>
-        <div>
-          <UserAvatar userId={user.id} size={128} loading="eager" />
-        </div>
-        <div>
-          <div className="text-2xl font-semibold">{user.displayName}</div>
-          <div className="text-gray-500">@{user.name}</div>
+        <div className="flex items-center">
+          <ChannelIcon className="size-10 -mr-1" />
+          <div className="text-2xl font-semibold pb-1">{channelName}</div>
         </div>
       </div>
       <div className="grid grid-cols-2 sm:gap-8 gap-4 max-lg:grid-cols-1">
         <div className="flex flex-col sm:gap-8 gap-4 @container">
           <div className="grid grid-cols-3 gap-4 auto-rows-min max-xs:grid-cols-1">
-            <UserMessageCountStat userId={userId} />
-            <UserGaveStampStat userId={userId} />
-            <UserReceivedStampStat userId={userId} />
+            <ChannelMessageCountStat channelId={channelId} />
+            <ChannelStampCountStat channelId={channelId} />
+            <ChannelSubscribersCountStat channelId={channelId} />
           </div>
-          <div className="grid grid-cols-1 gap-4 sm:gap-8 @lg:grid-cols-2 sm:@lg:gap-4">
-            <Card>
-              <div className="font-semibold mb-2">つけたスタンプ</div>
-              <StampRanking gaveUserId={userId} />
-            </Card>
-            <Card>
-              <div className="font-semibold mb-2">もらったスタンプ</div>
-              <StampRanking receivedUserId={userId} />
-            </Card>
-          </div>
+          <Card>
+            <div className="font-semibold mb-2">スタンプ</div>
+            <StampRanking channelId={channelId} />
+          </Card>
           <Card className="max-lg:hidden">
             <div className="font-semibold mb-4">リアクションの多い投稿</div>
             <div className="space-y-2">
               {stampPicker.render()}
-              <TopReactedMessages stampId={stampPicker.stampId} receivedUserId={userId} />
+              <TopReactedMessages stampId={stampPicker.stampId} channelId={channelId} />
             </div>
           </Card>
         </div>
@@ -81,32 +74,38 @@ export const UserDetail: FC<UserDetailProps> = ({ userId }) => {
           <Card>
             <div className="font-semibold mb-4">各アクションの時系列遷移</div>
             <div>
-              <UserActionTimeline userId={userId} />
+              <ChannelActionTimeline channelId={channelId} />
             </div>
           </Card>
           <Card>
             <div className="font-semibold mb-4">各アクションの時間帯</div>
             <div>
-              <UserActionHours userId={userId} />
+              <ChannelActionHours channelId={channelId} />
             </div>
           </Card>
           <Card>
-            <div className="font-semibold mb-4">よく投稿するチャンネル</div>
+            <div className="font-semibold mb-4">よく投稿するユーザー</div>
             <div>
-              <MessagesChannelRanking userId={userId} limit={20} />
+              <MessagesUserRanking channelId={channelId} />
             </div>
           </Card>
           <Card>
-            <div className="font-semibold mb-4">スタンプをよく付けるチャンネル</div>
+            <div className="font-semibold mb-4">よくスタンプを付けるユーザー</div>
             <div>
-              <UserGaveStampsChannels userId={userId} />
+              <StampsUserRanking channelId={channelId} />
+            </div>
+          </Card>
+          <Card>
+            <div className="font-semibold mb-4">よく使われるスタンプ</div>
+            <div>
+              <StampRanking channelId={channelId} />
             </div>
           </Card>
           <Card className="lg:hidden">
             <div className="font-semibold mb-4">リアクションの多い投稿</div>
             <div className="space-y-2">
               {stampPicker.render()}
-              <TopReactedMessages stampId={stampPicker.stampId} receivedUserId={userId} />
+              <TopReactedMessages stampId={stampPicker.stampId} channelId={channelId} />
             </div>
           </Card>
         </div>

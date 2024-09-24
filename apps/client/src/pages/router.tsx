@@ -1,3 +1,4 @@
+import { ChannelDetailPage } from '@/pages/channel-detail';
 import { ChannelsOverviewPage } from '@/pages/channels-overview';
 import { Dashboard } from '@/pages/dashboard';
 import { NotFoundPage } from '@/pages/not-found';
@@ -16,6 +17,10 @@ export const router = createBrowserRouter([
   {
     path: '/channels',
     element: <ChannelsOverviewPage />,
+  },
+  {
+    path: '/channels/*',
+    element: <ChannelDetailPage />,
   },
   {
     path: '*',

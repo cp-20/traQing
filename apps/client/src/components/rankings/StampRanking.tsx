@@ -7,13 +7,14 @@ import clsx from 'clsx';
 import { Fragment, useMemo, type FC } from 'react';
 
 type Props = {
+  range?: DateRange;
   channelId?: string;
   gaveUserId?: string;
   receivedUserId?: string;
-  range: DateRange;
+  limit?: number;
 };
 
-export const StampRanking: FC<Props> = ({ channelId, gaveUserId, receivedUserId, range }) => {
+export const StampRanking: FC<Props> = ({ range, channelId, gaveUserId, receivedUserId, limit }) => {
   const query = useMemo(
     () =>
       ({
@@ -23,17 +24,17 @@ export const StampRanking: FC<Props> = ({ channelId, gaveUserId, receivedUserId,
         groupBy: 'stamp',
         orderBy: 'count',
         order: 'desc',
-        limit: 10,
-        ...dateRangeToQuery(range),
+        limit: limit ?? 10,
+        ...(range && dateRangeToQuery(range)),
       }) satisfies StampsQuery,
-    [range, channelId, gaveUserId, receivedUserId],
+    [range, channelId, gaveUserId, receivedUserId, limit],
   );
   const { stamps, loading } = useStamps(query);
 
   if (loading && stamps.length === 0) {
     return (
       <div className="flex flex-col">
-        {[...Array(10)].map((_, i) => (
+        {[...Array(limit ?? 10)].map((_, i) => (
           <RankingItemSkeleton key={i} rank={i + 1} />
         ))}
       </div>

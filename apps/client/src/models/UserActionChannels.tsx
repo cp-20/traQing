@@ -3,12 +3,14 @@ import { useStamps } from '@/hooks/useStamps';
 import type { MessagesQuery, StampsQuery } from '@traq-ing/database';
 import { type FC, useMemo } from 'react';
 import { ChannelRankingItemWithUsers } from '@/components/rankings/channel';
+import type { DateRange } from '@/models/useDateRangePicker';
 
 type UserActionChannelsProps = {
   userId: string;
+  range?: DateRange;
 };
 
-export const UserMessageChannels: FC<UserActionChannelsProps> = ({ userId }) => {
+export const UserMessageChannels: FC<UserActionChannelsProps> = ({ userId, range }) => {
   const query = useMemo(
     () =>
       ({
@@ -24,7 +26,7 @@ export const UserMessageChannels: FC<UserActionChannelsProps> = ({ userId }) => 
     <div>
       {messages.map((m, i) => (
         <ChannelRankingItemWithUsers
-          range={null}
+          range={range}
           key={m.channel}
           rank={i + 1}
           channelId={m.channel}
@@ -36,7 +38,7 @@ export const UserMessageChannels: FC<UserActionChannelsProps> = ({ userId }) => 
   );
 };
 
-export const UserGaveStampsChannels: FC<UserActionChannelsProps> = ({ userId }) => {
+export const UserGaveStampsChannels: FC<UserActionChannelsProps> = ({ userId, range }) => {
   const query = useMemo(
     () =>
       ({
@@ -52,7 +54,7 @@ export const UserGaveStampsChannels: FC<UserActionChannelsProps> = ({ userId }) 
     <div>
       {stamps.map((s, i) => (
         <ChannelRankingItemWithUsers
-          range={null}
+          range={range}
           key={s.channel}
           rank={i + 1}
           channelId={s.channel}

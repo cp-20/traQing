@@ -1,6 +1,7 @@
 import { commonHoursChartOption, commonHoursQuery, hours } from '@/components/hours/common';
 import { useMessages } from '@/hooks/useMessages';
 import { useStamps } from '@/hooks/useStamps';
+import { dateRangeToQuery, type DateRange } from '@/models/useDateRangePicker';
 import type { MessagesQuery, StampsQuery } from '@traq-ing/database';
 import type { ChartOptions } from 'chart.js';
 import { type FC, useMemo } from 'react';
@@ -12,14 +13,36 @@ const option = {
 
 type Props = {
   userId: string;
+  range?: DateRange;
 };
 
-export const UserActionHours: FC<Props> = ({ userId }) => {
-  const messagesQuery = useMemo(() => ({ ...commonHoursQuery, userId }) satisfies MessagesQuery, [userId]);
-  const gaveStampsQuery = useMemo(() => ({ ...commonHoursQuery, userId }) satisfies StampsQuery, [userId]);
+export const UserActionHours: FC<Props> = ({ userId, range }) => {
+  const messagesQuery = useMemo(
+    () =>
+      ({
+        userId,
+        ...commonHoursQuery,
+        ...(range && dateRangeToQuery(range)),
+      }) satisfies MessagesQuery,
+    [userId, range],
+  );
+  const gaveStampsQuery = useMemo(
+    () =>
+      ({
+        userId,
+        ...commonHoursQuery,
+        ...(range && dateRangeToQuery(range)),
+      }) satisfies StampsQuery,
+    [userId, range],
+  );
   const receivedStampsQuery = useMemo(
-    () => ({ ...commonHoursQuery, messageUserId: userId }) satisfies StampsQuery,
-    [userId],
+    () =>
+      ({
+        messageUserId: userId,
+        ...commonHoursQuery,
+        ...(range && dateRangeToQuery(range)),
+      }) satisfies StampsQuery,
+    [userId, range],
   );
   const { messages } = useMessages(messagesQuery);
   const { stamps: gaveStamps } = useStamps(gaveStampsQuery);

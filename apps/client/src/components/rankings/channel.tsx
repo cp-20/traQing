@@ -38,7 +38,7 @@ export const ChannelRankingItem: FC<ChannelRankingItemProps> = ({ channelId, ran
 };
 
 export type ChannelRankingItemWithUsersProps = {
-  range: DateRange | null;
+  range?: DateRange;
   channelId: string;
   rank: number;
   value: number;

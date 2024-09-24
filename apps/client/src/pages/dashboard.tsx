@@ -3,9 +3,9 @@ import { Card } from '@/components/Card';
 import { ChannelIcon } from '@/components/icons/ChannelIcon';
 import { StampIcon } from '@/components/icons/StampIcon';
 import { UserIcon } from '@/components/icons/UserIcon';
-import { ChannelPostRanking } from '@/components/rankings/ChannelPostRanking';
+import { MessagesChannelRanking } from '@/components/rankings/ChannelRanking';
 import { StampRanking } from '@/components/rankings/StampRanking';
-import { UserPostRanking } from '@/components/rankings/UserPostRanking';
+import { MessagesUserRanking } from '@/components/rankings/UserRanking';
 import { useDateRangePicker } from '@/models/useDateRangePicker';
 import type { FC } from 'react';
 import { Link } from 'react-router-dom';
@@ -24,11 +24,11 @@ export const Dashboard: FC = () => {
           <div className="grid grid-cols-3 max-2xl:grid-cols-1 gap-4">
             <Card>
               <p className="text-lg font-bold mb-2">ユーザー投稿数ランキング</p>
-              <UserPostRanking range={range.value} />
+              <MessagesUserRanking range={range.value} />
             </Card>
             <Card>
               <p className="text-lg font-bold mb-2">チャンネル投稿数ランキング</p>
-              <ChannelPostRanking range={range.value} />
+              <MessagesChannelRanking range={range.value} />
             </Card>
             <Card>
               <p className="text-lg font-bold mb-2">スタンプランキング</p>
