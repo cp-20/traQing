@@ -7,20 +7,26 @@ import clsx from 'clsx';
 import { Fragment, useMemo, type FC } from 'react';
 
 type Props = {
+  channelId?: string;
+  gaveUserId?: string;
+  receivedUserId?: string;
   range: DateRange;
 };
 
-export const StampRanking: FC<Props> = ({ range }) => {
+export const StampRanking: FC<Props> = ({ channelId, gaveUserId, receivedUserId, range }) => {
   const query = useMemo(
     () =>
       ({
+        channelId,
+        userId: gaveUserId,
+        messageUserId: receivedUserId,
         groupBy: 'stamp',
         orderBy: 'count',
         order: 'desc',
         limit: 10,
         ...dateRangeToQuery(range),
       }) satisfies StampsQuery,
-    [range],
+    [range, channelId, gaveUserId, receivedUserId],
   );
   const { stamps, loading } = useStamps(query);
 

@@ -4,12 +4,12 @@ import { useUsers } from '@/hooks/useUsers';
 import { UserActionTimeline } from '@/models/Timelines/UserActionTimeline';
 import { UserGaveStampsChannels, UserMessageChannels } from '@/models/UserActionChannels';
 import { UserMessageHours } from '@/models/UserMessageHours';
-import { UserGaveStampRanking, UserReceivedStampRanking } from '@/models/UserStampRanking';
 import { UserGaveStampStat, UserMessageCountStat, UserReceivedStampStat } from '@/components/stats/UserStats';
 import { UserTopReactedMessages } from '@/models/UserTopReactedMessages';
 import { IconChevronLeft } from '@tabler/icons-react';
 import type { FC } from 'react';
 import { Link } from 'react-router-dom';
+import { StampRanking } from '@/components/rankings/StampRanking';
 
 type UserDetailProps = {
   userId: string;
@@ -59,11 +59,11 @@ export const UserDetail: FC<UserDetailProps> = ({ userId }) => {
           <div className="grid grid-cols-1 gap-4 sm:gap-8 @lg:grid-cols-2 sm:@lg:gap-4">
             <Card>
               <div className="font-semibold mb-2">つけたスタンプ</div>
-              <UserGaveStampRanking userId={userId} />
+              <StampRanking gaveUserId={userId} range={null} />
             </Card>
             <Card>
               <div className="font-semibold mb-2">もらったスタンプ</div>
-              <UserReceivedStampRanking userId={userId} />
+              <StampRanking receivedUserId={userId} range={null} />
             </Card>
           </div>
           <Card className="max-lg:hidden">
