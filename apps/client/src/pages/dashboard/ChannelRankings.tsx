@@ -80,7 +80,7 @@ const _ChannelRankingItem: FC<ChannelRankingItemProps> = ({ rank, channel: { cha
           <button
             type="button"
             onClick={() => {
-              setSubscriptionLevel(channel, (subscriptionLevel + 1) % 3);
+              setSubscriptionLevel(channel, ((subscriptionLevel + 1) % 3) as 0 | 1 | 2);
             }}
           >
             <NotificationIcon level={subscriptionLevel} />

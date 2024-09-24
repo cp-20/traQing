@@ -18,7 +18,7 @@ export const useSubscriptions = () => {
   );
 
   const setSubscriptionLevel = useCallback(
-    async (channelId: string, level: number) => {
+    async (channelId: string, level: 0 | 1 | 2) => {
       if (!subscriptions) return;
       const newSubscriptions = subscriptions.map((s) => (s.channelId === channelId ? { ...s, level } : s));
       await mutate(
