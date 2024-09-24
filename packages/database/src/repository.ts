@@ -244,9 +244,11 @@ export const getReceivedMessageStampsRanking = async () => {
 };
 
 export const updateMaterializedViews = async () => {
+  await db.refreshMaterializedView(schema.channelMessageRankingView);
   await db.refreshMaterializedView(schema.messagesRankingView);
   await db.refreshMaterializedView(schema.messagesMonthlyTimelineView);
   await db.refreshMaterializedView(schema.stampRelationsView);
+  await db.refreshMaterializedView(schema.channelStampsRankingView);
   await db.refreshMaterializedView(schema.gaveMessageStampsRankingView);
   await db.refreshMaterializedView(schema.receivedMessageStampsRankingView);
 };
