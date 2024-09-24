@@ -29,6 +29,13 @@ export const useSubscriptionsData = () => {
   );
 };
 
+export const useChannelMessagesRanking = () => {
+  return useSWR<{ channel: string; count: number }[]>(
+    '/api/channel-messages-ranking',
+    fetchWrapper(() => client['channel-messages-ranking'].$get()),
+  );
+};
+
 export const useMessagesRanking = () => {
   return useSWR<{ user: string; count: number }[]>(
     '/api/messages-ranking',

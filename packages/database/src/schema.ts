@@ -30,6 +30,17 @@ export const messages = pgTable(
   }),
 );
 
+export const channelMessageRankingView = pgMaterializedView('channel_messages_ranking').as((qb) =>
+  qb
+    .select({
+      channel: messages.channelId,
+      count: count().as('count'),
+    })
+    .from(messages)
+    .groupBy(messages.channelId)
+    .orderBy(desc(count())),
+);
+
 export const messagesRankingView = pgMaterializedView('messages_ranking').as((qb) =>
   qb
     .select({

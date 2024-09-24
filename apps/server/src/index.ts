@@ -5,6 +5,7 @@ import {
   MessagesQuerySchema,
   StampRelationsQuerySchema,
   StampsQuerySchema,
+  getChannelMessageRanking,
   getGaveMessageStampsRanking,
   getMessages,
   getMessagesRanking,
@@ -71,25 +72,30 @@ const routes = app
     c.header('Cache-Control', 'private, max-age=60, stale-while-revalidate=86400');
     return c.json(messages, 200);
   })
-  .get('/messages-ranking', async (c) => {
-    const messages = await getMessagesRanking();
+  .get('/channel-messages-ranking', async (c) => {
+    const data = await getChannelMessageRanking();
     c.header('Cache-Control', 'private, max-age=60, stale-while-revalidate=86400');
-    return c.json(messages, 200);
+    return c.json(data, 200);
+  })
+  .get('/messages-ranking', async (c) => {
+    const data = await getMessagesRanking();
+    c.header('Cache-Control', 'private, max-age=60, stale-while-revalidate=86400');
+    return c.json(data, 200);
   })
   .get('/messages-timeline', async (c) => {
-    const messages = await getMessagesTimeline();
+    const data = await getMessagesTimeline();
     c.header('Cache-Control', 'private, max-age=60, stale-while-revalidate=86400');
-    return c.json(messages, 200);
+    return c.json(data, 200);
   })
   .get('/gave-stamps-ranking', async (c) => {
-    const messages = await getGaveMessageStampsRanking();
+    const data = await getGaveMessageStampsRanking();
     c.header('Cache-Control', 'private, max-age=60, stale-while-revalidate=86400');
-    return c.json(messages, 200);
+    return c.json(data, 200);
   })
   .get('/received-stamps-ranking', async (c) => {
-    const messages = await getReceivedMessageStampsRanking();
+    const data = await getReceivedMessageStampsRanking();
     c.header('Cache-Control', 'private, max-age=60, stale-while-revalidate=86400');
-    return c.json(messages, 200);
+    return c.json(data, 200);
   })
   .get('/messages/:id', async (c) => {
     const id = c.req.param('id');
@@ -100,15 +106,15 @@ const routes = app
   })
   .get('/stamps', zValidator('query', StampsQuerySchema), async (c) => {
     const query = c.req.valid('query');
-    const messages = await getStamps(query);
+    const data = await getStamps(query);
     c.header('Cache-Control', 'private, max-age=60, stale-while-revalidate=86400');
-    return c.json(messages, 200);
+    return c.json(data, 200);
   })
   .get('/stamp-relations', zValidator('query', StampRelationsQuerySchema), async (c) => {
     const query = c.req.valid('query');
-    const messages = await getStampRelations(query);
+    const data = await getStampRelations(query);
     c.header('Cache-Control', 'private, max-age=60, stale-while-revalidate=86400');
-    return c.json(messages, 200);
+    return c.json(data, 200);
   })
   .get('/users', async (c) => c.json(await getUsers(), 200))
   .get('/groups', async (c) => c.json(await getUserGroups(), 200))

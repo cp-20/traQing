@@ -2,6 +2,19 @@ ALTER TABLE "message_stamps" ALTER COLUMN "message_user_id" SET NOT NULL;--> sta
 ALTER TABLE "message_stamps" ALTER COLUMN "channel_id" SET NOT NULL;--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "message_stamps_message_user_id_idx" ON "message_stamps" USING btree ("message_user_id");
 
+--- Materialized view for channel messages ranking
+DROP MATERIALIZED VIEW IF EXISTS channel_messages_ranking;
+CREATE MATERIALIZED VIEW channel_messages_ranking AS
+SELECT
+  channel_id,
+  COUNT(*) AS count
+FROM
+  messages
+GROUP BY
+  channel_id
+ORDER BY
+  count DESC;
+
 -- Materialized view for messages ranking
 DROP MATERIALIZED VIEW IF EXISTS messages_ranking;
 CREATE MATERIALIZED VIEW messages_ranking AS

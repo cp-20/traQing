@@ -219,6 +219,10 @@ export const getStampRelations = async (query: StampRelationsQuery) => {
     .execute();
 };
 
+export const getChannelMessageRanking = async () => {
+  return await db.select().from(schema.channelMessageRankingView).execute();
+};
+
 export const getMessagesRanking = async () => {
   return await db.select().from(schema.messagesRankingView).execute();
 };
