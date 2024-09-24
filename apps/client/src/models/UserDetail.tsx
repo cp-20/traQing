@@ -20,9 +20,7 @@ export const UserDetail: FC<UserDetailProps> = ({ userId }) => {
   const { getUserFromId } = useUsers();
   const user = getUserFromId(userId);
 
-  if (user === undefined) {
-    return null;
-  }
+  if (user === undefined) return null;
 
   return (
     <div className="bg-gray-100 min-h-screen sm:p-8 p-4 flex flex-col sm:gap-8 gap-4">
