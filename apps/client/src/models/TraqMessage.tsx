@@ -118,7 +118,7 @@ export const TraqMessage: FC<TraqMessageProps> = ({ messageId, annotation }) => 
         <div className="flex flex-col gap-1 min-w-0 flex-1">
           {/* biome-ignore lint/security/noDangerouslySetInnerHtml: Markdownレンダリング処理を外部でやるため */}
           <div className="traq-markdown" dangerouslySetInnerHTML={{ __html: markdown.renderedText }} />
-          <div>{quotedMessages}</div>
+          <div className="space-y-2">{quotedMessages}</div>
           <div
             className={clsx(
               'grid',
