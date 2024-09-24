@@ -66,7 +66,7 @@ export type StampsUserRankingProps = {
   limit?: number;
 };
 
-export const StampsUserRanking: FC<StampsUserRankingProps> = ({ range, stampId, channelId, limit }) => {
+export const StampsGaveUserRanking: FC<StampsUserRankingProps> = ({ range, stampId, channelId, limit }) => {
   const query = useMemo(
     () =>
       ({
@@ -83,4 +83,29 @@ export const StampsUserRanking: FC<StampsUserRankingProps> = ({ range, stampId, 
   const { stamps, loading } = useStamps(query);
 
   return <RankingView loading={loading} data={stamps} limit={limit ?? 10} />;
+};
+
+export const StampsReceivedUserRanking: FC<StampsUserRankingProps> = ({ range, stampId, channelId, limit }) => {
+  const query = useMemo(
+    () =>
+      ({
+        stampId,
+        channelId,
+        groupBy: 'messageUser',
+        orderBy: 'count',
+        order: 'desc',
+        limit: limit ?? 10,
+        ...(range && dateRangeToQuery(range)),
+      }) satisfies StampsQuery,
+    [range, stampId, channelId, limit],
+  );
+  const { stamps, loading } = useStamps(query);
+
+  return (
+    <RankingView
+      loading={loading}
+      data={stamps.map((s) => ({ user: s.messageUser, count: s.count }))}
+      limit={limit ?? 10}
+    />
+  );
 };

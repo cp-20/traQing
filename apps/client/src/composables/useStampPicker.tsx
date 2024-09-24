@@ -1,5 +1,5 @@
 import { useMessageStamps } from '@/hooks/useMessageStamps';
-import { Popover, TextInput } from '@mantine/core';
+import { Popover, Skeleton, TextInput } from '@mantine/core';
 import { type FC, useState } from 'react';
 import type { Stamp } from 'traq-bot-ts';
 
@@ -46,7 +46,7 @@ export const useStampPicker = () => {
             leftSection={
               currentStamp ? (
                 <div className="inline-grid place-content-center p-1">
-                  <StampImage fileId={currentStamp.fileId} />
+                  <StampImage stampId={currentStamp.id} />
                 </div>
               ) : null
             }
@@ -74,7 +74,7 @@ export const useStampPicker = () => {
                   }}
                 >
                   <div className="bg-gray-400 animate-pulse" />
-                  <StampImage fileId={s.fileId} />
+                  <StampImage stampId={s.id} />
                 </button>
               ))}
             </div>
@@ -87,12 +87,24 @@ export const useStampPicker = () => {
   return { stampId, render };
 };
 
-type StampProps = {
-  fileId: string;
+export type StampImageProps = {
+  stampId: string;
+  size?: number;
 } & JSX.IntrinsicElements['img'];
 
-export const StampImage: FC<StampProps> = ({ fileId, ...props }) => {
+export const StampImage: FC<StampImageProps> = ({ stampId, size = 24, ...props }) => {
+  const { getStamp } = useMessageStamps();
+  const stamp = getStamp(stampId);
+  if (!stamp) return <Skeleton width={24} height={24} />;
+
   return (
-    <img src={`/api/files/${fileId}?width=48&height=48`} width={24} height={24} loading="lazy" {...props} alt="" />
+    <img
+      src={`/api/files/${stamp.fileId}?width=${size * 2}&height=${size * 2}`}
+      width={size}
+      height={size}
+      loading="lazy"
+      {...props}
+      alt=""
+    />
   );
 };

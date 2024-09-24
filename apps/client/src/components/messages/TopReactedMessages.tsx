@@ -1,4 +1,3 @@
-import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { useStamps } from '@/hooks/useStamps';
 import { StampImage } from '@/composables/useStampPicker';
 import { TraqMessage } from '@/components/messages/TraqMessage';
@@ -14,7 +13,6 @@ type Props = {
 };
 
 export const TopReactedMessages: FC<Props> = ({ stampId, channelId, gaveUserId, receivedUserId }) => {
-  const { getStamp } = useMessageStamps();
   const query = useMemo(
     () =>
       ({
@@ -29,7 +27,6 @@ export const TopReactedMessages: FC<Props> = ({ stampId, channelId, gaveUserId, 
     [stampId, channelId, gaveUserId, receivedUserId],
   );
   const { stamps, loading } = useStamps(query);
-  const stamp = stampId && getStamp(stampId);
 
   return (
     <div className={clsx('flex flex-col gap-2', loading && 'opacity-70')}>
@@ -39,7 +36,7 @@ export const TopReactedMessages: FC<Props> = ({ stampId, channelId, gaveUserId, 
             messageId={s.message}
             annotation={
               <div className="flex gap-1">
-                {stamp && <StampImage fileId={stamp.fileId} title={`${stamp.name}`} />}
+                {stampId && <StampImage stampId={stampId} />}
                 <span className="font-semibold">{s.count}</span>
               </div>
             }

@@ -14,7 +14,7 @@ import { useStampPicker } from '@/composables/useStampPicker';
 import { TopReactedMessages } from '@/components/messages/TopReactedMessages';
 import { ChannelActionTimeline } from '@/components/timelines/ChannelActionTimeline';
 import { ChannelActionHours } from '@/components/hours/ChannelActionHours';
-import { MessagesUserRanking, StampsUserRanking } from '@/components/rankings/UserRanking';
+import { MessagesUserRanking, StampsGaveUserRanking } from '@/components/rankings/UserRanking';
 
 type Props = {
   channelId: string;
@@ -92,7 +92,7 @@ export const ChannelDetail: FC<Props> = ({ channelId }) => {
           <Card>
             <div className="font-semibold mb-4">よくスタンプを付けるユーザー</div>
             <div>
-              <StampsUserRanking channelId={channelId} />
+              <StampsGaveUserRanking channelId={channelId} />
             </div>
           </Card>
           <Card>
