@@ -1,5 +1,5 @@
 import { RankingItemSkeleton } from '@/components/rankings';
-import { ChannelRankingWithUsers } from '@/components/rankings/channel';
+import { ChannelRankingItemWithUsers } from '@/components/rankings/channel';
 import { useMessages } from '@/hooks/useMessages';
 
 import { type DateRange, dateRangeToQuery } from '@/models/useDateRangePicker';
@@ -40,7 +40,7 @@ export const ChannelPostRanking: FC<Props> = ({ range }) => {
     <div className={clsx('flex flex-col', loading && 'opacity-80')}>
       {messages.map((m, i) => (
         <Fragment key={m.channel}>
-          <ChannelRankingWithUsers
+          <ChannelRankingItemWithUsers
             range={range}
             channelId={m.channel}
             rank={i + 1}

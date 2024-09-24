@@ -37,8 +37,8 @@ export const ChannelRankingItem: FC<ChannelRankingItemProps> = ({ channelId, ran
   );
 };
 
-export type ChannelRankingWithUsersProps = {
-  range: DateRange;
+export type ChannelRankingItemWithUsersProps = {
+  range: DateRange | null;
   channelId: string;
   rank: number;
   value: number;
@@ -46,7 +46,7 @@ export type ChannelRankingWithUsersProps = {
   onlyTop?: boolean;
 };
 
-export const ChannelRankingWithUsers: FC<ChannelRankingWithUsersProps> = ({
+export const ChannelRankingItemWithUsers: FC<ChannelRankingItemWithUsersProps> = ({
   range,
   channelId,
   rank,
@@ -64,7 +64,7 @@ export const ChannelRankingWithUsers: FC<ChannelRankingWithUsersProps> = ({
         orderBy: 'count',
         order: 'desc',
         limit: onlyTop ? 1 : undefined,
-        ...dateRangeToQuery(range),
+        ...(range && dateRangeToQuery(range)),
       }) satisfies MessagesQuery,
     [channelId, range, onlyTop],
   );
