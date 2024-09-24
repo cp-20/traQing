@@ -1,4 +1,5 @@
 import { Card } from '@/components/Card';
+import { UserAvatar } from '@/components/UserAvatar';
 import { useUsers } from '@/hooks/useUsers';
 import { UserActionTimeline } from '@/models/Timelines/UserActionTimeline';
 import { UserGaveStampsChannels, UserMessageChannels } from '@/models/UserActionChannels';
@@ -43,14 +44,7 @@ export const UserDetail: FC<UserDetailProps> = ({ userId }) => {
           <span>ホームに戻る</span>
         </Link>
         <div>
-          <img
-            src={`/api/files/${user.iconFileId}`}
-            alt=""
-            loading="eager"
-            width={128}
-            height={128}
-            className="rounded-full bg-white"
-          />
+          <UserAvatar userId={user.id} size={128} loading="eager" />
         </div>
         <div>
           <div className="text-2xl font-semibold">{user.displayName}</div>

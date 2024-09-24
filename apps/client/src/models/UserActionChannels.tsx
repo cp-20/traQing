@@ -5,7 +5,10 @@ import { commonBarChartOptions, mergeOptions } from '@/models/commonChartOptions
 import type { MessagesQuery, StampsQuery } from '@traq-ing/database';
 import type { ChartOptions } from 'chart.js';
 import { type FC, useMemo } from 'react';
+import { Chart as ChartJS, BarElement } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+
+ChartJS.register(BarElement);
 
 const useChartOptions = <T extends { channel: string }>(data: T[]) => {
   const { getChannelName } = useChannels();
