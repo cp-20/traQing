@@ -82,6 +82,17 @@ export const useMessagesTimelineData = () => {
   );
 };
 
+export const useChannelSubscribersData = (channelId: string) => {
+  return useSWR<string[]>(
+    `/api/channels/${channelId}/subscribers`,
+    fetchWrapper(() =>
+      client.channels[':id'].subscribers.$get({
+        param: { id: channelId },
+      }),
+    ),
+  );
+};
+
 export const useChannelsData = () => {
   return useSWR<Channel[]>(
     '/api/channels',

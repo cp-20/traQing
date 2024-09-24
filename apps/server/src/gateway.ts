@@ -34,6 +34,12 @@ export const getUserGroups = memorize(0, async () => {
   return res.data;
 });
 
+export const getChannelSubscribers = memorize(0, async (channelId: string) => {
+  const res = await api.channels.getChannelSubscribers(channelId);
+  if (!res.ok) throw new Error('Failed to fetch channel');
+  return res.data;
+});
+
 export const getChannels = memorize(0, async () => {
   const res = await api.channels.getChannels();
   if (!res.ok) throw new Error('Failed to fetch channels');

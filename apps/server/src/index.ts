@@ -21,6 +21,7 @@ import { z } from 'zod';
 import { tokenKey, traqAuthRoutes } from './auth';
 import {
   getChannels,
+  getChannelSubscribers,
   getFile,
   getMe,
   getMessageStamps,
@@ -125,6 +126,7 @@ const routes = app
   .get('/users', async (c) => c.json(await getUsers(), 200))
   .get('/groups', async (c) => c.json(await getUserGroups(), 200))
   .get('/channels', async (c) => c.json(await getChannels(), 200))
+  .get('/channels/:id/subscribers', async (c) => c.json(await getChannelSubscribers(c.req.param('id')), 200))
   .get('/message-stamps', async (c) => c.json(await getMessageStamps(), 200))
   .get('/og', zValidator('query', z.object({ url: z.string() })), async (c) => {
     const { url } = c.req.valid('query');
