@@ -1,7 +1,7 @@
 import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { useStamps } from '@/hooks/useStamps';
 import { StampImage, StampPicker } from '@/models/StampPicker';
-import { StampTimeline } from '@/models/Timelines/StampTimeline';
+import { StampTimeline } from '@/components/timelines/StampTimeline';
 import { TraqMessage } from '@/models/TraqMessage';
 import { UserGaveSpecificStampRanking, UserReceivedSpecificStampRanking } from '@/models/UserRanking';
 import { Card } from '@mantine/core';

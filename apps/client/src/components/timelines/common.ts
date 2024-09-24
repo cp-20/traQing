@@ -1,4 +1,5 @@
-import { getCommonLineChartOptions, mergeOptions } from '@/models/commonChartOptions';
+import { getCommonLineChartOptions, mergeOptions } from '@/lib/commonChartOptions';
+import type { MessagesQuery, StampsQuery } from '@traq-ing/database';
 import {
   CategoryScale,
   Chart as ChartJS,
@@ -20,3 +21,9 @@ export const commonTimelineChartOptions = mergeOptions(getCommonLineChartOptions
     },
   },
 }) satisfies ChartOptions;
+
+export const timelineCommonQuery = {
+  groupBy: 'month',
+  orderBy: 'date',
+  order: 'asc',
+} satisfies MessagesQuery & StampsQuery;

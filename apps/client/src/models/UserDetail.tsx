@@ -1,7 +1,6 @@
 import { Card } from '@/components/Card';
 import { UserAvatar } from '@/components/UserAvatar';
 import { useUsers } from '@/hooks/useUsers';
-import { UserActionTimeline } from '@/models/Timelines/UserActionTimeline';
 import { UserGaveStampsChannels, UserMessageChannels } from '@/models/UserActionChannels';
 import { UserMessageHours } from '@/models/UserMessageHours';
 import { UserGaveStampStat, UserMessageCountStat, UserReceivedStampStat } from '@/components/stats/UserStats';
@@ -11,6 +10,7 @@ import { Link } from 'react-router-dom';
 import { StampRanking } from '@/components/rankings/StampRanking';
 import { TopReactedMessages } from '@/components/messages/TopReactedMessages';
 import { useStampPicker } from '@/models/StampPicker';
+import { UserActionTimeline } from '@/components/timelines/UserActionTimeline';
 
 type UserDetailProps = {
   userId: string;

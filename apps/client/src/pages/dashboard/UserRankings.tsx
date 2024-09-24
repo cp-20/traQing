@@ -1,5 +1,5 @@
-import { OverallMessagesTimeline } from '@/models/Timelines/OverallMessagesTimeline';
-import { TopUserMessagesTimeline } from '@/models/Timelines/TopUserMessagesTimeline';
+import { OverallMessagesTimeline } from '@/components/timelines/OverallMessagesTimeline';
+import { TopUserMessagesTimeline } from '@/components/timelines/TopUserMessagesTimeline';
 import { UserMessagesRanking } from '@/models/UserRanking';
 import { Card } from '@mantine/core';
 import type { FC } from 'react';

@@ -1,5 +1,6 @@
+import { timelineCommonQuery } from '@/components/timelines/common';
 import { useStamps } from '@/hooks/useStamps';
-import { getCommonLineChartOptions, mergeOptions } from '@/models/commonChartOptions';
+import { getCommonLineChartOptions, mergeOptions } from '@/lib/commonChartOptions';
 import type { StampsQuery } from '@traq-ing/database';
 import type { ChartOptions } from 'chart.js';
 import { Chart as ChartJS, Filler } from 'chart.js';
@@ -27,10 +28,8 @@ export const StampTimeline: FC<StampTimelineProps> = ({ stampId }) => {
   const query = useMemo(
     () =>
       ({
+        ...timelineCommonQuery,
         stampId: stampId ?? undefined,
-        groupBy: 'month',
-        orderBy: 'date',
-        order: 'asc',
       }) satisfies StampsQuery,
     [stampId],
   );

@@ -1,6 +1,6 @@
 import { useMessages } from '@/hooks/useMessages';
 import { useStamps } from '@/hooks/useStamps';
-import { getCommonLineChartOptions, mergeOptions } from '@/models/commonChartOptions';
+import { mergeOptions, getCommonLineChartOptions } from '@/lib/commonChartOptions';
 import type { MessagesQuery, StampsQuery } from '@traq-ing/database';
 import {
   CategoryScale,

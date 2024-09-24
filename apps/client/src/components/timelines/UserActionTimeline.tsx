@@ -1,6 +1,6 @@
+import { commonTimelineChartOptions, timelineCommonQuery } from '@/components/timelines/common';
 import { useMessages } from '@/hooks/useMessages';
 import { useStamps } from '@/hooks/useStamps';
-import { commonTimelineChartOptions } from '@/models/Timelines/common';
 import type { MessagesQuery, StampsQuery } from '@traq-ing/database';
 import type { ChartOptions } from 'chart.js';
 import { type FC, useMemo } from 'react';
@@ -18,30 +18,24 @@ export const UserActionTimeline: FC<UserMessageTimelineProps> = ({ userId }) => 
   const messagesQuery = useMemo(
     () =>
       ({
+        ...timelineCommonQuery,
         userId: userId,
-        groupBy: 'month',
-        orderBy: 'date',
-        order: 'asc',
       }) satisfies MessagesQuery,
     [userId],
   );
   const gaveStampsQuery = useMemo(
     () =>
       ({
+        ...timelineCommonQuery,
         userId: userId,
-        groupBy: 'month',
-        orderBy: 'date',
-        order: 'asc',
       }) satisfies StampsQuery,
     [userId],
   );
   const receivedStampsQuery = useMemo(
     () =>
       ({
+        ...timelineCommonQuery,
         messageUserId: userId,
-        groupBy: 'month',
-        orderBy: 'date',
-        order: 'asc',
       }) satisfies StampsQuery,
     [userId],
   );
