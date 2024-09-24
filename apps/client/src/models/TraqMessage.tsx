@@ -91,10 +91,14 @@ export const TraqMessage: FC<TraqMessageProps> = ({ messageId, annotation }) => 
     .map((e) => <QuotedMessage key={e.id} messageId={e.id} markdownIt={markdownIt} />);
   const attachedImages = markdown.embeddings
     .filter((e) => e.type === 'file')
-    .map((e, i) => <img key={i} src={`/api/files/${e.id}`} alt="" />);
+    .map((e) => (
+      <div key={e.id} className="max-w-64">
+        <img src={`/api/files/${e.id}`} alt="" />
+      </div>
+    ));
   const urlRichPreviews = markdown.embeddings
     .filter((e) => e.type === 'url')
-    .map((e, i) => <UrlRichPreview key={i} url={e.url} />);
+    .map((e) => <UrlRichPreview key={e.url} url={e.url} />);
 
   const date = new Date(message.createdAt);
   const formattedDate = formatDate(date);
