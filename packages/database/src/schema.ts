@@ -21,6 +21,7 @@ export const messages = pgTable(
     content: text('content').notNull(),
     createdAt: timestamp('created_at').notNull(),
     pinned: boolean('pinned').notNull(),
+    is_bot: boolean('is_bot').notNull(),
   },
   (t) => ({
     userIdIndex: index('messages_user_id_idx').on(t.userId),
@@ -73,6 +74,8 @@ export const messageStamps = pgTable(
       .references(() => messages.id),
     messageUserId: uuid('message_user_id').notNull(),
     channelId: uuid('channel_id').notNull(),
+    is_bot: boolean('is_bot').notNull(),
+    is_bot_message: boolean('is_bot_message').notNull(),
     count: integer('count').notNull(),
     createdAt: timestamp('created_at').notNull(),
   },

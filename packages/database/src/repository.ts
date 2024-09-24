@@ -20,8 +20,9 @@ export const MessagesQuerySchema = z
   .object({
     userId: z.string(),
     channelId: z.string(),
-    before: z.string(),
-    after: z.string(),
+    before: z.coerce.date(),
+    after: z.coerce.date(),
+    is_bot: z.boolean(),
     groupBy: z.union([
       z.literal('month'),
       z.literal('day'),
@@ -73,8 +74,9 @@ export const getMessages = async (query: MessagesQuery): GetMessagesResult<Messa
   const conditions = [
     query.userId && eq(schema.messages.userId, query.userId),
     query.channelId && eq(schema.messages.channelId, query.channelId),
-    query.after && gt(schema.messages.createdAt, new Date(query.after)),
-    query.before && lt(schema.messages.createdAt, new Date(query.before)),
+    query.after && gt(schema.messages.createdAt, query.after),
+    query.before && lt(schema.messages.createdAt, query.before),
+    query.is_bot && eq(schema.messages.is_bot, query.is_bot),
   ];
 
   const initialQuery = db
@@ -116,8 +118,9 @@ export const StampsQuerySchema = z
     messageUserId: z.string(),
     channelId: z.string(),
     stampId: z.string(),
-    before: z.string(),
-    after: z.string(),
+    before: z.coerce.date(),
+    after: z.coerce.date(),
+    is_bot: z.boolean(),
     groupBy: z.union([
       z.literal('month'),
       z.literal('day'),
@@ -172,8 +175,9 @@ export const getStamps = async (query: StampsQuery) => {
     query.messageUserId && eq(schema.messageStamps.messageUserId, query.messageUserId),
     query.channelId && eq(schema.messageStamps.channelId, query.channelId),
     query.stampId && eq(schema.messageStamps.stampId, query.stampId),
-    query.after && gt(schema.messageStamps.createdAt, new Date(query.after)),
-    query.before && lt(schema.messageStamps.createdAt, new Date(query.before)),
+    query.after && gt(schema.messageStamps.createdAt, query.after),
+    query.before && lt(schema.messageStamps.createdAt, query.before),
+    query.is_bot && eq(schema.messageStamps.is_bot, query.is_bot),
   ];
 
   const initialQuery = db

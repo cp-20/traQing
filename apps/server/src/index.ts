@@ -164,7 +164,11 @@ const update = async () => {
   console.log('Updating...');
 
   lock = true;
-  await updateMessages();
+  try {
+    await updateMessages();
+  } catch (err) {
+    console.error(err);
+  }
   lock = false;
 
   console.log('Finished updating.');

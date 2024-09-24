@@ -11,8 +11,14 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 export const updateMessages = async () => {
   const lastMessage = await getLastMessageCreatedAt();
   const after = lastMessage ? new Date(lastMessage.getTime() - 1000 * 60 * 60 * 24 * 7).toISOString() : undefined;
-
   let before = new Date().toISOString();
+
+  const res = await api.users.getUsers();
+  if (!res.ok) {
+    throw new Error('Failed to fetch users');
+  }
+  const users = res.data;
+  const isBot = (id: string) => users.find((u) => u.id === id)?.bot ?? false;
 
   let offset = 0;
   while (true) {
@@ -34,6 +40,7 @@ export const updateMessages = async () => {
       content: m.content.replaceAll('\u0000', ''),
       createdAt: new Date(m.createdAt),
       pinned: m.pinned,
+      is_bot: isBot(m.userId),
     }));
 
     await insertMessages(messages);
@@ -47,6 +54,8 @@ export const updateMessages = async () => {
         messageUserId: m.userId,
         count: s.count,
         createdAt: new Date(s.createdAt),
+        is_bot: isBot(m.userId),
+        is_bot_message: isBot(s.userId),
       })),
     );
 
