@@ -43,6 +43,13 @@ export const useMessagesRanking = () => {
   );
 };
 
+export const useChannelStampsRanking = () => {
+  return useSWR<{ channel: string; count: number }[]>(
+    '/api/channel-stamps-ranking',
+    fetchWrapper(() => client['channel-stamps-ranking'].$get()),
+  );
+};
+
 export const useGaveMessageStampsRanking = () => {
   return useSWR<{ user: string; count: number }[]>(
     '/api/gave-stamps-ranking',

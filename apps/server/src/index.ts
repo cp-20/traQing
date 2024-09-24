@@ -6,6 +6,7 @@ import {
   StampRelationsQuerySchema,
   StampsQuerySchema,
   getChannelMessageRanking,
+  getChannelStampsRanking,
   getGaveMessageStampsRanking,
   getMessages,
   getMessagesRanking,
@@ -84,6 +85,11 @@ const routes = app
   })
   .get('/messages-timeline', async (c) => {
     const data = await getMessagesTimeline();
+    c.header('Cache-Control', 'private, max-age=60, stale-while-revalidate=86400');
+    return c.json(data, 200);
+  })
+  .get('/channel-stamps-ranking', async (c) => {
+    const data = await getChannelStampsRanking();
     c.header('Cache-Control', 'private, max-age=60, stale-while-revalidate=86400');
     return c.json(data, 200);
   })

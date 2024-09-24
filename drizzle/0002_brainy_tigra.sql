@@ -41,6 +41,19 @@ GROUP BY
 ORDER BY
   TO_CHAR(created_at, 'YYYY-MM') ASC;
 
+-- Materialized view for channel stamps ranking
+DROP MATERIALIZED VIEW IF EXISTS channel_stamps_ranking;
+CREATE MATERIALIZED VIEW channel_stamps_ranking AS
+SELECT
+  channel_id,
+  COUNT(*) AS count
+FROM
+  message_stamps
+GROUP BY
+  channel_id
+ORDER BY
+  count DESC;
+
 -- Materialized view for gave message stamps ranking
 DROP MATERIALIZED VIEW IF EXISTS gave_message_stamps_ranking;
 CREATE MATERIALIZED VIEW gave_message_stamps_ranking AS

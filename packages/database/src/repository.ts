@@ -231,6 +231,10 @@ export const getMessagesTimeline = async () => {
   return await db.select().from(schema.messagesMonthlyTimelineView).execute();
 };
 
+export const getChannelStampsRanking = async () => {
+  return await db.select().from(schema.channelStampsRankingView).execute();
+};
+
 export const getGaveMessageStampsRanking = async () => {
   return await db.select().from(schema.gaveMessageStampsRankingView).execute();
 };
