@@ -17,9 +17,11 @@ const formatDate = (date: Date) => {
   return `${year === thisYear ? '' : `${year}/`}${month}/${day}`;
 };
 
-const msInDay = 24 * 60 * 60 * 1000;
+export const serializeDateRange = (range: DateRange) => range.map((d) => d.toISOString()).join(',');
 
-const adjustDate = (range: DateRange): DateRange => {
+export const msInDay = 24 * 60 * 60 * 1000;
+
+export const adjustDate = (range: DateRange): DateRange => {
   const start = new Date(range[0]);
   start.setHours(0, 0, 0, 0);
   const end = new Date(range[1]);
@@ -27,9 +29,9 @@ const adjustDate = (range: DateRange): DateRange => {
   return [start, end];
 };
 
-const daysBeforeNow = (days: number) => new Date(Date.now() - msInDay * days);
+export const daysBeforeNow = (days: number) => new Date(Date.now() - msInDay * days);
 
-const dateRangeKinds = {
+export const dateRangeKinds = {
   custom: {
     label: 'カスタム',
     range: null,

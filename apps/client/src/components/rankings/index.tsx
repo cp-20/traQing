@@ -1,7 +1,8 @@
 import { Skeleton } from '@mantine/core';
 import { IconCrown } from '@tabler/icons-react';
-import type { FC, ReactNode } from 'react';
+import { useEffect, useState, type FC, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
+import clsx from 'clsx';
 
 export type RankingItemSkeletonProps = {
   rank: number;
@@ -25,7 +26,7 @@ export const RankingItemWithLink: FC<RankingItemWithLinkProps> = ({ to, children
   return (
     <Link
       to={to}
-      className="flex items-center gap-2 rounded-r-md px-2 py-1 relative z-0 hover:opacity-70 transition-opacity duration-150"
+      className="flex items-center gap-2 rounded-r-md px-2 py-1 relative z-0 hover:opacity-70 transition-opacity duration-150 @container"
     >
       {children}
     </Link>
@@ -36,12 +37,21 @@ export type RankingItemBarProps = {
   rate: number;
 };
 
-export const RankingItemBar: FC<RankingItemBarProps> = ({ rate }) => (
-  <span
-    className="absolute inset-0 bg-blue-50 -z-10 origin-left rounded-r-md"
-    style={{ transform: `scale(${rate}, 0.9)` }}
-  />
-);
+export const RankingItemBar: FC<RankingItemBarProps> = ({ rate }) => {
+  const [displayRate, setDisplayRate] = useState(0);
+  useEffect(() => {
+    setDisplayRate(rate);
+  }, [rate]);
+
+  return (
+    <span
+      className={clsx(
+        'absolute inset-0 bg-blue-50 -z-10 origin-left rounded-r-md transition-transform duration-1000 ease-out',
+      )}
+      style={{ transform: `scale(${displayRate}, 0.9)` }}
+    />
+  );
+};
 
 export type RankingItemRankProps = {
   rank: number;

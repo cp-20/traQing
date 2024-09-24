@@ -1,0 +1,11 @@
+import type { SVGProps } from 'react';
+
+export const ChannelIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <title>チャンネル</title>
+    <path
+      d="M5 15.7169V13.9891H7.37966L8.17288 9.60915H6.01695V7.8813H8.4983L9.0678 4.66669H11.1017L10.5322 7.8813H12.9729L13.5424 4.66669H15.5763L15.0068 7.8813H17V9.60915H14.6814L13.8881 13.9891H15.9831V15.7169H13.5831L12.9322 19.3334H10.8983L11.5492 15.7169H9.10847L8.45763 19.3334H6.42373L7.07458 15.7169H5ZM12.6475 9.60915H10.2068L9.41356 13.9891H11.8542L12.6475 9.60915Z"
+      fill="currentColor"
+    />
+  </svg>
+);
