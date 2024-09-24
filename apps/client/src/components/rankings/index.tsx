@@ -75,5 +75,5 @@ export type RankingItemValueProps = {
 };
 
 export const RankingItemValue: FC<RankingItemValueProps> = ({ value }) => (
-  <span className="text-right font-medium ml-auto">{value}</span>
+  <span className="text-right font-bold ml-auto">{value}</span>
 );
