@@ -2,7 +2,6 @@ import { Card } from '@/components/Card';
 import { UserAvatar } from '@/components/UserAvatar';
 import { useUsers } from '@/hooks/useUsers';
 import { UserGaveStampsChannels, UserMessageChannels } from '@/models/UserActionChannels';
-import { UserMessageHours } from '@/models/UserMessageHours';
 import { UserGaveStampStat, UserMessageCountStat, UserReceivedStampStat } from '@/components/stats/UserStats';
 import { IconChevronLeft } from '@tabler/icons-react';
 import type { FC } from 'react';
@@ -11,6 +10,7 @@ import { StampRanking } from '@/components/rankings/StampRanking';
 import { TopReactedMessages } from '@/components/messages/TopReactedMessages';
 import { useStampPicker } from '@/models/StampPicker';
 import { UserActionTimeline } from '@/components/timelines/UserActionTimeline';
+import { UserActionHours } from '@/components/hours/UserActionHours';
 
 type UserDetailProps = {
   userId: string;
@@ -86,7 +86,7 @@ export const UserDetail: FC<UserDetailProps> = ({ userId }) => {
           <Card>
             <div className="font-semibold mb-4">各アクションの時間帯</div>
             <div>
-              <UserMessageHours userId={userId} />
+              <UserActionHours userId={userId} />
             </div>
           </Card>
           <Card>
