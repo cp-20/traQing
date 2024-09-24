@@ -1,7 +1,8 @@
 import { ChannelsOverviewPage } from '@/pages/channels-overview';
 import { Dashboard } from '@/pages/dashboard';
+import { NotFoundPage } from '@/pages/not-found';
 import { UserDetailPage } from '@/pages/user-detail';
-import { Navigate, createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 
 export const router = createBrowserRouter([
   {
@@ -18,6 +19,6 @@ export const router = createBrowserRouter([
   },
   {
     path: '*',
-    element: <Navigate to="/" />,
+    element: <NotFoundPage />,
   },
 ]);
