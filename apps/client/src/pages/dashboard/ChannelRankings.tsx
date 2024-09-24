@@ -7,9 +7,8 @@ import { useMessages } from '@/hooks/useMessages';
 import { useSubscriptions } from '@/hooks/useSubscriptions';
 import { useUsers } from '@/hooks/useUsers';
 import { Button, Skeleton } from '@mantine/core';
-import { useIntersection } from '@mantine/hooks';
 import type { MessagesQuery } from '@traq-ing/database';
-import { type FC, memo, type ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import { type FC, memo, type ReactNode, useMemo, useRef, useState } from 'react';
 
 type ChannelRankingItemSkeletonProps = {
   rank: number;
@@ -62,8 +61,6 @@ const _ChannelRankingItem: FC<ChannelRankingItemProps> = ({ rank, channel: { cha
   const firstUser = messages.length > 0 ? getUserFromId(messages[0]?.user) : undefined;
   const { getChannelName } = useChannels();
   const subscriptionLevel = getSubscriptionLevel(channel);
-
-  console.log('ChannelRankingItem rerendered');
 
   return (
     <div className="flex items-center gap-2 px-2 py-1 @container">
@@ -140,8 +137,6 @@ const ChannelRanking: FC<ChannelRankingProps> = ({ channels, limit, label }) => 
   const { getSubscriptionLevel } = useSubscriptions();
   const [currentLimit, setCurrentLimit] = useState(Math.min(limit ?? 20, 20));
   const containerRef = useRef<HTMLDivElement>(null);
-
-  console.log('ChannelRanking rerendered');
 
   const stats = channels.length > 0 && {
     total: channels.reduce((acc, { count }) => acc + count, 0),
