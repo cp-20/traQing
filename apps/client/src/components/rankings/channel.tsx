@@ -28,7 +28,7 @@ export const ChannelRankingItem: FC<ChannelRankingItemProps> = ({ channelId, ran
   if (channel === undefined) return <RankingItemSkeleton rank={rank} showIcon={false} />;
 
   return (
-    <RankingItemWithLink to={`/channels/${encodeURIComponent(channel)}`}>
+    <RankingItemWithLink to={`/channels/${getChannelName(channelId)}`}>
       {rate && <RankingItemBar rate={rate} />}
       <RankingItemRank rank={rank} />
       <span className="font-medium">#{channel}</span>
@@ -80,7 +80,7 @@ export const ChannelRankingItemWithUsers: FC<ChannelRankingItemWithUsersProps> =
   );
 
   return (
-    <RankingItemWithLink to={`/channels/${encodeURIComponent(channelId)}`}>
+    <RankingItemWithLink to={`/channels/${getChannelName(channelId)}`}>
       {rate && <RankingItemBar rate={rate} />}
       <RankingItemRank rank={rank} />
       {icon}
