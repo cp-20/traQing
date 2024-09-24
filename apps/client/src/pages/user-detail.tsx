@@ -7,10 +7,10 @@ import type { FC } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 export const UserDetailPage: FC = () => {
-  const params = useParams<{ username: string }>();
+  const { username } = useParams<{ username: string }>();
   const { getUserId, users } = useUsers();
-  assert(params.username);
-  const userId = getUserId(params.username);
+  assert(username);
+  const userId = getUserId(username);
 
   return (
     <div className="bg-gray-100 min-h-screen relative">
@@ -25,7 +25,7 @@ export const UserDetailPage: FC = () => {
       {users !== undefined && !userId && (
         <div className="min-h-screen flex flex-col justify-center items-center gap-4">
           <div className="text-2xl font-semibold">
-            <span>@{params.username}</span>
+            <span>@{username}</span>
             <span> というユーザーが見つかりません</span>
           </div>
           <div>
