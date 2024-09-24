@@ -1,4 +1,5 @@
 import { Card } from '@/components/Card';
+import { Skeleton } from '@mantine/core';
 import clsx from 'clsx';
 import type { ComponentProps, FC, ReactNode } from 'react';
 
@@ -26,3 +27,23 @@ export const Stat: FC<StatProps> = ({ label, value, unit, annotation, valueProps
     </Card>
   );
 };
+
+export type StatSkeletonProps = {
+  label: ReactNode;
+};
+
+export const StatSkeleton: FC<StatSkeletonProps> = ({ label }) => (
+  <Stat
+    label={label}
+    value={
+      <div className="h-10 flex items-center">
+        <Skeleton h={32} />
+      </div>
+    }
+    annotation={
+      <div className="h-5 flex items-center">
+        <Skeleton h={16} />
+      </div>
+    }
+  />
+);

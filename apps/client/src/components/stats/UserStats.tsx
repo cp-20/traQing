@@ -1,11 +1,10 @@
-import { Stat } from '@/components/stats';
+import { Stat, StatSkeleton } from '@/components/stats';
 import {
   useGaveMessageStampsRanking,
   useMessagesRanking,
   useReceivedMessageStampsRanking,
 } from '@/hooks/useServerData';
-import { Skeleton } from '@mantine/core';
-import type { FC, ReactNode } from 'react';
+import type { FC } from 'react';
 
 type UserStatsProps = {
   userId: string;
@@ -13,7 +12,7 @@ type UserStatsProps = {
 
 export const UserMessageCountStat: FC<UserStatsProps> = ({ userId }) => {
   const { data: messages } = useMessagesRanking();
-  if (messages === undefined) return <UserStatSkeleton label="投稿数" />;
+  if (messages === undefined) return <StatSkeleton label="投稿数" />;
   const index = messages.findIndex((m) => m.user === userId);
 
   if (index === -1) {
@@ -25,7 +24,7 @@ export const UserMessageCountStat: FC<UserStatsProps> = ({ userId }) => {
 
 export const UserGaveStampStat: FC<UserStatsProps> = ({ userId }) => {
   const { data: stamps } = useGaveMessageStampsRanking();
-  if (stamps === undefined) return <UserStatSkeleton label="つけたスタンプ" />;
+  if (stamps === undefined) return <StatSkeleton label="つけたスタンプ" />;
   const index = stamps.findIndex((s) => s.user === userId);
 
   if (index === -1) {
@@ -44,7 +43,7 @@ export const UserGaveStampStat: FC<UserStatsProps> = ({ userId }) => {
 
 export const UserReceivedStampStat: FC<UserStatsProps> = ({ userId }) => {
   const { data: stamps } = useReceivedMessageStampsRanking();
-  if (stamps === undefined) return <UserStatSkeleton label="もらったスタンプ" />;
+  if (stamps === undefined) return <StatSkeleton label="もらったスタンプ" />;
   const index = stamps.findIndex((s) => s.messageUser === userId);
 
   if (index === -1) {
@@ -60,23 +59,3 @@ export const UserReceivedStampStat: FC<UserStatsProps> = ({ userId }) => {
     />
   );
 };
-
-type UserStatSkeletonProps = {
-  label: ReactNode;
-};
-
-const UserStatSkeleton: FC<UserStatSkeletonProps> = ({ label }) => (
-  <Stat
-    label={label}
-    value={
-      <div className="h-10 flex items-center">
-        <Skeleton h={32} />
-      </div>
-    }
-    annotation={
-      <div className="h-5 flex items-center">
-        <Skeleton h={16} />
-      </div>
-    }
-  />
-);
