@@ -1,7 +1,7 @@
 import { commonHoursChartOption, commonHoursQuery, hours } from '@/components/hours/common';
 import { useMessages } from '@/hooks/useMessages';
 import { useStamps } from '@/hooks/useStamps';
-import { dateRangeToQuery, type DateRange } from '@/models/useDateRangePicker';
+import { dateRangeToQuery, type DateRange } from '@/composables/useDateRangePicker';
 import type { MessagesQuery, StampsQuery } from '@traq-ing/database';
 import type { ChartOptions } from 'chart.js';
 import { type FC, useMemo } from 'react';

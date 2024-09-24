@@ -8,7 +8,7 @@ import type { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { StampRanking } from '@/components/rankings/StampRanking';
 import { TopReactedMessages } from '@/components/messages/TopReactedMessages';
-import { useStampPicker } from '@/models/StampPicker';
+import { useStampPicker } from '@/composables/useStampPicker';
 import { UserActionTimeline } from '@/components/timelines/UserActionTimeline';
 import { UserActionHours } from '@/components/hours/UserActionHours';
 import { MessagesChannelRanking } from '@/components/rankings/ChannelRanking';

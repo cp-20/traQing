@@ -2,7 +2,7 @@ import { RankingItemSkeleton } from '@/components/rankings';
 import { UserRankingItem } from '@/components/rankings/user';
 import { useMessages } from '@/hooks/useMessages';
 import { useStamps } from '@/hooks/useStamps';
-import { type DateRange, dateRangeToQuery } from '@/models/useDateRangePicker';
+import { type DateRange, dateRangeToQuery } from '@/composables/useDateRangePicker';
 import type { MessagesQuery, StampsQuery } from '@traq-ing/database';
 import clsx from 'clsx';
 import { Fragment, useMemo } from 'react';

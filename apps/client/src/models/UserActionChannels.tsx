@@ -3,7 +3,7 @@ import { useStamps } from '@/hooks/useStamps';
 import type { MessagesQuery, StampsQuery } from '@traq-ing/database';
 import { type FC, useMemo } from 'react';
 import { ChannelRankingItemWithUsers } from '@/components/rankings/channel';
-import type { DateRange } from '@/models/useDateRangePicker';
+import type { DateRange } from '@/composables/useDateRangePicker';
 
 type UserActionChannelsProps = {
   userId: string;

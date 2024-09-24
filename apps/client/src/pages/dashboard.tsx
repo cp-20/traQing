@@ -6,7 +6,7 @@ import { UserIcon } from '@/components/icons/UserIcon';
 import { MessagesChannelRanking } from '@/components/rankings/ChannelRanking';
 import { StampRanking } from '@/components/rankings/StampRanking';
 import { MessagesUserRanking } from '@/components/rankings/UserRanking';
-import { useDateRangePicker } from '@/models/useDateRangePicker';
+import { useDateRangePicker } from '@/composables/useDateRangePicker';
 import type { FC } from 'react';
 import { Link } from 'react-router-dom';
 

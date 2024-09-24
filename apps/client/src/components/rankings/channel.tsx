@@ -9,7 +9,7 @@ import {
 import { useChannels } from '@/hooks/useChannels';
 import { useMessages } from '@/hooks/useMessages';
 import { useUsers } from '@/hooks/useUsers';
-import { type DateRange, dateRangeToQuery } from '@/models/useDateRangePicker';
+import { type DateRange, dateRangeToQuery } from '@/composables/useDateRangePicker';
 import { Skeleton } from '@mantine/core';
 import type { MessagesQuery } from '@traq-ing/database';
 import { type FC, useMemo } from 'react';

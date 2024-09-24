@@ -1,29 +1,29 @@
 import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { useStamps } from '@/hooks/useStamps';
-import { StampImage, StampPicker } from '@/models/StampPicker';
+import { StampImage, useStampPicker } from '@/composables/useStampPicker';
 import { StampTimeline } from '@/components/timelines/StampTimeline';
 import { TraqMessage } from '@/models/TraqMessage';
 import { UserGaveSpecificStampRanking, UserReceivedSpecificStampRanking } from '@/models/UserRanking';
 import { Card } from '@mantine/core';
 import type { StampsQuery } from '@traq-ing/database';
 import clsx from 'clsx';
-import { type FC, useMemo, useState } from 'react';
+import { type FC, useMemo } from 'react';
 
 export const StampRankings: FC = () => {
-  const [stampId, setStampId] = useState<string | null>(null);
+  const stampPicker = useStampPicker();
   const { getStamp } = useMessageStamps();
   const query = useMemo(
     () =>
       ({
-        stampId: stampId ?? undefined,
+        stampId: stampPicker.stampId ?? undefined,
         groupBy: 'message',
         orderBy: 'count',
         limit: 10,
       }) satisfies StampsQuery,
-    [stampId],
+    [stampPicker.stampId],
   );
   const { stamps, loading } = useStamps(query);
-  const stamp = stampId && getStamp(stampId);
+  const stamp = stampPicker.stampId && getStamp(stampPicker.stampId);
   const StampElement = stamp ? (
     <img src={`/api/files/${stamp.fileId}`} width={24} height={24} alt={stamp.name} />
   ) : (
@@ -33,23 +33,21 @@ export const StampRankings: FC = () => {
   return (
     <Card className="space-y-4">
       <div className="font-semibold text-xl">スタンプをつけた/もらったランキング</div>
-      <div>
-        <StampPicker setStampId={(id) => setStampId(id)} />
-      </div>
+      <div>{stampPicker.render()}</div>
       <div className="grid xl:grid-cols-2 grid-cols-1 gap-4">
         <Card className="border">
           <div className="font-medium text mb-2 flex gap-1">
             {StampElement}
             <span>をたくさんつけた人</span>
           </div>
-          <UserGaveSpecificStampRanking stampId={stampId} />
+          <UserGaveSpecificStampRanking stampId={stampPicker.stampId} />
         </Card>
         <Card className="border">
           <div className="font-medium text mb-2 flex gap-1">
             {StampElement}
             <span>をたくさんもらった人</span>
           </div>
-          <UserReceivedSpecificStampRanking stampId={stampId} />
+          <UserReceivedSpecificStampRanking stampId={stampPicker.stampId} />
         </Card>
       </div>
       <div className="flex flex-col-reverse gap-4 xl:flex-row">
@@ -80,7 +78,7 @@ export const StampRankings: FC = () => {
             <span>がつけられた数の推移</span>
           </div>
           <div>
-            <StampTimeline stampId={stampId} />
+            <StampTimeline stampId={stampPicker.stampId} />
           </div>
         </Card>
       </div>
