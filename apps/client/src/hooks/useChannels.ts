@@ -5,13 +5,16 @@ export const useChannels = () => {
   const { data: channels } = useChannelsData();
 
   const getChannelId = useCallback(
-    (name: string): string | undefined => {
+    (fullname: string): string | undefined => {
       if (!channels) return undefined;
 
-      const channel = channels.find((c) => getChannelName(c.id) === name);
-      if (!channel) return undefined;
+      let parentId: string | null = null;
+      for (const name of fullname.split('/')) {
+        parentId = channels.find((c) => c.name === name && c.parentId === parentId)?.id ?? null;
+        if (!parentId) return undefined;
+      }
 
-      return channel.id;
+      return parentId ?? undefined;
     },
     [channels],
   );
