@@ -1,8 +1,8 @@
-import { ChannelDetailPage } from '@/pages/channel-detail';
+import { ChannelDetailPage } from '@/pages/channel-detail/ChannelDetailPage';
 import { ChannelsOverviewPage } from '@/pages/channels-overview';
 import { Dashboard } from '@/pages/dashboard';
 import { NotFoundPage } from '@/pages/not-found';
-import { UserDetailPage } from '@/pages/user-detail';
+import { UserDetailPage } from '@/pages/user-detail/UserDetailPage';
 import { createBrowserRouter } from 'react-router-dom';
 
 export const router = createBrowserRouter([

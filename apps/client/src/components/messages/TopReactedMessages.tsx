@@ -1,7 +1,7 @@
 import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { useStamps } from '@/hooks/useStamps';
 import { StampImage } from '@/composables/useStampPicker';
-import { TraqMessage } from '@/models/TraqMessage';
+import { TraqMessage } from '@/components/messages/TraqMessage';
 import type { StampsQuery } from '@traq-ing/database';
 import clsx from 'clsx';
 import { type FC, useMemo } from 'react';

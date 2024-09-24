@@ -1,6 +1,6 @@
 import { useUsers } from '@/hooks/useUsers';
 import { assert } from '@/lib/invariant';
-import { UserDetail } from '@/models/UserDetail';
+import { UserDetail } from '@/pages/user-detail/UserDetail';
 import { Loader } from '@mantine/core';
 import clsx from 'clsx';
 import type { FC } from 'react';

@@ -1,7 +1,6 @@
 import { Card } from '@/components/Card';
 import { UserAvatar } from '@/components/UserAvatar';
 import { useUsers } from '@/hooks/useUsers';
-import { UserGaveStampsChannels } from '@/models/UserActionChannels';
 import { UserGaveStampStat, UserMessageCountStat, UserReceivedStampStat } from '@/components/stats/UserStats';
 import { IconChevronLeft } from '@tabler/icons-react';
 import type { FC } from 'react';
@@ -11,7 +10,7 @@ import { TopReactedMessages } from '@/components/messages/TopReactedMessages';
 import { useStampPicker } from '@/composables/useStampPicker';
 import { UserActionTimeline } from '@/components/timelines/UserActionTimeline';
 import { UserActionHours } from '@/components/hours/UserActionHours';
-import { MessagesChannelRanking } from '@/components/rankings/ChannelRanking';
+import { MessagesChannelRanking, StampsChannelRanking } from '@/components/rankings/ChannelRanking';
 
 type UserDetailProps = {
   userId: string;
@@ -99,7 +98,13 @@ export const UserDetail: FC<UserDetailProps> = ({ userId }) => {
           <Card>
             <div className="font-semibold mb-4">スタンプをよく付けるチャンネル</div>
             <div>
-              <UserGaveStampsChannels userId={userId} />
+              <StampsChannelRanking gaveUserId={userId} />
+            </div>
+          </Card>
+          <Card>
+            <div className="font-semibold mb-4">スタンプをよく付けられるチャンネル</div>
+            <div>
+              <StampsChannelRanking receivedUserId={userId} />
             </div>
           </Card>
           <Card className="lg:hidden">
