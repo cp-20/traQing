@@ -18,7 +18,7 @@
     "start:server": "bun --filter \"@traq-ing/server\" start",
     "start:studio": "bun --filter \"@traq-ing/database\" studio",
     "migration": "bun --filter \"@traq-ing/database\" migration",
-    "start-db": "docker run --name traq-ing-db -e TZ=\"Asia/Tokyo\" -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=traq_ing -v traq-ing-db:/var/lib/postgresql/data -p 5432:5432 -d postgres:16-alpine",
+    "start-db": "docker run --name traq-ing-db -e TZ=\"Asia/Tokyo\" -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=traq_ing -v traq-ing-db:/var/lib/postgresql/data -p 5432:5432 --shm-size=1g -d postgres:16-alpine",
     "stop-db": "docker stop traq-ing-db && docker rm traq-ing-db",
     "lint": "biome lint --fix .",
     "lint:check": "biome lint .",
