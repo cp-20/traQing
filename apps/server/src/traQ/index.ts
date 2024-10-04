@@ -96,7 +96,7 @@ const getDiff = <T>(before: T[], after: T[], comp: (a: T, b: T) => boolean) => {
 
 export const updateStatistics = async () => {
   // users
-  const userRes = await api.users.getUsers();
+  const userRes = await api.users.getUsers({ 'include-suspended': true });
   if (!userRes.ok) throw new Error('Failed to fetch users');
   const users = userRes.data;
   await insertUsers(
