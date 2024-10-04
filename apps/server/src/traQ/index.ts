@@ -146,6 +146,7 @@ export const updateStatistics = async () => {
         name: tag.tag,
       })),
     );
+    await sleep(100);
   }
   const insertedTags = await getTags();
   const tagsDiff = getDiff(insertedTags, newTags, (a, b) => a.userId === b.userId && a.name === b.name);
@@ -170,6 +171,7 @@ export const updateStatistics = async () => {
         channelId: channel.id,
       })),
     );
+    await sleep(100);
   }
   const insertedChannelSubscriptions = await getChannelSubscriptions();
   const channelSubscriptionsDiff = getDiff(
@@ -192,6 +194,7 @@ export const updateStatistics = async () => {
         messageId: pin.message.id,
       })),
     );
+    await sleep(100);
   }
   const insertedChannelPins = await getChannelPins();
   const channelPinsDiff = getDiff(
