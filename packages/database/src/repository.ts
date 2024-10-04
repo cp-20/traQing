@@ -1,6 +1,6 @@
 import { db } from '@/db';
 import { sqlGetDate, sqlGetHour, sqlGetMonth } from '@/util';
-import { and, asc, count, desc, eq, gt, gte, lt } from 'drizzle-orm';
+import { and, asc, count, desc, eq, gt, gte, lt, or } from 'drizzle-orm';
 import { z } from 'zod';
 import * as schema from './schema';
 
@@ -22,7 +22,7 @@ export const MessagesQuerySchema = z
     channelId: z.string(),
     before: z.coerce.date(),
     after: z.coerce.date(),
-    is_bot: z.boolean(),
+    isBot: z.boolean(),
     groupBy: z.union([
       z.literal('month'),
       z.literal('day'),
@@ -76,7 +76,7 @@ export const getMessages = async (query: MessagesQuery): GetMessagesResult<Messa
     query.channelId && eq(schema.messages.channelId, query.channelId),
     query.after && gt(schema.messages.createdAt, query.after),
     query.before && lt(schema.messages.createdAt, query.before),
-    query.is_bot && eq(schema.messages.is_bot, query.is_bot),
+    query.isBot && eq(schema.messages.isBot, query.isBot),
   ];
 
   const initialQuery = db
@@ -112,6 +112,102 @@ export const insertMessageStamps = async (stamps: MessageStamp[]) => {
   await db.insert(schema.messageStamps).values(stamps).onConflictDoNothing().execute();
 };
 
+export const insertUsers = async (users: { id: string; isBot: boolean; updatedAt: Date }[]) => {
+  await db.insert(schema.users).values(users).onConflictDoNothing().execute();
+};
+
+export const insertGroups = async (groups: { id: string; name: string; updatedAt: Date }[]) => {
+  await db.insert(schema.groups).values(groups).onConflictDoNothing().execute();
+};
+
+export const getUserGroupRelations = async () => {
+  return await db.select().from(schema.userGroupRelations).execute();
+};
+
+export const insertUserGroupRelations = async (relations: { userId: string; groupId: string; isAdmin: boolean }[]) => {
+  await db.insert(schema.userGroupRelations).values(relations).onConflictDoNothing().execute();
+};
+
+export const deleteUserGroupRelations = async (relations: { userId: string; groupId: string }[]) => {
+  await db
+    .delete(schema.userGroupRelations)
+    .where(
+      or(
+        ...relations.map((relation) =>
+          and(
+            eq(schema.userGroupRelations.userId, relation.userId),
+            eq(schema.userGroupRelations.groupId, relation.groupId),
+          ),
+        ),
+      ),
+    )
+    .execute();
+};
+
+export const getTags = async () => {
+  return await db.select().from(schema.tags).execute();
+};
+
+export const insertTags = async (tags: { userId: string; name: string }[]) => {
+  await db.insert(schema.tags).values(tags).onConflictDoNothing().execute();
+};
+
+export const deleteTags = async (tags: { userId: string; name: string }[]) => {
+  await db
+    .delete(schema.tags)
+    .where(or(...tags.map((tag) => and(eq(schema.tags.userId, tag.userId), eq(schema.tags.name, tag.name)))))
+    .execute();
+};
+
+export const insertChannels = async (channels: { id: string }[]) => {
+  await db.insert(schema.channels).values(channels).onConflictDoNothing().execute();
+};
+
+export const getChannelSubscriptions = async () => {
+  return await db.select().from(schema.channelSubscriptions).execute();
+};
+
+export const insertChannelSubscriptions = async (subscriptions: { userId: string; channelId: string }[]) => {
+  await db.insert(schema.channelSubscriptions).values(subscriptions).onConflictDoNothing().execute();
+};
+
+export const deleteChannelSubscriptions = async (subscriptions: { userId: string; channelId: string }[]) => {
+  await db
+    .delete(schema.channelSubscriptions)
+    .where(
+      or(
+        ...subscriptions.map((subscription) =>
+          and(
+            eq(schema.channelSubscriptions.userId, subscription.userId),
+            eq(schema.channelSubscriptions.channelId, subscription.channelId),
+          ),
+        ),
+      ),
+    )
+    .execute();
+};
+
+export const getChannelPins = async () => {
+  return await db.select().from(schema.channelPins).execute();
+};
+
+export const insertChannelPins = async (pins: { channelId: string; messageId: string }[]) => {
+  await db.insert(schema.channelPins).values(pins).onConflictDoNothing().execute();
+};
+
+export const deleteChannelPins = async (pins: { channelId: string; messageId: string }[]) => {
+  await db
+    .delete(schema.channelPins)
+    .where(
+      or(
+        ...pins.map((pin) =>
+          and(eq(schema.channelPins.channelId, pin.channelId), eq(schema.channelPins.messageId, pin.messageId)),
+        ),
+      ),
+    )
+    .execute();
+};
+
 export const StampsQuerySchema = z
   .object({
     userId: z.string(),
@@ -120,7 +216,7 @@ export const StampsQuerySchema = z
     stampId: z.string(),
     before: z.coerce.date(),
     after: z.coerce.date(),
-    is_bot: z.boolean(),
+    isBot: z.boolean(),
     groupBy: z.union([
       z.literal('month'),
       z.literal('day'),
@@ -177,7 +273,7 @@ export const getStamps = async (query: StampsQuery) => {
     query.stampId && eq(schema.messageStamps.stampId, query.stampId),
     query.after && gt(schema.messageStamps.createdAt, query.after),
     query.before && lt(schema.messageStamps.createdAt, query.before),
-    query.is_bot && eq(schema.messageStamps.is_bot, query.is_bot),
+    query.isBot && eq(schema.messageStamps.isBot, query.isBot),
   ];
 
   const initialQuery = db

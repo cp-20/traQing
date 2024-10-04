@@ -21,7 +21,7 @@ export const messages = pgTable(
     content: text('content').notNull(),
     createdAt: timestamp('created_at').notNull(),
     pinned: boolean('pinned').notNull(),
-    is_bot: boolean('is_bot').notNull(),
+    isBot: boolean('is_bot').notNull(),
   },
   (t) => ({
     userIdIndex: index('messages_user_id_idx').on(t.userId),
@@ -74,8 +74,8 @@ export const messageStamps = pgTable(
       .references(() => messages.id),
     messageUserId: uuid('message_user_id').notNull(),
     channelId: uuid('channel_id').notNull(),
-    is_bot: boolean('is_bot').notNull(),
-    is_bot_message: boolean('is_bot_message').notNull(),
+    isBot: boolean('is_bot').notNull(),
+    isBotMessage: boolean('is_bot_message').notNull(),
     count: integer('count').notNull(),
     createdAt: timestamp('created_at').notNull(),
   },
@@ -144,4 +144,96 @@ export const receivedMessageStampsRankingView = pgMaterializedView('received_mes
     .from(messageStamps)
     .groupBy(messageStamps.messageUserId)
     .orderBy(desc(count())),
+);
+
+export const users = pgTable(
+  'users',
+  {
+    id: uuid('id').primaryKey().notNull(),
+    isBot: boolean('is_bot').notNull(),
+    updatedAt: timestamp('updated_at').notNull(),
+  },
+  (t) => ({
+    updatedAtIndex: index('users_updated_at_idx').on(t.updatedAt),
+  }),
+);
+
+export const groups = pgTable(
+  'groups',
+  {
+    id: uuid('id').primaryKey().notNull(),
+    name: text('name').notNull(),
+    updatedAt: timestamp('updated_at').notNull(),
+  },
+  (t) => ({
+    updatedAtIndex: index('groups_updated_at_idx').on(t.updatedAt),
+  }),
+);
+
+export const userGroupRelations = pgTable(
+  'user_group_relations',
+  {
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id),
+    groupId: uuid('group_id')
+      .notNull()
+      .references(() => groups.id),
+    isAdmin: boolean('is_admin').notNull(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.userId, t.groupId] }),
+    userIdIndex: index('user_group_relations_user_id_idx').on(t.userId),
+    groupIdIndex: index('user_group_relations_group_id_idx').on(t.groupId),
+  }),
+);
+
+export const tags = pgTable(
+  'tags',
+  {
+    userId: uuid('user_id').notNull(),
+    name: text('name').notNull(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.userId, t.name] }),
+    nameIndex: index('tags_name_idx').on(t.name),
+  }),
+);
+
+export const channels = pgTable('channels', {
+  id: uuid('id').primaryKey().notNull(),
+});
+
+export const channelSubscriptions = pgTable(
+  'channel_subscriptions',
+  {
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id),
+    channelId: uuid('channel_id')
+      .notNull()
+      .references(() => channels.id),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.userId, t.channelId] }),
+    userIdIndex: index('channel_subscriptions_user_id_idx').on(t.userId),
+    channelIdIndex: index('channel_subscriptions_channel_id_idx').on(t.channelId),
+  }),
+);
+
+export const channelPins = pgTable(
+  'channel_pins',
+  {
+    channelId: uuid('channel_id')
+      .notNull()
+      .references(() => channels.id),
+    messageId: uuid('message_id')
+      .notNull()
+      .references(() => messages.id),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.channelId, t.messageId] }),
+    channelIdIndex: index('channel_pins_channel_id_idx').on(t.channelId),
+    messageIdIndex: index('channel_pins_message_id_idx').on(t.messageId),
+  }),
 );
