@@ -1,5 +1,4 @@
 import { updateMessages } from '@/traQ';
-import { api } from '@/traQ/api';
 import { zValidator } from '@hono/zod-validator';
 import {
   MessagesQuerySchema,
@@ -25,6 +24,7 @@ import {
   getChannelSubscribers,
   getFile,
   getMe,
+  getMessage,
   getMessageStamps,
   getOgInfo,
   getSubscriptions,
@@ -83,24 +83,10 @@ const routes = app
   .get('/messages-ranking', cacheMiddleware, async (c) => c.json(await getMessagesRanking(), 200))
   .get('/messages-timeline', cacheMiddleware, async (c) => c.json(await getMessagesTimeline(), 200))
   .get('/stamp-ranking', cacheMiddleware, async (c) => c.json(await getStampRanking(), 200))
-  .get('/channel-stamps-ranking', cacheMiddleware, async (c) => {
-    const data = await getChannelStampsRanking();
-    return c.json(data, 200);
-  })
-  .get('/gave-stamps-ranking', cacheMiddleware, async (c) => {
-    const data = await getGaveMessageStampsRanking();
-    return c.json(data, 200);
-  })
-  .get('/received-stamps-ranking', cacheMiddleware, async (c) => {
-    const data = await getReceivedMessageStampsRanking();
-    return c.json(data, 200);
-  })
-  .get('/messages/:id', cacheMiddleware, async (c) => {
-    const id = c.req.param('id');
-    const messages = await api.messages.getMessage(id);
-    if (!messages.ok) throw new Error('Failed to fetch messages');
-    return c.json(messages.data, 200);
-  })
+  .get('/channel-stamps-ranking', cacheMiddleware, async (c) => c.json(await getChannelStampsRanking(), 200))
+  .get('/gave-stamps-ranking', cacheMiddleware, async (c) => c.json(await getGaveMessageStampsRanking(), 200))
+  .get('/received-stamps-ranking', cacheMiddleware, async (c) => c.json(await getReceivedMessageStampsRanking(), 200))
+  .get('/messages/:id', cacheMiddleware, async (c) => c.json(await getMessage(c.req.param('id')), 200))
   .get('/stamps', zValidator('query', StampsQuerySchema), async (c) =>
     c.json(await getStamps(c.req.valid('query')), 200),
   )

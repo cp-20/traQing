@@ -22,6 +22,12 @@ export const setSubscriptionLevel = async (token: string, channelId: string, lev
   return res.data;
 };
 
+export const getMessage = memorize(1000, async (messageId: string) => {
+  const res = await api.messages.getMessage(messageId);
+  if (!res.ok) throw new Error('Failed to fetch message');
+  return res.data;
+});
+
 export const getUsers = memorize(1000, async () => {
   const res = await api.users.getUsers({ 'include-suspended': true });
   if (!res.ok) throw new Error('Failed to fetch users');
