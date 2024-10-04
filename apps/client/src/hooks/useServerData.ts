@@ -2,7 +2,7 @@ import { client } from '@/features/api';
 import type { StampRelationsQuery } from '@traq-ing/database';
 import type { ClientResponse } from 'hono/client';
 import useSWR from 'swr';
-import type { Channel, Message, MyUserDetail, Stamp, User, UserGroup } from 'traq-bot-ts';
+import type { Channel, MyUserDetail, Stamp, User, UserGroup } from 'traq-bot-ts';
 
 // biome-ignore lint/suspicious/noExplicitAny: 型パズルに必要なany
 type BlankRecordToNever<T> = T extends any ? (T extends null ? null : keyof T extends never ? never : T) : never;
@@ -71,14 +71,24 @@ export const useReceivedMessageStampsRanking = () => {
   );
 };
 
-export const useMessageData = (messageId: string) => {
-  return useSWR<Message>(
-    `/api/messages/${messageId}`,
-    fetchWrapper(() =>
-      client.messages[':id'].$get({
-        param: { id: messageId },
-      }),
-    ),
+export const useGroupRanking = (groupBy: 'user' | 'group') => {
+  return useSWR<{ group: string; count: number }[]>(
+    `/api/group-ranking?groupBy=${groupBy}`,
+    fetchWrapper(() => client['group-ranking'].$get({ query: { groupBy } })),
+  );
+};
+
+export const useTagRanking = (groupBy: 'user' | 'tag') => {
+  return useSWR<{ group: string; count: number }[]>(
+    `/api/tag-ranking?groupBy=${groupBy}`,
+    fetchWrapper(() => client['tag-ranking'].$get({ query: { groupBy } })),
+  );
+};
+
+export const useSubscriptionRanking = (groupBy: 'user' | 'channel') => {
+  return useSWR<{ group: string; count: number }[]>(
+    `/api/subscription-ranking?groupBy=${groupBy}`,
+    fetchWrapper(() => client['subscription-ranking'].$get({ query: { groupBy } })),
   );
 };
 

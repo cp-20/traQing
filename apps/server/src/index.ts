@@ -14,6 +14,9 @@ import {
   getStampRanking,
   getStampRelations,
   getStamps,
+  getSubscriptionRanking,
+  getTagRanking,
+  getUserGroupRanking,
 } from '@traq-ing/database';
 import { Hono } from 'hono';
 import { getCookie } from 'hono/cookie';
@@ -86,6 +89,24 @@ const routes = app
   .get('/channel-stamps-ranking', cacheMiddleware, async (c) => c.json(await getChannelStampsRanking(), 200))
   .get('/gave-stamps-ranking', cacheMiddleware, async (c) => c.json(await getGaveMessageStampsRanking(), 200))
   .get('/received-stamps-ranking', cacheMiddleware, async (c) => c.json(await getReceivedMessageStampsRanking(), 200))
+  .get(
+    '/group-ranking',
+    zValidator('query', z.object({ groupBy: z.enum(['user', 'group']) })),
+    cacheMiddleware,
+    async (c) => c.json(await getUserGroupRanking(c.req.valid('query').groupBy), 200),
+  )
+  .get(
+    '/tag-ranking',
+    zValidator('query', z.object({ groupBy: z.enum(['user', 'tag']) })),
+    cacheMiddleware,
+    async (c) => c.json(await getTagRanking(c.req.valid('query').groupBy), 200),
+  )
+  .get(
+    '/subscription-ranking',
+    zValidator('query', z.object({ groupBy: z.enum(['user', 'channel']) })),
+    cacheMiddleware,
+    async (c) => c.json(await getSubscriptionRanking(c.req.valid('query').groupBy), 200),
+  )
   .get('/messages/:id', cacheMiddleware, async (c) => c.json(await getMessage(c.req.param('id')), 200))
   .get('/stamps', zValidator('query', StampsQuerySchema), async (c) =>
     c.json(await getStamps(c.req.valid('query')), 200),

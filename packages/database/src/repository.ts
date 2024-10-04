@@ -124,6 +124,23 @@ export const getUserGroupRelations = async () => {
   return await db.select().from(schema.userGroupRelations).execute();
 };
 
+export const getUserGroupRanking = async (groupBy: 'user' | 'group') => {
+  const groupByColumn = {
+    user: schema.userGroupRelations.userId,
+    group: schema.userGroupRelations.groupId,
+  }[groupBy];
+
+  return await db
+    .select({
+      group: groupByColumn,
+      count: count(),
+    })
+    .from(schema.userGroupRelations)
+    .groupBy(groupByColumn)
+    .orderBy(count())
+    .execute();
+};
+
 export const insertUserGroupRelations = async (relations: { userId: string; groupId: string; isAdmin: boolean }[]) => {
   await db.insert(schema.userGroupRelations).values(relations).onConflictDoNothing().execute();
 };
@@ -148,6 +165,23 @@ export const getTags = async () => {
   return await db.select().from(schema.tags).execute();
 };
 
+export const getTagRanking = async (groupBy: 'user' | 'tag') => {
+  const groupByColumn = {
+    user: schema.tags.userId,
+    tag: schema.tags.name,
+  }[groupBy];
+
+  return await db
+    .select({
+      group: groupByColumn,
+      count: count(),
+    })
+    .from(schema.tags)
+    .groupBy(groupByColumn)
+    .orderBy(count())
+    .execute();
+};
+
 export const insertTags = async (tags: { userId: string; name: string }[]) => {
   await db.insert(schema.tags).values(tags).onConflictDoNothing().execute();
 };
@@ -165,6 +199,23 @@ export const insertChannels = async (channels: { id: string }[]) => {
 
 export const getChannelSubscriptions = async () => {
   return await db.select().from(schema.channelSubscriptions).execute();
+};
+
+export const getSubscriptionRanking = async (groupBy: 'user' | 'channel') => {
+  const groupByColumn = {
+    user: schema.channelSubscriptions.userId,
+    channel: schema.channelSubscriptions.channelId,
+  }[groupBy];
+
+  return await db
+    .select({
+      group: groupByColumn,
+      count: count(),
+    })
+    .from(schema.channelSubscriptions)
+    .groupBy(groupByColumn)
+    .orderBy(count())
+    .execute();
 };
 
 export const insertChannelSubscriptions = async (subscriptions: { userId: string; channelId: string }[]) => {
