@@ -10,13 +10,10 @@ import {
   getUserGroupRelations,
   insertChannelPins,
   insertChannelSubscriptions,
-  insertChannels,
-  insertGroups,
   insertMessageStamps,
   insertMessages,
   insertTags,
   insertUserGroupRelations,
-  insertUsers,
   updateMaterializedViews,
 } from '@traq-ing/database';
 import { api } from './api';
@@ -94,30 +91,25 @@ const getDiff = <T>(before: T[], after: T[], comp: (a: T, b: T) => boolean) => {
   return { added, deleted };
 };
 
+const chunkArray = <T>(array: T[], size = 1000) => {
+  const chunks = [];
+  for (let i = 0; i < array.length; i += size) {
+    chunks.push(array.slice(i, i + size));
+  }
+  return chunks;
+};
+
 export const updateStatistics = async () => {
   // users
   const userRes = await api.users.getUsers({ 'include-suspended': true });
   if (!userRes.ok) throw new Error('Failed to fetch users');
   const users = userRes.data;
-  await insertUsers(
-    users.map((user) => ({
-      id: user.id,
-      isBot: user.bot,
-      updatedAt: new Date(user.updatedAt),
-    })),
-  );
+  console.log(`Successfully fetched and inserted ${users.length} users`);
 
   // groups
   const groupRes = await api.groups.getUserGroups();
   if (!groupRes.ok) throw new Error('Failed to fetch groups');
   const groups = groupRes.data;
-  await insertGroups(
-    groups.map((group) => ({
-      id: group.id,
-      name: group.name,
-      updatedAt: new Date(group.updatedAt),
-    })),
-  );
   const insertedUserGroupRelations = await getUserGroupRelations();
   const newUserGroupRelations = groups.flatMap((group) =>
     group.members.map((user) => ({
@@ -133,6 +125,7 @@ export const updateStatistics = async () => {
   );
   await insertUserGroupRelations(userGroupRelationsDiff.added);
   await deleteUserGroupRelations(userGroupRelationsDiff.deleted);
+  console.log(`Successfully fetched and inserted ${groups.length} groups`);
 
   // tags
   const newTags = [];
@@ -152,25 +145,32 @@ export const updateStatistics = async () => {
   const tagsDiff = getDiff(insertedTags, newTags, (a, b) => a.userId === b.userId && a.name === b.name);
   await insertTags(tagsDiff.added);
   await deleteTags(tagsDiff.deleted);
+  console.log(
+    `Successfully fetched and inserted tags (newly ${tagsDiff.added.length} tags was created and ${tagsDiff.deleted.length} was deleted)`,
+  );
 
   // channels
   const channelRes = await api.channels.getChannels();
   if (!channelRes.ok) throw new Error('Failed to fetch channels');
   const channels = channelRes.data.public;
-  await insertChannels(channels.map((channel) => ({ id: channel.id })));
+  console.log(`Successfully fetched ${channels.length} channels`);
 
   // channel subscriptions
   const newChannelSubscriptions = [];
   for (const channel of channels) {
-    const res = await api.channels.getChannelSubscribers(channel.id);
-    if (!res.ok) throw new Error('Failed to fetch channel subscriptions');
-    const subscriptions = res.data;
-    newChannelSubscriptions.push(
-      ...subscriptions.map((subscription) => ({
-        userId: subscription,
-        channelId: channel.id,
-      })),
-    );
+    try {
+      const res = await api.channels.getChannelSubscribers(channel.id);
+      if (!res.ok) throw new Error('Failed to fetch channel subscriptions');
+      const subscriptions = res.data;
+      newChannelSubscriptions.push(
+        ...subscriptions.map((subscription) => ({
+          userId: subscription,
+          channelId: channel.id,
+        })),
+      );
+    } catch (err) {
+      // 403エラーの場合はスキップ
+    }
     await sleep(100);
   }
   const insertedChannelSubscriptions = await getChannelSubscriptions();
@@ -179,8 +179,13 @@ export const updateStatistics = async () => {
     newChannelSubscriptions,
     (a, b) => a.userId === b.userId && a.channelId === b.channelId,
   );
-  await insertChannelSubscriptions(channelSubscriptionsDiff.added);
+  for (const chunk of chunkArray(channelSubscriptionsDiff.added)) {
+    await insertChannelSubscriptions(chunk);
+  }
   await deleteChannelSubscriptions(channelSubscriptionsDiff.deleted);
+  console.log(
+    `Successfully fetched and inserted channel subscriptions (newly ${channelSubscriptionsDiff.added.length} subscriptions was created and ${channelSubscriptionsDiff.deleted.length} was deleted)`,
+  );
 
   // channel pins
   const newChannelPins = [];
@@ -202,6 +207,11 @@ export const updateStatistics = async () => {
     newChannelPins,
     (a, b) => a.channelId === b.channelId && a.messageId === b.messageId,
   );
-  await insertChannelPins(channelPinsDiff.added);
+  for (const chunk of chunkArray(channelPinsDiff.added)) {
+    await insertChannelPins(chunk);
+  }
   await deleteChannelPins(channelPinsDiff.deleted);
+  console.log(
+    `Successfully fetched and inserted channel pins (newly ${channelPinsDiff.added.length} pins was created)`,
+  );
 };

@@ -1,4 +1,4 @@
-import { updateMessages } from '@/traQ';
+import { updateMessages, updateStatistics } from '@/traQ';
 import { zValidator } from '@hono/zod-validator';
 import {
   MessagesQuerySchema,
@@ -161,30 +161,36 @@ app.on(
   },
 );
 
-let lock = false;
-const update = async () => {
-  if (lock) {
-    console.log('Already updating. Skipping...');
-    return;
-  }
-
-  console.log('Updating...');
-
-  lock = true;
+let updateMessagesLock = false;
+const updateMessagesHandler = async () => {
+  if (updateMessagesLock) return;
+  updateMessagesLock = true;
   try {
     await updateMessages();
   } catch (err) {
     console.error(err);
   }
-  lock = false;
-
-  console.log('Finished updating.');
+  updateMessagesLock = false;
 };
+setInterval(updateMessagesHandler, 1000 * 60 * 60);
 
-setInterval(update, 1000 * 60 * 60);
+let updateStatisticsLock = false;
+const updateStatisticsHandler = async () => {
+  if (updateStatisticsLock) return;
+  updateStatisticsLock = true;
+  try {
+    await updateStatistics();
+  } catch (err) {
+    console.error(err);
+  }
+  updateStatisticsLock = false;
+};
+setInterval(updateStatisticsHandler, 1000 * 60 * 60 * 24);
+
 if (process.env.NODE_ENV === 'production') {
-  update();
+  await updateMessagesHandler();
 }
+await updateStatisticsHandler();
 
 export default {
   port: 8080,

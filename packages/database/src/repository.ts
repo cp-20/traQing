@@ -112,14 +112,6 @@ export const insertMessageStamps = async (stamps: MessageStamp[]) => {
   await db.insert(schema.messageStamps).values(stamps).onConflictDoNothing().execute();
 };
 
-export const insertUsers = async (users: { id: string; isBot: boolean; updatedAt: Date }[]) => {
-  await db.insert(schema.users).values(users).onConflictDoNothing().execute();
-};
-
-export const insertGroups = async (groups: { id: string; name: string; updatedAt: Date }[]) => {
-  await db.insert(schema.groups).values(groups).onConflictDoNothing().execute();
-};
-
 export const getUserGroupRelations = async () => {
   return await db.select().from(schema.userGroupRelations).execute();
 };
@@ -191,10 +183,6 @@ export const deleteTags = async (tags: { userId: string; name: string }[]) => {
     .delete(schema.tags)
     .where(or(...tags.map((tag) => and(eq(schema.tags.userId, tag.userId), eq(schema.tags.name, tag.name)))))
     .execute();
-};
-
-export const insertChannels = async (channels: { id: string }[]) => {
-  await db.insert(schema.channels).values(channels).onConflictDoNothing().execute();
 };
 
 export const getChannelSubscriptions = async () => {

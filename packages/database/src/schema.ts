@@ -146,39 +146,11 @@ export const receivedMessageStampsRankingView = pgMaterializedView('received_mes
     .orderBy(desc(count())),
 );
 
-export const users = pgTable(
-  'users',
-  {
-    id: uuid('id').primaryKey().notNull(),
-    isBot: boolean('is_bot').notNull(),
-    updatedAt: timestamp('updated_at').notNull(),
-  },
-  (t) => ({
-    updatedAtIndex: index('users_updated_at_idx').on(t.updatedAt),
-  }),
-);
-
-export const groups = pgTable(
-  'groups',
-  {
-    id: uuid('id').primaryKey().notNull(),
-    name: text('name').notNull(),
-    updatedAt: timestamp('updated_at').notNull(),
-  },
-  (t) => ({
-    updatedAtIndex: index('groups_updated_at_idx').on(t.updatedAt),
-  }),
-);
-
 export const userGroupRelations = pgTable(
   'user_group_relations',
   {
-    userId: uuid('user_id')
-      .notNull()
-      .references(() => users.id),
-    groupId: uuid('group_id')
-      .notNull()
-      .references(() => groups.id),
+    userId: uuid('user_id').notNull(),
+    groupId: uuid('group_id').notNull(),
     isAdmin: boolean('is_admin').notNull(),
   },
   (t) => ({
@@ -200,19 +172,11 @@ export const tags = pgTable(
   }),
 );
 
-export const channels = pgTable('channels', {
-  id: uuid('id').primaryKey().notNull(),
-});
-
 export const channelSubscriptions = pgTable(
   'channel_subscriptions',
   {
-    userId: uuid('user_id')
-      .notNull()
-      .references(() => users.id),
-    channelId: uuid('channel_id')
-      .notNull()
-      .references(() => channels.id),
+    userId: uuid('user_id').notNull(),
+    channelId: uuid('channel_id').notNull(),
   },
   (t) => ({
     pk: primaryKey({ columns: [t.userId, t.channelId] }),
@@ -224,12 +188,8 @@ export const channelSubscriptions = pgTable(
 export const channelPins = pgTable(
   'channel_pins',
   {
-    channelId: uuid('channel_id')
-      .notNull()
-      .references(() => channels.id),
-    messageId: uuid('message_id')
-      .notNull()
-      .references(() => messages.id),
+    channelId: uuid('channel_id').notNull(),
+    messageId: uuid('message_id').notNull(),
   },
   (t) => ({
     pk: primaryKey({ columns: [t.channelId, t.messageId] }),
