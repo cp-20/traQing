@@ -1,8 +1,9 @@
+import { Card } from '@/components/Card';
 import { StampIcon } from '@/components/icons/StampIcon';
 import { StampImage } from '@/composables/useStampPicker';
 import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { searchStamps } from '@/lib/search';
-import { Card, Skeleton, TextInput } from '@mantine/core';
+import { Skeleton, TextInput } from '@mantine/core';
 import { useState, type FC } from 'react';
 import { Link } from 'react-router-dom';
 

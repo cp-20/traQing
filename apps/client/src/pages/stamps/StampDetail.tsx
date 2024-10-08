@@ -1,3 +1,4 @@
+import { Card } from '@/components/Card';
 import { Container, ContainerTitle } from '@/components/containers/Container';
 import { StampHours } from '@/components/hours/StampHours';
 import { TopReactedMessages } from '@/components/messages/TopReactedMessages';
@@ -9,7 +10,6 @@ import { dateRangeKinds } from '@/composables/useDateRangePicker';
 import { StampImage } from '@/composables/useStampPicker';
 import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { assert } from '@/lib/invariant';
-import { Card } from '@mantine/core';
 import type { FC } from 'react';
 
 type Props = {

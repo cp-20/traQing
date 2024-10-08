@@ -1,8 +1,9 @@
+import { Card } from '@/components/Card';
 import { ChannelIcon } from '@/components/icons/ChannelIcon';
 import { UserIcon } from '@/components/icons/UserIcon';
 import { useChannels } from '@/hooks/useChannels';
 import { searchChannels } from '@/lib/search';
-import { Card, Skeleton, TextInput } from '@mantine/core';
+import { Skeleton, TextInput } from '@mantine/core';
 import { useState, type FC } from 'react';
 import { Link } from 'react-router-dom';
 
