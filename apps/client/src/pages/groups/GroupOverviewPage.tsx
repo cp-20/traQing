@@ -1,6 +1,7 @@
 import { Card } from '@/components/Card';
 import { Container, ContainerTitle } from '@/components/containers/Container';
 import { GroupIcon } from '@/components/icons/GroupIcon';
+import { GroupMembersRanking } from '@/components/rankings/GroupRanking';
 import { useGroups } from '@/hooks/useGroups';
 import { searchGroups } from '@/lib/search';
 import { TextInput, Skeleton } from '@mantine/core';
@@ -46,6 +47,11 @@ export const GroupOverviewPage: FC = () => {
         <GroupIcon className="size-8" />
         <span className="text-2xl font-bold">グループ</span>
       </ContainerTitle>
+
+      <Card>
+        <h2 className="text-lg font-semibold mb-2">メンバー数ランキング</h2>
+        <GroupMembersRanking limit={20} />
+      </Card>
 
       <Card>
         <h2 className="text-lg font-semibold mb-2">グループ検索</h2>

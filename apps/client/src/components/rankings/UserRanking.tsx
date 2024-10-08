@@ -7,6 +7,12 @@ import type { MessagesQuery, StampsQuery } from '@traq-ing/database';
 import clsx from 'clsx';
 import { Fragment, useMemo } from 'react';
 import type { FC } from 'react';
+import { useGroups } from '@/hooks/useGroups';
+import {
+  useGaveMessageStampsRanking,
+  useMessagesRanking,
+  useReceivedMessageStampsRanking,
+} from '@/hooks/useServerData';
 
 type RankingViewProps = {
   loading: boolean;
@@ -108,4 +114,52 @@ export const StampsReceivedUserRanking: FC<StampsUserRankingProps> = ({ range, s
       limit={limit ?? 10}
     />
   );
+};
+
+type GroupMessagesRankingProps = {
+  groupId: string;
+  limit?: number;
+};
+export const GroupMessagesRanking: FC<GroupMessagesRankingProps> = ({ groupId, limit }) => {
+  const { getGroup } = useGroups();
+  const group = getGroup(groupId);
+  const groupMap = new Map(group?.members.map((m) => [m.id, m]));
+  const { data: ranking } = useMessagesRanking();
+  const inGroup = ranking?.filter((m) => groupMap.has(m.user)).slice(0, limit ?? 10);
+
+  return <RankingView loading={ranking === undefined} data={inGroup ?? []} limit={limit ?? 10} />;
+};
+
+type GroupGaveStampsRankingProps = {
+  groupId: string;
+  limit?: number;
+};
+export const GroupGaveStampsRanking: FC<GroupGaveStampsRankingProps> = ({ groupId, limit }) => {
+  const { getGroup } = useGroups();
+  const group = getGroup(groupId);
+  const groupMap = new Map(group?.members.map((m) => [m.id, m]));
+  const { data: ranking } = useGaveMessageStampsRanking();
+  const inGroup = ranking?.filter((s) => groupMap.has(s.user)).slice(0, limit ?? 10);
+
+  return <RankingView loading={ranking === undefined} data={inGroup ?? []} limit={limit ?? 10} />;
+};
+
+type GroupReceivedStampsRankingProps = {
+  groupId: string;
+  limit?: number;
+};
+export const GroupReceivedStampsRanking: FC<GroupReceivedStampsRankingProps> = ({ groupId, limit }) => {
+  const { getGroup } = useGroups();
+  const group = getGroup(groupId);
+  const groupMap = new Map(group?.members.map((m) => [m.id, m]));
+  const { data: ranking } = useReceivedMessageStampsRanking();
+  const inGroup = ranking
+    ?.filter((s) => groupMap.has(s.messageUser))
+    .slice(0, limit ?? 10)
+    .map((s) => ({
+      user: s.messageUser,
+      count: s.count,
+    }));
+
+  return <RankingView loading={ranking === undefined} data={inGroup ?? []} limit={limit ?? 10} />;
 };

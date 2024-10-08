@@ -1,6 +1,7 @@
 import { ChannelDetailPage } from '@/pages/channels/ChannelDetailPage';
 import { ChannelOverviewPage } from '@/pages/channels/ChannelOverviewPage';
 import { Dashboard } from '@/pages/dashboard';
+import { GroupDetailPage } from '@/pages/groups/GroupDetailPage';
 import { GroupOverviewPage } from '@/pages/groups/GroupOverviewPage';
 import { NotFoundPage } from '@/pages/not-found';
 import { StampDetailPage } from '@/pages/stamps/StampDetailPage';
@@ -41,6 +42,10 @@ export const router = createBrowserRouter([
   {
     path: '/groups',
     element: <GroupOverviewPage />,
+  },
+  {
+    path: '/groups/:groupName',
+    element: <GroupDetailPage />,
   },
   {
     path: '*',
