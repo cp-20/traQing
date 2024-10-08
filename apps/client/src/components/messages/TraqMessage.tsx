@@ -9,7 +9,6 @@ import type { Store, traQMarkdownIt } from '@traptitech/traq-markdown-it';
 import { type FC, type ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import './TraqMessage.css';
 import { useOpenGraph } from '@/hooks/useOpenGraph';
-import clsx from 'clsx';
 
 const formatDate = (date: Date) => {
   const year = date.getFullYear();
@@ -119,16 +118,7 @@ export const TraqMessage: FC<TraqMessageProps> = ({ messageId, annotation }) => 
           {/* biome-ignore lint/security/noDangerouslySetInnerHtml: Markdownレンダリング処理を外部でやるため */}
           <div className="traq-markdown" dangerouslySetInnerHTML={{ __html: markdown.renderedText }} />
           <div className="space-y-2">{quotedMessages}</div>
-          <div
-            className={clsx(
-              'grid',
-              attachedImages.length === 1 && 'grid-cols-1',
-              attachedImages.length === 2 && 'grid-cols-2',
-              attachedImages.length > 2 && 'grid-cols-3',
-            )}
-          >
-            {attachedImages}
-          </div>
+          <div className="flex flex-wrap gap-2">{attachedImages}</div>
           <div>{urlRichPreviews}</div>
         </div>
       </div>
