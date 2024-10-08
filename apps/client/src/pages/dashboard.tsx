@@ -53,7 +53,7 @@ export const Dashboard: FC = () => {
         <div className="pt-8">
           <h2 className="font-bold text-center text-xl mb-4">もっと詳細を見る</h2>
 
-          <div className="grid grid-cols-3 gap-4 max-md:grid-cols-1">
+          <div className="grid grid-cols-3 gap-4 max-md:grid-cols-2 max-xs:grid-cols-1">
             {links.map((link) => (
               <Link
                 key={link.to}
