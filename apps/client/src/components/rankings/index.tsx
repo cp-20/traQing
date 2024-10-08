@@ -13,7 +13,7 @@ export const RankingItemSkeleton: FC<RankingItemSkeletonProps> = ({ rank, showIc
   <div className="flex items-center gap-2 px-2 py-1">
     <RankingItemRank rank={rank} />
     {showIcon && <Skeleton circle w={24} height={24} />}
-    <Skeleton h={16} />
+    <Skeleton h={16} className="flex-1" />
   </div>
 );
 
