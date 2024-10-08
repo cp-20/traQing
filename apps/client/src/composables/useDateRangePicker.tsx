@@ -5,8 +5,8 @@ import { useId, useState } from 'react';
 export type DateRange = [Date, Date];
 
 export const dateRangeToQuery = (range: DateRange) => ({
-  after: range[0].toISOString(),
-  before: range[1].toISOString(),
+  after: range[0],
+  before: range[1],
 });
 
 const formatDate = (date: Date) => {
