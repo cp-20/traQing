@@ -6,6 +6,15 @@ type Result<Q extends StampsQuery> = {
   [K in Q extends { groupBy: infer U } ? (U extends undefined ? 'day' : U) : 'day']: string;
 } & { count: number };
 
+const normalizeQuery = <Q extends StampsQuery>(query: Q) => ({
+  ...query,
+  after: query.after?.toISOString(),
+  before: query.before?.toISOString(),
+  isBot: query.isBot?.toString(),
+  limit: query.limit?.toString(),
+  offset: query.offset?.toString(),
+});
+
 export const useStamps = <Q extends StampsQuery>(query: Q) => {
   const [stamps, setStamps] = useState<Result<Q>[]>([]);
   const [loading, setLoading] = useState(true);
@@ -14,14 +23,7 @@ export const useStamps = <Q extends StampsQuery>(query: Q) => {
     setLoading(true);
     const fetchStamps = async () => {
       const res = await client.stamps.$get({
-        query: {
-          ...query,
-          after: query.after?.toISOString(),
-          before: query.before?.toISOString(),
-          isBot: query.isBot?.toString(),
-          limit: query.limit?.toString(),
-          offset: query.offset?.toString(),
-        },
+        query: normalizeQuery(query),
       });
       const data = (await res.json()) as Result<Q>[];
       setStamps(data);
@@ -30,6 +32,31 @@ export const useStamps = <Q extends StampsQuery>(query: Q) => {
 
     fetchStamps();
   }, [query]);
+
+  return { stamps, loading };
+};
+
+export const useStampsByMultipleQueries = <Q extends StampsQuery>(queries: Q[]) => {
+  const [stamps, setStamps] = useState<Result<Q>[][]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    const fetchStamps = async () => {
+      const res = await Promise.all(
+        queries.map((query) =>
+          client.stamps.$get({
+            query: normalizeQuery(query),
+          }),
+        ),
+      );
+      const json = (await Promise.all(res.filter((r) => r.ok).map((r) => r.json()))) as Result<Q>[][];
+      setStamps(json);
+      setLoading(false);
+    };
+
+    fetchStamps();
+  }, [queries]);
 
   return { stamps, loading };
 };
