@@ -1,7 +1,10 @@
 import LogoImage from '@/assets/logo.svg';
 import { Card } from '@/components/Card';
 import { ChannelIcon } from '@/components/icons/ChannelIcon';
+import { GroupIcon } from '@/components/icons/GroupIcon';
+import { MessageIcon } from '@/components/icons/MessageIcon';
 import { StampIcon } from '@/components/icons/StampIcon';
+import { TagIcon } from '@/components/icons/TagIcon';
 import { UserIcon } from '@/components/icons/UserIcon';
 import { MessagesChannelRanking } from '@/components/rankings/ChannelRanking';
 import { StampRanking } from '@/components/rankings/StampRanking';
@@ -12,6 +15,16 @@ import { Link } from 'react-router-dom';
 
 export const Dashboard: FC = () => {
   const range = useDateRangePicker('last-7-days');
+
+  const links = [
+    { to: '/users', icon: <UserIcon className="size-8" />, label: 'ユーザー' },
+    { to: '/channels', icon: <ChannelIcon className="size-8" />, label: 'チャンネル' },
+    { to: '/stamps', icon: <StampIcon className="size-8" />, label: 'スタンプ' },
+    { to: '/messages', icon: <MessageIcon className="size-7" />, label: 'メッセージ' },
+    { to: '/groups', icon: <GroupIcon className="size-7" />, label: 'グループ' },
+    { to: '/tags', icon: <TagIcon className="size-7" />, label: 'タグ' },
+  ];
+
   return (
     <div className="min-h-screen bg-gray-100 lg:px-8 lg:py-16 px-4 py-8">
       <div className="space-y-8">
@@ -41,27 +54,16 @@ export const Dashboard: FC = () => {
           <h2 className="font-bold text-center text-xl mb-4">もっと詳細を見る</h2>
 
           <div className="grid grid-cols-3 gap-4 max-md:grid-cols-1">
-            <Link
-              to="/users"
-              className="flex items-center gap-2 bg-white rounded-md p-4 justify-center hover:text-blue-500 transition-colors duration-200"
-            >
-              <UserIcon className="size-8" />
-              <span className="text-lg font-bold">ユーザー</span>
-            </Link>
-            <Link
-              to="/channels"
-              className="flex items-center gap-2 bg-white rounded-md p-4 justify-center hover:text-blue-500 transition-colors duration-200"
-            >
-              <ChannelIcon className="size-8" />
-              <span className="text-lg font-bold">チャンネル</span>
-            </Link>
-            <Link
-              to="/stamps"
-              className="flex items-center gap-2 bg-white rounded-md p-4 justify-center hover:text-blue-500 transition-colors duration-200"
-            >
-              <StampIcon className="size-8" />
-              <span className="text-lg font-bold">スタンプ</span>
-            </Link>
+            {links.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className="flex items-center gap-2 bg-white rounded-md p-4 justify-center hover:text-blue-500 transition-colors duration-200"
+              >
+                {link.icon}
+                <span className="text-lg font-bold">{link.label}</span>
+              </Link>
+            ))}
           </div>
         </div>
       </div>
