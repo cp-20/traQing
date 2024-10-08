@@ -129,7 +129,7 @@ export const getUserGroupRanking = async (groupBy: 'user' | 'group') => {
     })
     .from(schema.userGroupRelations)
     .groupBy(groupByColumn)
-    .orderBy(count())
+    .orderBy(desc(count()))
     .execute();
 };
 
@@ -176,7 +176,7 @@ export const getTagRanking = async (groupBy: 'user' | 'tag') => {
     })
     .from(schema.tags)
     .groupBy(groupByColumn)
-    .orderBy(count())
+    .orderBy(desc(count()))
     .execute();
 };
 
@@ -209,7 +209,7 @@ export const getSubscriptionRanking = async (groupBy: 'user' | 'channel') => {
     })
     .from(schema.channelSubscriptions)
     .groupBy(groupByColumn)
-    .orderBy(count())
+    .orderBy(desc(count()))
     .execute();
 };
 
