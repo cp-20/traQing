@@ -1,5 +1,8 @@
 import { Card } from '@/components/Card';
+import { Container, ContainerTitle } from '@/components/containers/Container';
 import { StampIcon } from '@/components/icons/StampIcon';
+import { StampRanking } from '@/components/rankings/StampRanking';
+import { TopStampsTimeline } from '@/components/timelines/TopStampsTimeline';
 import { StampImage } from '@/composables/useStampPicker';
 import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { searchStamps } from '@/lib/search';
@@ -43,16 +46,26 @@ const SearchStampBlock: FC = () => {
 
 export const StampOverviewPage: FC = () => {
   return (
-    <div className="min-h-screen bg-gray-100 lg:px-8 lg:py-16 px-4 py-8">
-      <h1 className="text-2xl font-bold flex items-center justify-center py-8">
+    <Container>
+      <ContainerTitle>
         <StampIcon className="size-8" />
-        <span>スタンプ</span>
-      </h1>
+        <span className="text-2xl font-bold">スタンプ</span>
+      </ContainerTitle>
 
       <Card>
-        <h2 className="font-semibold mb-2">スタンプ検索</h2>
+        <h2 className="text-lg font-semibold mb-2">つけられた数</h2>
+        <div className="grid grid-cols-2 gap-4">
+          <StampRanking limit={20} />
+          <div>
+            <TopStampsTimeline />
+          </div>
+        </div>
+      </Card>
+
+      <Card>
+        <h2 className="text-lg font-semibold mb-2">スタンプ検索</h2>
         <SearchStampBlock />
       </Card>
-    </div>
+    </Container>
   );
 };
