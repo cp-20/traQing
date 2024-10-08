@@ -3,6 +3,7 @@ import { ChannelOverviewPage } from '@/pages/channels/ChannelOverviewPage';
 import { Dashboard } from '@/pages/dashboard';
 import { GroupDetailPage } from '@/pages/groups/GroupDetailPage';
 import { GroupOverviewPage } from '@/pages/groups/GroupOverviewPage';
+import { MessageOverviewPage } from '@/pages/messages/MessageOverviewPage';
 import { NotFoundPage } from '@/pages/not-found';
 import { StampDetailPage } from '@/pages/stamps/StampDetailPage';
 import { StampOverviewPage } from '@/pages/stamps/StampOverViewPage';
@@ -38,6 +39,10 @@ export const router = createBrowserRouter([
   {
     path: '/stamps/:stampName',
     element: <StampDetailPage />,
+  },
+  {
+    path: '/messages',
+    element: <MessageOverviewPage />,
   },
   {
     path: '/groups',
