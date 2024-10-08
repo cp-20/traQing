@@ -111,6 +111,8 @@ export const updateStatistics = async () => {
   if (!groupRes.ok) throw new Error('Failed to fetch groups');
   const groups = groupRes.data;
   const insertedUserGroupRelations = await getUserGroupRelations();
+  console.log(`Successfully fetched ${groups.length} groups`);
+
   const newUserGroupRelations = groups.flatMap((group) =>
     group.members.map((user) => ({
       userId: user.id,
@@ -123,9 +125,10 @@ export const updateStatistics = async () => {
     newUserGroupRelations,
     (a, b) => a.userId === b.userId && a.groupId === b.groupId,
   );
-  await insertUserGroupRelations(userGroupRelationsDiff.added);
-  await deleteUserGroupRelations(userGroupRelationsDiff.deleted);
-  console.log(`Successfully fetched and inserted ${groups.length} groups`);
+  if (userGroupRelationsDiff.added.length > 0) await insertUserGroupRelations(userGroupRelationsDiff.added);
+  console.log(`Successfully inserted ${userGroupRelationsDiff.added.length} groups`);
+  if (userGroupRelationsDiff.deleted.length > 0) await deleteUserGroupRelations(userGroupRelationsDiff.deleted);
+  console.log(`Successfully deleted ${userGroupRelationsDiff.deleted.length} groups`);
 
   // tags
   const newTags = [];
@@ -141,13 +144,13 @@ export const updateStatistics = async () => {
     );
     await sleep(100);
   }
+  console.log(`Successfully fetched ${newTags.length} tags`);
   const insertedTags = await getTags();
   const tagsDiff = getDiff(insertedTags, newTags, (a, b) => a.userId === b.userId && a.name === b.name);
-  await insertTags(tagsDiff.added);
-  await deleteTags(tagsDiff.deleted);
-  console.log(
-    `Successfully fetched and inserted tags (newly ${tagsDiff.added.length} tags was created and ${tagsDiff.deleted.length} was deleted)`,
-  );
+  if (tagsDiff.added.length > 0) await insertTags(tagsDiff.added);
+  console.log(`Successfully inserted ${tagsDiff.added.length} tags`);
+  if (tagsDiff.deleted.length > 0) await deleteTags(tagsDiff.deleted);
+  console.log(`Successfully deleted ${tagsDiff.deleted.length} tags`);
 
   // channels
   const channelRes = await api.channels.getChannels();
@@ -179,13 +182,13 @@ export const updateStatistics = async () => {
     newChannelSubscriptions,
     (a, b) => a.userId === b.userId && a.channelId === b.channelId,
   );
+  // 一度に大量のデータを挿入するとエラーが発生するため、1000件ずつ挿入する
   for (const chunk of chunkArray(channelSubscriptionsDiff.added)) {
     await insertChannelSubscriptions(chunk);
   }
-  await deleteChannelSubscriptions(channelSubscriptionsDiff.deleted);
-  console.log(
-    `Successfully fetched and inserted channel subscriptions (newly ${channelSubscriptionsDiff.added.length} subscriptions was created and ${channelSubscriptionsDiff.deleted.length} was deleted)`,
-  );
+  console.log(`Successfully inserted ${channelSubscriptionsDiff.added.length} channel subscriptions`);
+  if (channelSubscriptionsDiff.deleted.length > 0) await deleteChannelSubscriptions(channelSubscriptionsDiff.deleted);
+  console.log(`Successfully deleted ${channelSubscriptionsDiff.deleted.length} channel subscriptions`);
 
   // channel pins
   const newChannelPins = [];
@@ -210,8 +213,7 @@ export const updateStatistics = async () => {
   for (const chunk of chunkArray(channelPinsDiff.added)) {
     await insertChannelPins(chunk);
   }
-  await deleteChannelPins(channelPinsDiff.deleted);
-  console.log(
-    `Successfully fetched and inserted channel pins (newly ${channelPinsDiff.added.length} pins was created)`,
-  );
+  console.log(`Successfully inserted ${channelPinsDiff.added.length} channel pins`);
+  if (channelPinsDiff.deleted.length > 0) await deleteChannelPins(channelPinsDiff.deleted);
+  console.log(`Successfully deleted ${channelPinsDiff.deleted.length} channel pins`);
 };

@@ -134,7 +134,12 @@ export const getUserGroupRanking = async (groupBy: 'user' | 'group') => {
 };
 
 export const insertUserGroupRelations = async (relations: { userId: string; groupId: string; isAdmin: boolean }[]) => {
-  await db.insert(schema.userGroupRelations).values(relations).onConflictDoNothing().execute();
+  await db
+    .insert(schema.userGroupRelations)
+    .values(relations)
+    .onConflictDoNothing()
+    .returning({ userId: schema.userGroupRelations.userId })
+    .execute();
 };
 
 export const deleteUserGroupRelations = async (relations: { userId: string; groupId: string }[]) => {
@@ -150,6 +155,7 @@ export const deleteUserGroupRelations = async (relations: { userId: string; grou
         ),
       ),
     )
+    .returning({ userId: schema.userGroupRelations.userId })
     .execute();
 };
 
@@ -175,13 +181,14 @@ export const getTagRanking = async (groupBy: 'user' | 'tag') => {
 };
 
 export const insertTags = async (tags: { userId: string; name: string }[]) => {
-  await db.insert(schema.tags).values(tags).onConflictDoNothing().execute();
+  await db.insert(schema.tags).values(tags).onConflictDoNothing().returning({ userId: schema.tags.userId }).execute();
 };
 
 export const deleteTags = async (tags: { userId: string; name: string }[]) => {
   await db
     .delete(schema.tags)
     .where(or(...tags.map((tag) => and(eq(schema.tags.userId, tag.userId), eq(schema.tags.name, tag.name)))))
+    .returning({ userId: schema.tags.userId })
     .execute();
 };
 
@@ -207,7 +214,12 @@ export const getSubscriptionRanking = async (groupBy: 'user' | 'channel') => {
 };
 
 export const insertChannelSubscriptions = async (subscriptions: { userId: string; channelId: string }[]) => {
-  await db.insert(schema.channelSubscriptions).values(subscriptions).onConflictDoNothing().execute();
+  await db
+    .insert(schema.channelSubscriptions)
+    .values(subscriptions)
+    .onConflictDoNothing()
+    .returning({ userId: schema.channelSubscriptions.userId })
+    .execute();
 };
 
 export const deleteChannelSubscriptions = async (subscriptions: { userId: string; channelId: string }[]) => {
@@ -223,6 +235,7 @@ export const deleteChannelSubscriptions = async (subscriptions: { userId: string
         ),
       ),
     )
+    .returning({ userId: schema.channelSubscriptions.userId })
     .execute();
 };
 
@@ -231,7 +244,12 @@ export const getChannelPins = async () => {
 };
 
 export const insertChannelPins = async (pins: { channelId: string; messageId: string }[]) => {
-  await db.insert(schema.channelPins).values(pins).onConflictDoNothing().execute();
+  await db
+    .insert(schema.channelPins)
+    .values(pins)
+    .onConflictDoNothing()
+    .returning({ channelId: schema.channelPins.channelId })
+    .execute();
 };
 
 export const deleteChannelPins = async (pins: { channelId: string; messageId: string }[]) => {
@@ -244,6 +262,7 @@ export const deleteChannelPins = async (pins: { channelId: string; messageId: st
         ),
       ),
     )
+    .returning({ channelId: schema.channelPins.channelId })
     .execute();
 };
 
