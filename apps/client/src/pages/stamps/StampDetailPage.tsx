@@ -22,7 +22,7 @@ export const StampDetailPage: FC = () => {
       >
         <Loader type="bars" size="xl" />
       </div>
-      {stampId !== undefined && !stampId && (
+      {stamps !== undefined && !stampId && (
         <div className="min-h-screen flex flex-col justify-center items-center gap-4">
           <div className="text-2xl font-semibold">
             <span>:{stampName}:</span>
