@@ -1,29 +1,7 @@
 import { useMessageStamps } from '@/hooks/useMessageStamps';
+import { searchStamps } from '@/lib/search';
 import { Popover, Skeleton, TextInput } from '@mantine/core';
 import { type FC, useState } from 'react';
-import type { Stamp } from 'traq-bot-ts';
-
-const searchStamps = (stamps: Stamp[], keyword: string) => {
-  return stamps
-    .filter((prof) => prof.name.toLowerCase().includes(keyword.toLowerCase()))
-    .sort((a, b) => {
-      const aIndex = a.name.toLowerCase().indexOf(keyword.toLowerCase());
-      const bIndex = b.name.toLowerCase().indexOf(keyword.toLowerCase());
-      return aIndex > bIndex
-        ? 1
-        : aIndex < bIndex
-          ? -1
-          : a.name.length > b.name.length
-            ? 1
-            : a.name.length < b.name.length
-              ? -1
-              : a.name > b.name
-                ? 1
-                : a.name < b.name
-                  ? -1
-                  : 0;
-    });
-};
 
 export const useStampPicker = () => {
   const [stampId, setStampId] = useState<string | null>(null);

@@ -1,34 +1,12 @@
 import { UserIcon } from '@/components/icons/UserIcon';
 import { UserAvatar } from '@/components/UserAvatar';
 import { useUsers } from '@/hooks/useUsers';
+import { searchUsers } from '@/lib/search';
 import { Card, Skeleton, TextInput } from '@mantine/core';
 import { useState, type FC } from 'react';
 import { Link } from 'react-router-dom';
-import type { User } from 'traq-bot-ts';
 
-const searchUsers = (users: User[], keyword: string) => {
-  return users
-    .filter((user) => user.name.toLowerCase().includes(keyword.toLowerCase()) || user.displayName.includes(keyword))
-    .sort((a, b) => {
-      const aIndex = a.name.toLowerCase().indexOf(keyword.toLowerCase());
-      const bIndex = b.name.toLowerCase().indexOf(keyword.toLowerCase());
-      return aIndex > bIndex
-        ? 1
-        : aIndex < bIndex
-          ? -1
-          : a.name.length > b.name.length
-            ? 1
-            : a.name.length < b.name.length
-              ? -1
-              : a.name > b.name
-                ? 1
-                : a.name < b.name
-                  ? -1
-                  : 0;
-    });
-};
-
-const SearchUser: FC = () => {
+const SearchUserBlock: FC = () => {
   const [keyword, setKeyword] = useState<string>('');
   const { users } = useUsers();
 
@@ -70,7 +48,7 @@ export const UserOverviewPage: FC = () => {
 
       <Card>
         <h2 className="font-semibold mb-2">ユーザー検索</h2>
-        <SearchUser />
+        <SearchUserBlock />
       </Card>
     </div>
   );

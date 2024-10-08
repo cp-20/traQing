@@ -1,6 +1,6 @@
 import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { assert } from '@/lib/invariant';
-import { StampDetail } from '@/pages/stamp-detail/StampDetail';
+import { StampDetail } from '@/pages/stamps/StampDetail';
 import { Loader } from '@mantine/core';
 import clsx from 'clsx';
 import type { FC } from 'react';
