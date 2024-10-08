@@ -32,6 +32,9 @@ const SearchStampBlock: FC = () => {
               <Skeleton h={24} />
             </div>
           ))}
+        {filteredStamps?.length === 0 && (
+          <div className="grid place-content-center h-full text-gray-600">お探しのスタンプは見つかりませんでした</div>
+        )}
       </div>
     </div>
   );

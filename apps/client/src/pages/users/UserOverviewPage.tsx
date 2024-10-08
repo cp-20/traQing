@@ -33,6 +33,9 @@ const SearchUserBlock: FC = () => {
               <Skeleton h={24} />
             </div>
           ))}
+        {filteredUsers?.length === 0 && (
+          <div className="grid place-content-center h-full text-gray-600">お探しのユーザーは見つかりませんでした</div>
+        )}
       </div>
     </div>
   );
