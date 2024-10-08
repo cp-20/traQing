@@ -1,7 +1,14 @@
 import { Card } from '@/components/Card';
 import { UserAvatar } from '@/components/UserAvatar';
 import { useUsers } from '@/hooks/useUsers';
-import { UserGaveStampStat, UserMessageCountStat, UserReceivedStampStat } from '@/components/stats/UserStats';
+import {
+  UserGaveStampStat,
+  UserGroupStat,
+  UserMessageCountStat,
+  UserReceivedStampStat,
+  UserSubscriptionStat,
+  UserTagStat,
+} from '@/components/stats/UserStats';
 import { IconChevronLeft } from '@tabler/icons-react';
 import type { FC } from 'react';
 import { Link } from 'react-router-dom';
@@ -57,6 +64,9 @@ export const UserDetail: FC<UserDetailProps> = ({ userId }) => {
             <UserMessageCountStat userId={userId} />
             <UserGaveStampStat userId={userId} />
             <UserReceivedStampStat userId={userId} />
+            <UserGroupStat userId={userId} />
+            <UserTagStat userId={userId} />
+            <UserSubscriptionStat userId={userId} />
           </div>
           <div className="grid grid-cols-1 gap-4 sm:gap-8 @lg:grid-cols-2 sm:@lg:gap-4">
             <Card>

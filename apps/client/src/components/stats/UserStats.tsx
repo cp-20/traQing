@@ -1,8 +1,10 @@
 import { Stat, StatSkeleton } from '@/components/stats';
 import {
   useGaveMessageStampsRanking,
+  useGroupRanking,
   useMessagesRanking,
   useReceivedMessageStampsRanking,
+  useTagRanking,
 } from '@/hooks/useServerData';
 import type { FC } from 'react';
 
@@ -55,6 +57,63 @@ export const UserReceivedStampStat: FC<UserStatsProps> = ({ userId }) => {
       label="もらったスタンプ"
       value={stamps[index].count}
       valueProps={{ className: 'text-indigo-600' }}
+      annotation={`全体${index + 1}位`}
+    />
+  );
+};
+
+export const UserGroupStat: FC<UserStatsProps> = ({ userId }) => {
+  const { data: ranking } = useGroupRanking('user');
+  if (ranking === undefined) return <StatSkeleton label="グループ" />;
+  const index = ranking.findIndex((r) => r.group === userId);
+
+  if (index === -1) {
+    return <Stat label="グループ所属数" value="0" valueProps={{ className: 'text-orange-600' }} />;
+  }
+
+  return (
+    <Stat
+      label="グループ所属数"
+      value={ranking[index].count}
+      valueProps={{ className: 'text-orange-600' }}
+      annotation={`全体${index + 1}位`}
+    />
+  );
+};
+
+export const UserTagStat: FC<UserStatsProps> = ({ userId }) => {
+  const { data: ranking } = useTagRanking('user');
+  if (ranking === undefined) return <StatSkeleton label="タグ" />;
+  const index = ranking.findIndex((r) => r.group === userId);
+
+  if (index === -1) {
+    return <Stat label="タグ数" value="0" valueProps={{ className: 'text-pink-600' }} />;
+  }
+
+  return (
+    <Stat
+      label="タグ数"
+      value={ranking[index].count}
+      valueProps={{ className: 'text-pink-600' }}
+      annotation={`全体${index + 1}位`}
+    />
+  );
+};
+
+export const UserSubscriptionStat: FC<UserStatsProps> = ({ userId }) => {
+  const { data: ranking } = useGroupRanking('user');
+  if (ranking === undefined) return <StatSkeleton label="チャンネル購読数" />;
+  const index = ranking.findIndex((r) => r.group === userId);
+
+  if (index === -1) {
+    return <Stat label="チャンネル購読数" value="0" valueProps={{ className: 'text-green-600' }} />;
+  }
+
+  return (
+    <Stat
+      label="チャンネル購読数"
+      value={ranking[index].count}
+      valueProps={{ className: 'text-green-600' }}
       annotation={`全体${index + 1}位`}
     />
   );
