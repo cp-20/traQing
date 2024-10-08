@@ -52,3 +52,7 @@ export const searchGroups = (groups: UserGroup[], keyword: string) => {
     .filter((group) => group.name.toLowerCase().includes(keyword.toLowerCase()))
     .sort((a, b) => sort(a.name, b.name, keyword));
 };
+
+export const searchTags = (tags: string[], keyword: string) => {
+  return tags.filter((tag) => tag.toLowerCase().includes(keyword.toLowerCase())).sort((a, b) => sort(a, b, keyword));
+};
