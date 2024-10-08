@@ -13,52 +13,16 @@ import { UserOverviewPage } from '@/pages/users/UserOverviewPage';
 import { createBrowserRouter } from 'react-router-dom';
 
 export const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Dashboard />,
-  },
-  {
-    path: '/users',
-    element: <UserOverviewPage />,
-  },
-  {
-    path: '/users/:username',
-    element: <UserDetailPage />,
-  },
-  {
-    path: '/channels',
-    element: <ChannelOverviewPage />,
-  },
-  {
-    path: '/channels/*',
-    element: <ChannelDetailPage />,
-  },
-  {
-    path: '/stamps',
-    element: <StampOverviewPage />,
-  },
-  {
-    path: '/stamps/:stampName',
-    element: <StampDetailPage />,
-  },
-  {
-    path: '/messages',
-    element: <MessageOverviewPage />,
-  },
-  {
-    path: '/groups',
-    element: <GroupOverviewPage />,
-  },
-  {
-    path: '/groups/:groupName',
-    element: <GroupDetailPage />,
-  },
-  {
-    path: '/tags',
-    element: <TagOverviewPage />,
-  },
-  {
-    path: '*',
-    element: <NotFoundPage />,
-  },
+  { path: '/', element: <Dashboard /> },
+  { path: '/users', element: <UserOverviewPage /> },
+  { path: '/users/:username', element: <UserDetailPage /> },
+  { path: '/channels', element: <ChannelOverviewPage /> },
+  { path: '/channels/*', element: <ChannelDetailPage /> },
+  { path: '/stamps', element: <StampOverviewPage /> },
+  { path: '/stamps/:stampName', element: <StampDetailPage /> },
+  { path: '/messages', element: <MessageOverviewPage /> },
+  { path: '/groups', element: <GroupOverviewPage /> },
+  { path: '/groups/:groupName', element: <GroupDetailPage /> },
+  { path: '/tags', element: <TagOverviewPage /> },
+  { path: '*', element: <NotFoundPage /> },
 ]);
