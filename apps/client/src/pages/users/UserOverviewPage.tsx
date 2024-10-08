@@ -17,7 +17,7 @@ const SearchUserBlock: FC = () => {
     <div className="space-y-4">
       <TextInput placeholder="ユーザー名" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
       <div className="h-96 overflow-y-scroll border rounded text-text-primary">
-        {filteredUsers?.map((user) => (
+        {filteredUsers?.slice(0, 100).map((user) => (
           <Link
             key={user.id}
             to={`/users/${user.name}`}
