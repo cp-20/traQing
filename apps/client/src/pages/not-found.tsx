@@ -6,7 +6,7 @@ export const NotFoundPage: FC = () => {
   return (
     <div className="min-h-screen flex flex-col justify-center items-center gap-4">
       <div className="text-2xl font-semibold">
-        <span>{location.pathname}</span>
+        <span>{decodeURIComponent(location.pathname)}</span>
         <span> というページは見つかりませんでした</span>
       </div>
       <div>
