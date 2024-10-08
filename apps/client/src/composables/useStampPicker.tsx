@@ -73,7 +73,7 @@ export type StampImageProps = {
 export const StampImage: FC<StampImageProps> = ({ stampId, size = 24, ...props }) => {
   const { getStamp } = useMessageStamps();
   const stamp = getStamp(stampId);
-  if (!stamp) return <Skeleton width={24} height={24} />;
+  if (!stamp) return <Skeleton width={size} height={size} />;
 
   return (
     <img
