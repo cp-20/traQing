@@ -3,13 +3,18 @@ import { ChannelsOverviewPage } from '@/pages/channels-overview';
 import { Dashboard } from '@/pages/dashboard';
 import { NotFoundPage } from '@/pages/not-found';
 import { StampDetailPage } from '@/pages/stamp-detail/StampDetailPage';
-import { UserDetailPage } from '@/pages/user-detail/UserDetailPage';
+import { UserDetailPage } from '@/pages/users/UserDetailPage';
+import { UserOverviewPage } from '@/pages/users/UserOverviewPage';
 import { createBrowserRouter } from 'react-router-dom';
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <Dashboard />,
+  },
+  {
+    path: '/users',
+    element: <UserOverviewPage />,
   },
   {
     path: '/users/:username',
