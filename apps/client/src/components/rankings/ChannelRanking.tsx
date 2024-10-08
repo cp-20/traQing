@@ -8,6 +8,7 @@ import type { MessagesQuery, StampsQuery } from '@traq-ing/database';
 import clsx from 'clsx';
 import { Fragment, useMemo } from 'react';
 import type { FC } from 'react';
+import { useSubscriptionRanking } from '@/hooks/useServerData';
 
 type RankingViewProps = {
   range?: DateRange;
@@ -101,4 +102,22 @@ export const StampsChannelRanking: FC<ChannelStampsRankingProps> = ({
   const { stamps, loading } = useStamps(query);
 
   return <RankingView range={range} loading={loading} data={stamps} limit={limit ?? 10} />;
+};
+
+type SubscribersChannelRankingProps = {
+  limit?: number;
+};
+
+export const SubscribersChannelRanking: FC<SubscribersChannelRankingProps> = ({ limit }) => {
+  const { data: ranking } = useSubscriptionRanking('channel');
+
+  console.log('ranking', ranking?.length);
+
+  return (
+    <RankingView
+      loading={ranking === undefined}
+      data={ranking?.slice(0, limit ?? 10).map((r) => ({ channel: r.group, count: r.count })) ?? []}
+      limit={limit ?? 10}
+    />
+  );
 };

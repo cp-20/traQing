@@ -1,6 +1,13 @@
 import { Card } from '@/components/Card';
+import { Container, ContainerTitle } from '@/components/containers/Container';
 import { ChannelIcon } from '@/components/icons/ChannelIcon';
-import { UserIcon } from '@/components/icons/UserIcon';
+import {
+  MessagesChannelRanking,
+  StampsChannelRanking,
+  SubscribersChannelRanking,
+} from '@/components/rankings/ChannelRanking';
+import { TopChannelMessagesTimeline } from '@/components/timelines/TopMessagesTimeline';
+import { useStampPicker } from '@/composables/useStampPicker';
 import { useChannels } from '@/hooks/useChannels';
 import { searchChannels } from '@/lib/search';
 import { Skeleton, TextInput } from '@mantine/core';
@@ -42,17 +49,41 @@ const SearchChannelBlock: FC = () => {
 };
 
 export const ChannelOverviewPage: FC = () => {
+  const picker = useStampPicker();
   return (
-    <div className="min-h-screen bg-gray-100 lg:px-8 lg:py-16 px-4 py-8">
-      <h1 className="text-2xl font-bold flex items-center justify-center py-8">
-        <UserIcon className="size-8" />
-        <span>チャンネル</span>
-      </h1>
+    <Container>
+      <ContainerTitle>
+        <ChannelIcon className="size-8" />
+        <span className="text-2xl font-bold">チャンネル</span>
+      </ContainerTitle>
 
       <Card>
-        <h2 className="font-semibold mb-2">チャンネル検索</h2>
+        <h2 className="text-lg font-semibold mb-2">投稿数ランキング</h2>
+        <div className="grid grid-cols-2 gap-4">
+          <MessagesChannelRanking limit={20} />
+          <div>
+            <TopChannelMessagesTimeline />
+          </div>
+        </div>
+      </Card>
+
+      <div className="grid grid-cols-2 gap-4">
+        <Card>
+          <h2 className="text-lg font-semibold mb-2">つけられたスタンプのランキング</h2>
+          <div className="mb-4">{picker.render()}</div>
+          <StampsChannelRanking limit={20} stampId={picker.stampId ?? undefined} />
+        </Card>
+
+        <Card>
+          <h2 className="text-lg font-semibold mb-2">メンバー数ランキング</h2>
+          <SubscribersChannelRanking limit={20} />
+        </Card>
+      </div>
+
+      <Card>
+        <h2 className="text-lg font-semibold mb-2">チャンネル検索</h2>
         <SearchChannelBlock />
       </Card>
-    </div>
+    </Container>
   );
 };
