@@ -9,6 +9,7 @@ import type { Store, traQMarkdownIt } from '@traptitech/traq-markdown-it';
 import { type FC, type ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import './TraqMessage.css';
 import { useOpenGraph } from '@/hooks/useOpenGraph';
+import { StampImage } from '@/composables/useStampPicker';
 
 const formatDate = (date: Date) => {
   const year = date.getFullYear();
@@ -101,6 +102,10 @@ export const TraqMessage: FC<TraqMessageProps> = ({ messageId, annotation }) => 
 
   const date = new Date(message.createdAt);
   const formattedDate = formatDate(date);
+  const aggregatedStamps = message.stamps.reduce((acc, s) => {
+    acc.set(s.stampId, (acc.get(s.stampId) ?? 0) + s.count);
+    return acc;
+  }, new Map<string, number>());
 
   return (
     <div className="border p-4 rounded-md flex flex-col">
@@ -121,6 +126,14 @@ export const TraqMessage: FC<TraqMessageProps> = ({ messageId, annotation }) => 
           <div className="flex flex-wrap gap-2">{attachedImages}</div>
           <div>{urlRichPreviews}</div>
         </div>
+      </div>
+      <div className="flex gap-1 flex-wrap">
+        {[...aggregatedStamps.entries()].map(([stampId, count]) => (
+          <div className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded" key={stampId}>
+            <StampImage stampId={stampId} size={16} className="size-4" />
+            <span className="font-semibold text-sm">{count}</span>
+          </div>
+        ))}
       </div>
       <div className="flex gap-1 justify-between text-gray-500 mt-1">
         <a href={`https://q.trap.jp/messages/${messageId}`} className="text-blue-600 font-medium hover:underline">
