@@ -122,7 +122,7 @@ export const TraqMessage: FC<TraqMessageProps> = ({ messageId, annotation }) => 
           <div>{urlRichPreviews}</div>
         </div>
       </div>
-      <div className="flex gap-1 justify-between text-gray-500">
+      <div className="flex gap-1 justify-between text-gray-500 mt-1">
         <a href={`https://q.trap.jp/messages/${messageId}`} className="text-blue-600 font-medium hover:underline">
           traQで開く
         </a>
