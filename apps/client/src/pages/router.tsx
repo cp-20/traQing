@@ -3,6 +3,7 @@ import { ChannelsOverviewPage } from '@/pages/channels-overview';
 import { Dashboard } from '@/pages/dashboard';
 import { NotFoundPage } from '@/pages/not-found';
 import { StampDetailPage } from '@/pages/stamps/StampDetailPage';
+import { StampOverviewPage } from '@/pages/stamps/StampOverViewPage';
 import { UserDetailPage } from '@/pages/users/UserDetailPage';
 import { UserOverviewPage } from '@/pages/users/UserOverviewPage';
 import { createBrowserRouter } from 'react-router-dom';
@@ -27,6 +28,10 @@ export const router = createBrowserRouter([
   {
     path: '/channels/*',
     element: <ChannelDetailPage />,
+  },
+  {
+    path: '/stamps',
+    element: <StampOverviewPage />,
   },
   {
     path: '/stamps/:stampName',
