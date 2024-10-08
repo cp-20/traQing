@@ -6,7 +6,7 @@ import {
   StampsGaveUserRanking,
   StampsReceivedUserRanking,
 } from '@/components/rankings/UserRanking';
-import { TopUserMessagesTimeline } from '@/components/timelines/TopUserMessagesTimeline';
+import { TopUserMessagesTimeline } from '@/components/timelines/TopMessagesTimeline';
 import { UserAvatar } from '@/components/UserAvatar';
 import { useStampPicker } from '@/composables/useStampPicker';
 import { useUsers } from '@/hooks/useUsers';
@@ -56,7 +56,7 @@ export const UserOverviewPage: FC = () => {
     <Container>
       <ContainerTitle>
         <UserIcon className="size-8" />
-        <span className="text-2xl font-semibold">ユーザー</span>
+        <span className="text-2xl font-bold">ユーザー</span>
       </ContainerTitle>
 
       <Card>
@@ -91,7 +91,7 @@ export const UserOverviewPage: FC = () => {
       </Card>
 
       <Card>
-        <h2 className="font-semibold mb-2">ユーザー検索</h2>
+        <h2 className="text-lg font-semibold mb-2">ユーザー検索</h2>
         <SearchUserBlock />
       </Card>
     </Container>
