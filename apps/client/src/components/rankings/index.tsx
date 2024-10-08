@@ -17,6 +17,13 @@ export const RankingItemSkeleton: FC<RankingItemSkeletonProps> = ({ rank, showIc
   </div>
 );
 
+export type RankingItemProps = {
+  children: ReactNode;
+};
+export const RankingItem: FC<RankingItemProps> = ({ children }) => (
+  <div className="flex items-center gap-2 px-2 py-1">{children}</div>
+);
+
 export type RankingItemWithLinkProps = {
   to: string;
   children: ReactNode;

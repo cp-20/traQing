@@ -1,5 +1,5 @@
 import { TagIcon } from '@/components/icons/TagIcon';
-import { RankingItemWithLink, RankingItemBar, RankingItemRank, RankingItemValue } from '@/components/rankings';
+import { RankingItemBar, RankingItemRank, RankingItemValue, RankingItem } from '@/components/rankings';
 import type { FC } from 'react';
 
 type TagRankingItemProps = {
@@ -10,12 +10,12 @@ type TagRankingItemProps = {
 };
 export const TagRankingItem: FC<TagRankingItemProps> = ({ tag, rank, value, rate }) => {
   return (
-    <RankingItemWithLink to={`/tags/${encodeURIComponent(tag)}`}>
+    <RankingItem>
       {rate && <RankingItemBar rate={rate} />}
       <RankingItemRank rank={rank} />
       <TagIcon />
       <span className="font-medium">{tag}</span>
       <RankingItemValue value={value} />
-    </RankingItemWithLink>
+    </RankingItem>
   );
 };
