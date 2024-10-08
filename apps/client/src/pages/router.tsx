@@ -1,5 +1,5 @@
-import { ChannelDetailPage } from '@/pages/channel-detail/ChannelDetailPage';
-import { ChannelsOverviewPage } from '@/pages/channels-overview';
+import { ChannelDetailPage } from '@/pages/channels/ChannelDetailPage';
+import { ChannelOverviewPage } from '@/pages/channels/ChannelOverviewPage';
 import { Dashboard } from '@/pages/dashboard';
 import { NotFoundPage } from '@/pages/not-found';
 import { StampDetailPage } from '@/pages/stamps/StampDetailPage';
@@ -23,7 +23,7 @@ export const router = createBrowserRouter([
   },
   {
     path: '/channels',
-    element: <ChannelsOverviewPage />,
+    element: <ChannelOverviewPage />,
   },
   {
     path: '/channels/*',

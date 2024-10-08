@@ -1,6 +1,6 @@
 import { useChannels } from '@/hooks/useChannels';
 import { assert } from '@/lib/invariant';
-import { ChannelDetail } from '@/pages/channel-detail/ChannelDetail';
+import { ChannelDetail } from '@/pages/channels/ChannelDetail';
 import { Loader } from '@mantine/core';
 import clsx from 'clsx';
 import type { FC } from 'react';
