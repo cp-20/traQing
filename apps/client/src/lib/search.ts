@@ -1,4 +1,4 @@
-import type { Channel, Stamp, User } from 'traq-bot-ts';
+import type { Channel, Stamp, User, UserGroup } from 'traq-bot-ts';
 
 const sort = (a: string, b: string, keyword: string) => {
   const aIndex = a.toLowerCase().indexOf(keyword.toLowerCase());
@@ -44,5 +44,11 @@ export const searchChannels = (channels: Channel[], keyword: string) => {
 export const searchStamps = (stamps: Stamp[], keyword: string) => {
   return stamps
     .filter((prof) => prof.name.toLowerCase().includes(keyword.toLowerCase()))
+    .sort((a, b) => sort(a.name, b.name, keyword));
+};
+
+export const searchGroups = (groups: UserGroup[], keyword: string) => {
+  return groups
+    .filter((group) => group.name.toLowerCase().includes(keyword.toLowerCase()))
     .sort((a, b) => sort(a.name, b.name, keyword));
 };
