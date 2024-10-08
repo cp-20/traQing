@@ -1,9 +1,6 @@
 import { ChannelIcon } from '@/components/icons/ChannelIcon';
 import { useChannels } from '@/hooks/useChannels';
-import { Card } from '@mantine/core';
-import { IconChevronLeft } from '@tabler/icons-react';
 import type { FC } from 'react';
-import { Link } from 'react-router-dom';
 import {
   ChannelMessageCountStat,
   ChannelStampCountStat,
@@ -15,6 +12,8 @@ import { TopReactedMessages } from '@/components/messages/TopReactedMessages';
 import { ChannelActionTimeline } from '@/components/timelines/ChannelActionTimeline';
 import { ChannelActionHours } from '@/components/hours/ChannelActionHours';
 import { MessagesUserRanking, StampsGaveUserRanking } from '@/components/rankings/UserRanking';
+import { Container, ContainerTitle } from '@/components/containers/Container';
+import { Card } from '@/components/Card';
 
 type Props = {
   channelId: string;
@@ -28,29 +27,11 @@ export const ChannelDetail: FC<Props> = ({ channelId }) => {
   if (channelName === undefined) return null;
 
   return (
-    <div className="bg-gray-100 min-h-screen sm:p-8 p-4 flex flex-col sm:gap-8 gap-4">
-      <div className="lg:hidden flex">
-        <Link
-          to="/"
-          className="px-4 py-2 flex justify-center items-center font-semibold hover:bg-gray-200 duration-200 transition-all rounded-md"
-        >
-          <IconChevronLeft />
-          <span>ホームに戻る</span>
-        </Link>
-      </div>
-      <div className="flex gap-8 justify-center items-center relative">
-        <Link
-          to="/"
-          className="absolute top-1/2 -translate-y-1/2 left-0 px-4 py-2 flex justify-center items-center font-semibold hover:bg-gray-200 duration-200 transition-all rounded-md max-lg:hidden"
-        >
-          <IconChevronLeft />
-          <span>ホームに戻る</span>
-        </Link>
-        <div className="flex items-center">
-          <ChannelIcon className="size-10 -mr-1" />
-          <div className="text-2xl font-semibold pb-1">{channelName}</div>
-        </div>
-      </div>
+    <Container>
+      <ContainerTitle>
+        <ChannelIcon className="size-10 -mr-1" />
+        <div className="text-2xl font-semibold pb-1">{channelName}</div>
+      </ContainerTitle>
       <div className="grid grid-cols-2 sm:gap-8 gap-4 max-lg:grid-cols-1">
         <div className="flex flex-col sm:gap-8 gap-4 @container">
           <div className="grid grid-cols-3 gap-4 auto-rows-min max-xs:grid-cols-1">
@@ -110,6 +91,6 @@ export const ChannelDetail: FC<Props> = ({ channelId }) => {
           </Card>
         </div>
       </div>
-    </div>
+    </Container>
   );
 };

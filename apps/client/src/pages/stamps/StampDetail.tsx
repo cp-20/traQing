@@ -1,3 +1,4 @@
+import { Container, ContainerTitle } from '@/components/containers/Container';
 import { StampHours } from '@/components/hours/StampHours';
 import { TopReactedMessages } from '@/components/messages/TopReactedMessages';
 import { StampsChannelRanking } from '@/components/rankings/ChannelRanking';
@@ -9,9 +10,7 @@ import { StampImage } from '@/composables/useStampPicker';
 import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { assert } from '@/lib/invariant';
 import { Card } from '@mantine/core';
-import { IconChevronLeft } from '@tabler/icons-react';
 import type { FC } from 'react';
-import { Link } from 'react-router-dom';
 
 type Props = {
   stampId: string;
@@ -23,31 +22,15 @@ export const StampDetail: FC<Props> = ({ stampId }) => {
   assert(stamp);
 
   return (
-    <div className="bg-gray-100 min-h-screen sm:p-8 p-4 flex flex-col sm:gap-8 gap-4">
-      <div className="lg:hidden flex">
-        <Link
-          to="/"
-          className="px-4 py-2 flex justify-center items-center font-semibold hover:bg-gray-200 duration-200 transition-all rounded-md"
-        >
-          <IconChevronLeft />
-          <span>ホームに戻る</span>
-        </Link>
-      </div>
-      <div className="flex gap-8 justify-center items-center relative">
-        <Link
-          to="/"
-          className="absolute top-1/2 -translate-y-1/2 left-0 px-4 py-2 flex justify-center items-center font-semibold hover:bg-gray-200 duration-200 transition-all rounded-md max-lg:hidden"
-        >
-          <IconChevronLeft />
-          <span>ホームに戻る</span>
-        </Link>
+    <Container>
+      <ContainerTitle>
         <div>
           <StampImage stampId={stampId} size={64} loading="eager" />
         </div>
-        <div>
+        <div className="ml-4">
           <div className="text-2xl font-semibold">:{stamp.name}:</div>
         </div>
-      </div>
+      </ContainerTitle>
       <div className="grid grid-cols-2 sm:gap-8 gap-4 max-lg:grid-cols-1">
         <div className="flex flex-col sm:gap-8 gap-4 @container">
           <div className="grid grid-cols-3 gap-4 auto-rows-min max-xs:grid-cols-1">
@@ -99,6 +82,6 @@ export const StampDetail: FC<Props> = ({ stampId }) => {
           </Card>
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
