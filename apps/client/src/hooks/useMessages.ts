@@ -6,6 +6,15 @@ type Result<Q extends MessagesQuery> = {
   [K in Q extends { groupBy: infer U } ? (U extends undefined ? 'day' : U) : 'day']: string;
 } & { count: number };
 
+const normalizeQuery = <Q extends MessagesQuery>(query: Q) => ({
+  ...query,
+  after: query.after?.toISOString(),
+  before: query.before?.toISOString(),
+  isBot: query.isBot?.toString(),
+  limit: query.limit?.toString(),
+  offset: query.offset?.toString(),
+});
+
 export const useMessages = <Q extends MessagesQuery>(query: Q) => {
   const [messages, setMessages] = useState<Result<Q>[]>([]);
   const [loading, setLoading] = useState(true);
@@ -14,14 +23,7 @@ export const useMessages = <Q extends MessagesQuery>(query: Q) => {
     setLoading(true);
     const fetchMessages = async () => {
       const res = await client.messages.$get({
-        query: {
-          ...query,
-          after: query.after?.toISOString(),
-          before: query.before?.toISOString(),
-          isBot: query.isBot?.toString(),
-          limit: query.limit?.toString(),
-          offset: query.offset?.toString(),
-        },
+        query: normalizeQuery(query),
       });
       const data = (await res.json()) as Result<Q>[];
       setMessages(data);
@@ -44,14 +46,7 @@ export const useMessagesByMultipleQueries = <Q extends MessagesQuery>(queries: Q
       const res = await Promise.all(
         queries.map((query) =>
           client.messages.$get({
-            query: {
-              ...query,
-              after: query.after?.toISOString(),
-              before: query.before?.toISOString(),
-              isBot: query.isBot?.toString(),
-              limit: query.limit?.toString(),
-              offset: query.offset?.toString(),
-            },
+            query: normalizeQuery(query),
           }),
         ),
       );
