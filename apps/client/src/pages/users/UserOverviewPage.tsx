@@ -1,6 +1,14 @@
 import { Card } from '@/components/Card';
+import { Container, ContainerTitle } from '@/components/containers/Container';
 import { UserIcon } from '@/components/icons/UserIcon';
+import {
+  MessagesUserRanking,
+  StampsGaveUserRanking,
+  StampsReceivedUserRanking,
+} from '@/components/rankings/UserRanking';
+import { TopUserMessagesTimeline } from '@/components/timelines/TopUserMessagesTimeline';
 import { UserAvatar } from '@/components/UserAvatar';
+import { useStampPicker } from '@/composables/useStampPicker';
 import { useUsers } from '@/hooks/useUsers';
 import { searchUsers } from '@/lib/search';
 import { Skeleton, TextInput } from '@mantine/core';
@@ -43,17 +51,49 @@ const SearchUserBlock: FC = () => {
 };
 
 export const UserOverviewPage: FC = () => {
+  const picker = useStampPicker();
   return (
-    <div className="min-h-screen bg-gray-100 lg:px-8 lg:py-16 px-4 py-8">
-      <h1 className="text-2xl font-bold flex items-center justify-center py-8">
+    <Container>
+      <ContainerTitle>
         <UserIcon className="size-8" />
-        <span>ユーザー</span>
-      </h1>
+        <span className="text-2xl font-semibold">ユーザー</span>
+      </ContainerTitle>
+
+      <Card>
+        <h2 className="text-lg font-semibold mb-2">投稿数ランキング</h2>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <MessagesUserRanking limit={20} />
+          </div>
+
+          <div className="flex flex-col">
+            <div className="flex-1">
+              <TopUserMessagesTimeline />
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      <Card>
+        <h2 className="text-lg font-semibold mb-2">つけた/もらったスタンプのランキング</h2>
+        <div className="mb-4">{picker.render()}</div>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <h3 className="font-semibold mb-2">つけたスタンプ</h3>
+            <StampsGaveUserRanking limit={20} stampId={picker.stampId ?? undefined} />
+          </div>
+
+          <div>
+            <h3 className="font-semibold mb-2">もらったスタンプ</h3>
+            <StampsReceivedUserRanking limit={20} stampId={picker.stampId ?? undefined} />
+          </div>
+        </div>
+      </Card>
 
       <Card>
         <h2 className="font-semibold mb-2">ユーザー検索</h2>
         <SearchUserBlock />
       </Card>
-    </div>
+    </Container>
   );
 };
