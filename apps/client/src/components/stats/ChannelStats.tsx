@@ -1,5 +1,5 @@
 import { Stat, StatSkeleton } from '@/components/stats';
-import { useChannelMessagesRanking, useChannelStampsRanking, useChannelSubscribersData } from '@/hooks/useServerData';
+import { useChannelMessagesRanking, useChannelStampsRanking, useSubscriptionRanking } from '@/hooks/useServerData';
 import type { FC } from 'react';
 
 type ChannelStatsProps = {
@@ -38,13 +38,20 @@ export const ChannelStampCountStat: FC<ChannelStatsProps> = ({ channelId }) => {
 };
 
 export const ChannelSubscribersCountStat: FC<ChannelStatsProps> = ({ channelId }) => {
-  const { data: subscribers, isLoading } = useChannelSubscribersData(channelId);
-  if (isLoading) return <StatSkeleton label="メンバー数" />;
+  const { data: subscribers } = useSubscriptionRanking('channel');
+  if (subscribers === undefined) return <StatSkeleton label="メンバー数" />;
+  const index = subscribers.findIndex((s) => s.group === channelId);
 
-  if (!subscribers) {
+  if (index === -1) {
     return <Stat label="メンバー数" value={0} valueProps={{ className: 'text-indigo-600' }} />;
   }
 
-  // TODO: 順位も出す
-  return <Stat label="メンバー数" value={subscribers.length} valueProps={{ className: 'text-indigo-600' }} />;
+  return (
+    <Stat
+      label="メンバー数"
+      value={subscribers[index].count}
+      annotation={`全体${index + 1}位`}
+      valueProps={{ className: 'text-indigo-600' }}
+    />
+  );
 };
