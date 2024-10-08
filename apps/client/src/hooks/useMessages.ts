@@ -16,6 +16,9 @@ export const useMessages = <Q extends MessagesQuery>(query: Q) => {
       const res = await client.messages.$get({
         query: {
           ...query,
+          after: query.after?.toISOString(),
+          before: query.before?.toISOString(),
+          isBot: query.isBot?.toString(),
           limit: query.limit?.toString(),
           offset: query.offset?.toString(),
         },
@@ -43,6 +46,9 @@ export const useMessagesByMultipleQueries = <Q extends MessagesQuery>(queries: Q
           client.messages.$get({
             query: {
               ...query,
+              after: query.after?.toISOString(),
+              before: query.before?.toISOString(),
+              isBot: query.isBot?.toString(),
               limit: query.limit?.toString(),
               offset: query.offset?.toString(),
             },
