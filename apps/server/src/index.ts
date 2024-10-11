@@ -188,8 +188,14 @@ const updateStatisticsHandler = async () => {
 setInterval(updateStatisticsHandler, 1000 * 60 * 60 * 24);
 
 if (process.env.NODE_ENV === 'production') {
-  await updateMessagesHandler();
-  await updateStatisticsHandler();
+  (async () => {
+    updateMessagesLock = true;
+    await updateMessagesHandler();
+    updateMessagesLock = false;
+    updateStatisticsLock = true;
+    await updateStatisticsHandler();
+    updateStatisticsLock = false;
+  })();
 }
 
 export default {
