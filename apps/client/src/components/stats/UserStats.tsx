@@ -4,6 +4,7 @@ import {
   useGroupRanking,
   useMessagesRanking,
   useReceivedMessageStampsRanking,
+  useSubscriptionRanking,
   useTagRanking,
 } from '@/hooks/useServerData';
 import type { FC } from 'react';
@@ -101,7 +102,7 @@ export const UserTagStat: FC<UserStatsProps> = ({ userId }) => {
 };
 
 export const UserSubscriptionStat: FC<UserStatsProps> = ({ userId }) => {
-  const { data: ranking } = useGroupRanking('user');
+  const { data: ranking } = useSubscriptionRanking('user');
   if (ranking === undefined) return <StatSkeleton label="チャンネル購読数" />;
   const index = ranking.findIndex((r) => r.group === userId);
 
