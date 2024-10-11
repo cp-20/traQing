@@ -216,6 +216,4 @@ export const updateStatistics = async () => {
   console.log(`Successfully inserted ${channelPinsDiff.added.length} channel pins`);
   if (channelPinsDiff.deleted.length > 0) await deleteChannelPins(channelPinsDiff.deleted);
   console.log(`Successfully deleted ${channelPinsDiff.deleted.length} channel pins`);
-
-  await updateMaterializedViews();
 };
