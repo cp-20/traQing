@@ -23,6 +23,8 @@ services:
       - '5001:8080'
     networks:
       - traq-ing-network
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
     environment:
       - TRAQ_AUTH_CLIENT_ID=${TRAQ_AUTH_CLIENT_ID}
       - TRAQ_TOKEN=${TRAQ_TOKEN}
