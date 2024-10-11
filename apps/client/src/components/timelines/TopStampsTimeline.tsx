@@ -3,7 +3,8 @@ import { dateRangeToQuery, type DateRange } from '@/composables/useDateRangePick
 import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { useStamps, useStampsByMultipleQueries } from '@/hooks/useStamps';
 import type { StampsQuery } from '@traq-ing/database';
-import { useMemo, type FC } from 'react';
+import { useMemo } from 'react';
+import type { FC } from 'react';
 
 type TopStampsTimelineProps = {
   range?: DateRange;
@@ -36,7 +37,7 @@ export const TopStampsTimeline: FC<TopStampsTimelineProps> = ({
     [range, channelId, gaveUserId, receivedUserId, limit],
   );
   const { stamps: ranking } = useStamps(query);
-  const topStamps = ranking?.slice(0, 10).map((s) => s.stamp) ?? [];
+  const topStamps = useMemo(() => ranking?.slice(0, 10).map((s) => s.stamp) ?? [], [ranking]);
   const queries = useMemo(
     () =>
       topStamps.map(
