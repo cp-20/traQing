@@ -1,4 +1,4 @@
-import { commonHoursChartOption, commonHoursQuery, hours } from '@/components/hours/common';
+import { commonHoursChartOption, commonHoursQuery, getHourDataset, hours } from '@/components/hours/common';
 import { useMessages } from '@/hooks/useMessages';
 import { useStamps } from '@/hooks/useStamps';
 import { dateRangeToQuery, type DateRange } from '@/composables/useDateRangePicker';
@@ -52,19 +52,19 @@ export const UserActionHours: FC<Props> = ({ userId, range }) => {
     labels: hours.map((h) => `${h}:00`),
     datasets: [
       {
-        data: hours.map((h) => messages.find((m) => m.hour === h)?.count ?? 0),
+        data: getHourDataset(messages),
         label: '投稿数',
         backgroundColor: 'rgba(34, 139, 230, 0.8)',
         borderColor: 'rgba(34, 139, 230, 0.8)',
       },
       {
-        data: hours.map((h) => gaveStamps.find((s) => s.hour === h)?.count ?? 0),
+        data: getHourDataset(gaveStamps),
         label: 'つけたスタンプ',
         backgroundColor: 'rgba(21, 170, 191, 0.8)',
         borderColor: 'rgba(21, 170, 191, 0.8)',
       },
       {
-        data: hours.map((h) => receivedStamps.find((s) => s.hour === h)?.count ?? 0),
+        data: getHourDataset(receivedStamps),
         label: 'もらったスタンプ',
         backgroundColor: 'rgba(76, 110, 245, 0.8)',
         borderColor: 'rgba(76, 110, 245, 0.8)',

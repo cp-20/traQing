@@ -28,3 +28,9 @@ export const commonHoursChartOption = mergeOptions(getCommonLineChartOptions(fal
 export const commonHoursQuery = {
   groupBy: 'hour',
 } satisfies MessagesQuery & StampsQuery;
+
+const diff = new Date().getTimezoneOffset() / 60;
+export const getHourDataset = (data: { hour: string; count: number }[]) =>
+  hours.map(
+    (h) => data.find((s) => Number.parseInt(s.hour) === ((Number.parseInt(h) + diff + 23) % 24) + 1)?.count ?? 0,
+  );

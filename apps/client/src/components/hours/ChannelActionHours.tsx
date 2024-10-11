@@ -1,4 +1,4 @@
-import { commonHoursChartOption, commonHoursQuery, hours } from '@/components/hours/common';
+import { commonHoursChartOption, commonHoursQuery, getHourDataset, hours } from '@/components/hours/common';
 import { useMessages } from '@/hooks/useMessages';
 import { useStamps } from '@/hooks/useStamps';
 import type { MessagesQuery, StampsQuery } from '@traq-ing/database';
@@ -24,13 +24,13 @@ export const ChannelActionHours: FC<Props> = ({ channelId }) => {
     labels: hours.map((h) => `${h}:00`),
     datasets: [
       {
-        data: hours.map((h) => messages.find((m) => m.hour === h)?.count ?? 0),
+        data: getHourDataset(messages),
         label: '投稿数',
         backgroundColor: 'rgba(34, 139, 230, 0.8)',
         borderColor: 'rgba(34, 139, 230, 0.8)',
       },
       {
-        data: hours.map((h) => stamps.find((s) => s.hour === h)?.count ?? 0),
+        data: getHourDataset(stamps),
         label: 'スタンプ数',
         backgroundColor: 'rgba(21, 170, 191, 0.8)',
         borderColor: 'rgba(21, 170, 191, 0.8)',

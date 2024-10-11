@@ -1,4 +1,4 @@
-import { commonHoursChartOption, commonHoursQuery, hours } from '@/components/hours/common';
+import { commonHoursChartOption, commonHoursQuery, getHourDataset, hours } from '@/components/hours/common';
 import { useStamps } from '@/hooks/useStamps';
 import type { StampsQuery } from '@traq-ing/database';
 import type { ChartOptions } from 'chart.js';
@@ -21,7 +21,7 @@ export const StampHours: FC<Props> = ({ stampId }) => {
     labels: hours.map((h) => `${h}:00`),
     datasets: [
       {
-        data: hours.map((h) => stamps.find((s) => s.hour === h)?.count ?? 0),
+        data: getHourDataset(stamps),
         label: 'スタンプ数',
         backgroundColor: 'rgba(34, 139, 230, 0.8)',
         borderColor: 'rgba(34, 139, 230, 0.8)',
