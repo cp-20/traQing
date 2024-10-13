@@ -1,5 +1,5 @@
 import { RankingItemSkeleton } from '@/components/rankings';
-import { ChannelRankingItemWithUsers } from '@/components/rankings/channel';
+import { ChannelRankingItemWithSubscription, ChannelRankingItemWithUsers } from '@/components/rankings/channel';
 import { useMessages } from '@/hooks/useMessages';
 import { useStamps } from '@/hooks/useStamps';
 
@@ -9,6 +9,7 @@ import clsx from 'clsx';
 import { Fragment, useMemo } from 'react';
 import type { FC } from 'react';
 import { useSubscriptionRanking } from '@/hooks/useServerData';
+import { useSubscriptions } from '@/hooks/useSubscriptions';
 
 type RankingViewProps = {
   range?: DateRange;
@@ -70,6 +71,63 @@ export const MessagesChannelRanking: FC<MessagesChannelRankingProps> = ({ range,
   return <RankingView range={range} loading={loading} data={messages} limit={limit ?? 10} />;
 };
 
+export const MessagesChannelRankingWithSubscription: FC<MessagesChannelRankingProps> = ({ range, userId, limit }) => {
+  const { getSubscriptionLevel } = useSubscriptions();
+  const query = useMemo(
+    () =>
+      ({
+        userId,
+        groupBy: 'channel',
+        orderBy: 'count',
+        order: 'desc',
+        limit: limit ?? 10,
+        ...(range && dateRangeToQuery(range)),
+      }) satisfies MessagesQuery,
+    [range, userId, limit],
+  );
+  const { messages, loading } = useMessages(query);
+
+  const allMessagesCount = messages.map((m) => m.count).reduce((a, b) => a + b, 0);
+  const subscribedCount = messages
+    .filter((m) => getSubscriptionLevel(m.channel) > 0)
+    .map((m) => m.count)
+    .reduce((a, b) => a + b, 0);
+
+  if (loading && messages.length === 0) {
+    return (
+      <div className="flex flex-col">
+        {[...Array(limit)].map((_, i) => (
+          <RankingItemSkeleton key={i} rank={i + 1} />
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className={clsx('space-y-2', loading && 'opacity-80')}>
+      <div className="flex justify-end gap-1">
+        <span className="font-semibold">購読率</span>
+        <span>
+          {subscribedCount}/{allMessagesCount}
+        </span>
+        <span>({((subscribedCount / allMessagesCount) * 100).toFixed(1)}%)</span>
+      </div>
+      <div className="flex flex-col">
+        {messages.map((row, i) => (
+          <Fragment key={row.channel}>
+            <ChannelRankingItemWithSubscription
+              channelId={row.channel}
+              rank={i + 1}
+              value={row.count}
+              rate={row.count / allMessagesCount}
+            />
+          </Fragment>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 export type ChannelStampsRankingProps = {
   range?: DateRange;
   stampId?: string;
@@ -110,8 +168,6 @@ type SubscribersChannelRankingProps = {
 
 export const SubscribersChannelRanking: FC<SubscribersChannelRankingProps> = ({ limit }) => {
   const { data: ranking } = useSubscriptionRanking('channel');
-
-  console.log('ranking', ranking?.length);
 
   return (
     <RankingView

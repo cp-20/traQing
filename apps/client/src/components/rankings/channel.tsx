@@ -1,5 +1,6 @@
 import { UserAvatar } from '@/components/UserAvatar';
 import {
+  RankingItem,
   RankingItemBar,
   RankingItemRank,
   RankingItemSkeleton,
@@ -10,9 +11,12 @@ import { useChannels } from '@/hooks/useChannels';
 import { useMessages } from '@/hooks/useMessages';
 import { useUsers } from '@/hooks/useUsers';
 import { type DateRange, dateRangeToQuery } from '@/composables/useDateRangePicker';
-import { Skeleton } from '@mantine/core';
+import { ActionIcon, Skeleton } from '@mantine/core';
 import type { MessagesQuery } from '@traq-ing/database';
-import { type FC, useMemo } from 'react';
+import { type FC, useCallback, useMemo } from 'react';
+import { ChannelIcon } from '@/components/icons/ChannelIcon';
+import { useSubscriptions } from '@/hooks/useSubscriptions';
+import { NotificationIcon } from '@/components/NotificationIcon';
 
 export type ChannelRankingItemProps = {
   channelId: string;
@@ -121,5 +125,43 @@ export const ChannelRankingItemWithUsers: FC<ChannelRankingItemWithUsersProps> =
       </div>
       <RankingItemValue value={value} />
     </RankingItemWithLink>
+  );
+};
+
+export type ChannelRankingItemWithSubscriptionProps = {
+  channelId: string;
+  rank: number;
+  value: number;
+  rate?: number;
+};
+
+export const ChannelRankingItemWithSubscription: FC<ChannelRankingItemWithSubscriptionProps> = ({
+  channelId,
+  rank,
+  value,
+  rate,
+}) => {
+  const { getChannelName } = useChannels();
+  const { getSubscriptionLevel, setSubscriptionLevel } = useSubscriptions();
+
+  const currentLevel = useMemo(() => getSubscriptionLevel(channelId), [channelId, getSubscriptionLevel]);
+  const handleClick = useCallback(
+    () => setSubscriptionLevel(channelId, ((currentLevel + 1) % 3) as 0 | 1 | 2),
+    [setSubscriptionLevel, channelId, currentLevel],
+  );
+
+  return (
+    <RankingItem>
+      <RankingItemRank rank={rank} />
+      <ActionIcon variant="transparent" className="text-text-primary hover:text-text-primary" onClick={handleClick}>
+        <NotificationIcon level={currentLevel} />
+      </ActionIcon>
+      <ChannelIcon />
+      <div className="flex-1 flex">
+        <div className="font-semibold">{getChannelName(channelId) ?? <Skeleton h={16} />}</div>
+      </div>
+      <RankingItemValue value={value} />
+      {rate && <div>({(rate * 100).toFixed(2)}%)</div>}
+    </RankingItem>
   );
 };
