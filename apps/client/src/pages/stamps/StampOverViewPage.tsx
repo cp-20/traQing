@@ -54,7 +54,7 @@ export const StampOverviewPage: FC = () => {
 
       <Card>
         <h2 className="text-lg font-semibold mb-2">つけられた数</h2>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 max-lg:grid-cols-1 gap-4">
           <StampRanking limit={20} />
           <div>
             <TopStampsTimeline />

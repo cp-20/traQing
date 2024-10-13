@@ -59,7 +59,7 @@ export const ChannelOverviewPage: FC = () => {
 
       <Card>
         <h2 className="text-lg font-semibold mb-2">投稿数ランキング</h2>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 max-lg:grid-cols-1 gap-4">
           <MessagesChannelRanking limit={20} />
           <div>
             <TopChannelMessagesTimeline />
@@ -67,7 +67,7 @@ export const ChannelOverviewPage: FC = () => {
         </div>
       </Card>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 max-lg:grid-cols-1 gap-4">
         <Card>
           <h2 className="text-lg font-semibold mb-2">つけられたスタンプのランキング</h2>
           <div className="mb-4">{picker.render()}</div>
