@@ -6,6 +6,7 @@ import { MessageIcon } from '@/components/icons/MessageIcon';
 import { StampIcon } from '@/components/icons/StampIcon';
 import { TagIcon } from '@/components/icons/TagIcon';
 import { UserIcon } from '@/components/icons/UserIcon';
+import { NotificationIcon } from '@/components/NotificationIcon';
 import { MessagesChannelRanking } from '@/components/rankings/ChannelRanking';
 import { StampRanking } from '@/components/rankings/StampRanking';
 import { MessagesUserRanking } from '@/components/rankings/UserRanking';
@@ -27,7 +28,7 @@ export const Dashboard: FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 lg:px-8 lg:py-16 px-4 py-8">
-      <div className="space-y-8">
+      <div className="space-y-16 pt-8">
         <div className="grid place-content-center">
           <img src={LogoImage} alt="traQing" width={256} />
         </div>
@@ -50,7 +51,7 @@ export const Dashboard: FC = () => {
           </div>
         </div>
 
-        <div className="pt-8">
+        <div>
           <h2 className="font-bold text-center text-xl mb-4">もっと詳細を見る</h2>
 
           <div className="grid grid-cols-3 gap-4 max-md:grid-cols-2 max-xs:grid-cols-1">
@@ -65,6 +66,17 @@ export const Dashboard: FC = () => {
               </Link>
             ))}
           </div>
+        </div>
+
+        <div>
+          <h2 className="font-bold text-center text-xl mb-4">ツール</h2>
+          <Link
+            to="/subscriptions"
+            className="flex items-center gap-2 bg-white rounded-md p-4 justify-center hover:text-blue-500 transition-colors duration-200"
+          >
+            <NotificationIcon level={2} className="size-8" />
+            <span className="text-lg font-bold">通知管理</span>
+          </Link>
         </div>
       </div>
     </div>

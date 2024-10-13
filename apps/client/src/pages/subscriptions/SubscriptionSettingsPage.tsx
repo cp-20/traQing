@@ -11,7 +11,7 @@ export const SubscriptionSettingsPage: FC = () => {
     <Container>
       <ContainerTitle>
         <NotificationIcon level={2} className="size-8" />
-        <span className="ml-2 text-2xl font-bold">通知設定</span>
+        <span className="ml-2 text-2xl font-bold">通知管理</span>
       </ContainerTitle>
 
       <div className="flex justify-end">{picker.render()}</div>
