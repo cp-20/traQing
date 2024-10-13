@@ -27,8 +27,10 @@ export const UserRankingItem: FC<UserRankingItemProps> = ({ userId, rank, value,
       {rate && <RankingItemBar rate={rate} />}
       <RankingItemRank rank={rank} />
       <UserAvatar userId={userId} />
-      <span className="font-medium">{user.displayName}</span>
-      <span className="text-gray-500">@{user.name.split('#')[0]}</span>
+      <div className="flex @md:gap-2 @lg:flex-row flex-col">
+        <span className="font-medium break-all">{user.displayName}</span>
+        <span className="text-gray-500 @md:text-md text-sm">@{user.name.split('#')[0]}</span>
+      </div>
       <RankingItemValue value={value} />
     </RankingItemWithLink>
   );

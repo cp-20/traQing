@@ -35,7 +35,7 @@ export const ChannelRankingItem: FC<ChannelRankingItemProps> = ({ channelId, ran
     <RankingItemWithLink to={`/channels/${getChannelName(channelId)}`}>
       {rate && <RankingItemBar rate={rate} />}
       <RankingItemRank rank={rank} />
-      <span className="font-medium">#{channel}</span>
+      <span className="font-medium break-all">#{channel}</span>
       <RankingItemValue value={value} />
     </RankingItemWithLink>
   );
@@ -89,7 +89,7 @@ export const ChannelRankingItemWithUsers: FC<ChannelRankingItemWithUsersProps> =
       <RankingItemRank rank={rank} />
       {icon}
       <div className="flex-1 flex @2xl:flex-row flex-col @2xl:items-center @2xl:gap-2 gap-1 justify-between">
-        <div className="font-semibold">
+        <div className="font-semibold break-all">
           {getChannelName(channelId) ? `#${getChannelName(channelId)}` : <Skeleton h={16} />}
         </div>
         {!onlyTop && (
