@@ -30,13 +30,12 @@ export const RangeStampCountStat: FC<RangeStampCountStatProps> = ({ stampId, lab
   const query = useMemo(
     () =>
       ({
-        stampId,
         groupBy: 'stamp',
         orderBy: 'count',
         order: 'desc',
         ...dateRangeToQuery(range),
       }) satisfies StampsQuery,
-    [stampId, range],
+    [range],
   );
   const { stamps, loading } = useStamps(query);
   if (loading && stamps.length === 0) return <StatSkeleton label={label} />;
