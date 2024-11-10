@@ -28,7 +28,7 @@ const SearchUserBlock: FC = () => {
         {filteredUsers?.slice(0, 100).map((user) => (
           <Link
             key={user.id}
-            to={`/users/${user.name}`}
+            to={`/users/${encodeURIComponent(user.name)}`}
             className="flex items-center gap-2 px-4 py-2 hover:bg-blue-100 transition-colors duration-200"
           >
             <UserAvatar userId={user.id} />
