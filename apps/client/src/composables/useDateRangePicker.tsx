@@ -98,7 +98,7 @@ export const useDateRangePicker = (defaultType: Type, defaultRange?: DateRange) 
     >
       <Popover.Target>
         <Button variant="default" onClick={() => setOpened((o) => !o)}>
-          <span className="inline-flex gap-2 items-center">
+          <span className="inline-flex gap-2 items-center text-text-primary">
             <span className="text-xs font-bold">{label}</span>
             <span>
               {formatDate(value[0])}～{formatDate(value[1])}
