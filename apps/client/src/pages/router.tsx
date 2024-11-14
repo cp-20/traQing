@@ -5,6 +5,7 @@ import { GroupDetailPage } from '@/pages/groups/GroupDetailPage';
 import { GroupOverviewPage } from '@/pages/groups/GroupOverviewPage';
 import { MessageOverviewPage } from '@/pages/messages/MessageOverviewPage';
 import { NotFoundPage } from '@/pages/not-found';
+import { PlaygroundPage } from '@/pages/playground/PlaygroundPage';
 import { StampDetailPage } from '@/pages/stamps/StampDetailPage';
 import { StampOverviewPage } from '@/pages/stamps/StampOverViewPage';
 import { SubscriptionSettingsPage } from '@/pages/subscriptions/SubscriptionSettingsPage';
@@ -26,5 +27,6 @@ export const router = createBrowserRouter([
   { path: '/groups/:groupName', element: <GroupDetailPage /> },
   { path: '/tags', element: <TagOverviewPage /> },
   { path: '/subscriptions', element: <SubscriptionSettingsPage /> },
+  { path: '/playground', element: <PlaygroundPage /> },
   { path: '*', element: <NotFoundPage /> },
 ]);

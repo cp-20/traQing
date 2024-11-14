@@ -15,22 +15,26 @@ const normalizeQuery = <Q extends StampsQuery>(query: Q) => ({
   offset: query.offset?.toString(),
 });
 
+export const fetchStamps = async <Q extends StampsQuery>(query: Q) => {
+  const res = await client.stamps.$get({
+    query: normalizeQuery(query),
+  });
+  return (await res.json()) as Result<Q>[];
+};
+
 export const useStamps = <Q extends StampsQuery>(query: Q) => {
   const [stamps, setStamps] = useState<Result<Q>[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
-    const fetchStamps = async () => {
-      const res = await client.stamps.$get({
-        query: normalizeQuery(query),
-      });
-      const data = (await res.json()) as Result<Q>[];
+    const request = async () => {
+      const data = await fetchStamps(query);
       setStamps(data);
       setLoading(false);
     };
 
-    fetchStamps();
+    request();
   }, [query]);
 
   return { stamps, loading };

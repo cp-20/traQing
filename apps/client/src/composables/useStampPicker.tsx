@@ -1,6 +1,6 @@
 import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { searchStamps } from '@/lib/search';
-import { Popover, Skeleton, TextInput } from '@mantine/core';
+import { Popover, Skeleton, TextInput, type TextInputProps } from '@mantine/core';
 import { type FC, useState } from 'react';
 
 export const useStampPicker = () => {
@@ -13,7 +13,7 @@ export const useStampPicker = () => {
 
   const filteredStamps = stamps && searchStamps(stamps, keyword);
 
-  const render = () => (
+  const render = (props?: { textInputProps: TextInputProps }) => (
     <div>
       <Popover width="target" position="bottom" shadow="sm" opened={opened} onChange={setOpened}>
         <Popover.Target>
@@ -34,6 +34,7 @@ export const useStampPicker = () => {
               if (stamp) setStampId(stamp.id);
               if (e.target.value === '') setStampId(null);
             }}
+            {...props?.textInputProps}
           />
         </Popover.Target>
         <Popover.Dropdown>

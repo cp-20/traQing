@@ -1,4 +1,4 @@
-import { Button, Popover } from '@mantine/core';
+import { Button, type ButtonProps, Popover } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 import { useId, useState } from 'react';
 
@@ -84,7 +84,7 @@ export const useDateRangePicker = (defaultType: Type, defaultRange?: DateRange) 
     defaultRange ?? dateRangeKinds[settingType].range ?? [null, null],
   );
 
-  const render = () => (
+  const render = (props?: { buttonProps: ButtonProps }) => (
     <Popover
       position="bottom"
       withArrow
@@ -97,7 +97,7 @@ export const useDateRangePicker = (defaultType: Type, defaultRange?: DateRange) 
       }}
     >
       <Popover.Target>
-        <Button variant="default" onClick={() => setOpened((o) => !o)}>
+        <Button variant="default" onClick={() => setOpened((o) => !o)} {...props?.buttonProps}>
           <span className="inline-flex gap-2 items-center text-text-primary">
             <span className="text-xs font-bold">{label}</span>
             <span>

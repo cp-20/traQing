@@ -1,6 +1,7 @@
 import LogoImage from '@/assets/logo.svg';
 import { Card } from '@/components/Card';
 import { ChannelIcon } from '@/components/icons/ChannelIcon';
+import { EffectIcon } from '@/components/icons/EffectIcon';
 import { GroupIcon } from '@/components/icons/GroupIcon';
 import { MessageIcon } from '@/components/icons/MessageIcon';
 import { StampIcon } from '@/components/icons/StampIcon';
@@ -70,13 +71,22 @@ export const Dashboard: FC = () => {
 
         <div>
           <h2 className="font-bold text-center text-xl mb-4">ツール</h2>
-          <Link
-            to="/subscriptions"
-            className="flex items-center gap-2 bg-white rounded-md p-4 justify-center hover:text-blue-500 transition-colors duration-200"
-          >
-            <NotificationIcon level={2} className="size-8" />
-            <span className="text-lg font-bold">通知管理</span>
-          </Link>
+          <div className="grid grid-cols-2 gap-4 max-xs:grid-cols-1">
+            <Link
+              to="/subscriptions"
+              className="flex items-center gap-2 bg-white rounded-md p-4 justify-center hover:text-blue-500 transition-colors duration-200"
+            >
+              <NotificationIcon level={2} className="size-8" />
+              <span className="text-lg font-bold">通知管理</span>
+            </Link>
+            <Link
+              to="/playground"
+              className="flex items-center gap-2 bg-white rounded-md p-4 justify-center hover:text-blue-500 transition-colors duration-200"
+            >
+              <EffectIcon className="size-8" />
+              <span className="text-lg font-bold">APIプレイグラウンド</span>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

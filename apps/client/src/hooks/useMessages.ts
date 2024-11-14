@@ -15,22 +15,26 @@ const normalizeQuery = <Q extends MessagesQuery>(query: Q) => ({
   offset: query.offset?.toString(),
 });
 
+export const fetchMessages = async <Q extends MessagesQuery>(query: Q) => {
+  const res = await client.messages.$get({
+    query: normalizeQuery(query),
+  });
+  return (await res.json()) as Result<Q>[];
+};
+
 export const useMessages = <Q extends MessagesQuery>(query: Q) => {
   const [messages, setMessages] = useState<Result<Q>[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
-    const fetchMessages = async () => {
-      const res = await client.messages.$get({
-        query: normalizeQuery(query),
-      });
-      const data = (await res.json()) as Result<Q>[];
+    const request = async () => {
+      const data = await fetchMessages(query);
       setMessages(data);
       setLoading(false);
     };
 
-    fetchMessages();
+    request();
   }, [query]);
 
   return { messages, loading };
