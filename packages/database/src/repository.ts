@@ -22,7 +22,7 @@ export const MessagesQuerySchema = z
     channelId: z.string(),
     before: z.coerce.date(),
     after: z.coerce.date(),
-    isBot: z.boolean(),
+    isBot: z.coerce.boolean(),
     groupBy: z.union([
       z.literal('month'),
       z.literal('day'),
@@ -274,7 +274,7 @@ export const StampsQuerySchema = z
     stampId: z.string(),
     before: z.coerce.date(),
     after: z.coerce.date(),
-    isBot: z.boolean(),
+    isBot: z.coerce.boolean(),
     groupBy: z.union([
       z.literal('month'),
       z.literal('day'),
