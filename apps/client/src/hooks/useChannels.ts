@@ -1,8 +1,14 @@
 import { useChannelsData } from '@/hooks/useServerData';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 export const useChannels = () => {
   const { data: channels } = useChannelsData();
+
+  const channelsMapById = useMemo(() => new Map(channels?.map((c) => [c.id, c])), [channels]);
+  const channelsMapByNameAndParent = useMemo(
+    () => new Map(channels?.map((c) => [`${c.name}:${c.parentId}`, c])),
+    [channels],
+  );
 
   const getChannelId = useCallback(
     (fullname: string): string | undefined => {
@@ -10,30 +16,30 @@ export const useChannels = () => {
 
       let parentId: string | null = null;
       for (const name of fullname.split('/')) {
-        parentId = channels.find((c) => c.name === name && c.parentId === parentId)?.id ?? null;
+        parentId = channelsMapByNameAndParent.get(`${name}:${parentId}`)?.id ?? null;
         if (!parentId) return undefined;
       }
 
       return parentId ?? undefined;
     },
-    [channels],
+    [channels, channelsMapByNameAndParent],
   );
 
   const getChannelName = useCallback(
     (id: string): string | undefined => {
       if (!channels) return undefined;
 
-      const channel = channels.find((c) => c.id === id);
+      const channel = channelsMapById.get(id);
       if (!channel) return undefined;
 
-      const parent = channels.find((c) => c.id === channel.parentId);
+      const parent = channel.parentId && channelsMapById.get(channel.parentId);
       if (parent) {
         return `${getChannelName(parent.id)}/${channel.name}`;
       }
 
       return channel.name;
     },
-    [channels],
+    [channels, channelsMapById],
   );
 
   const getSummedChannelName = useCallback(

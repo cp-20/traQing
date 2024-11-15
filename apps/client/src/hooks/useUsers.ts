@@ -1,12 +1,15 @@
 import { useUsersData } from '@/hooks/useServerData';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 export const useUsers = () => {
   const { data: users } = useUsersData();
 
-  const getUserFromId = useCallback((id: string) => users?.find((u) => u.id === id), [users]);
+  const usersMapById = useMemo(() => new Map(users?.map((u) => [u.id, u])), [users]);
+  const usersMapByName = useMemo(() => new Map(users?.map((u) => [u.name, u])), [users]);
 
-  const getUserFromName = useCallback((name: string) => users?.find((u) => u.name === name), [users]);
+  const getUserFromId = useCallback((id: string) => usersMapById.get(id), [usersMapById]);
+
+  const getUserFromName = useCallback((name: string) => usersMapByName.get(name), [usersMapByName]);
 
   const getUsername = useCallback(
     (id: string): string => {
