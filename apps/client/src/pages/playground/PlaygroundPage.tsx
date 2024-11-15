@@ -184,7 +184,7 @@ export const PlaygroundPage: FC = () => {
         </div>
       </Card>
 
-      <Card>
+      <Card className="max-w-5xl w-full mx-auto">
         <div className="font-semibold mb-4">コード</div>
         <pre className="border rounded-md p-4">
           <code className="text-wrap break-all">{`const query = ${JSON.stringify(normalizedQuery, null, 2)};
