@@ -17,8 +17,6 @@ const formatDate = (date: Date) => {
   return `${year === thisYear ? '' : `${year}/`}${month}/${day}`;
 };
 
-export const serializeDateRange = (range: DateRange) => range.map((d) => d.toISOString()).join(',');
-
 export const msInDay = 24 * 60 * 60 * 1000;
 
 export const adjustDate = (range: DateRange): DateRange => {
