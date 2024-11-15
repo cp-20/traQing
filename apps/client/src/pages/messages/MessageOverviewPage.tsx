@@ -2,7 +2,7 @@ import { Card } from '@/components/Card';
 import { Container, ContainerTitle } from '@/components/containers/Container';
 import { MessageIcon } from '@/components/icons/MessageIcon';
 import { TopReactedMessages } from '@/components/messages/TopReactedMessages';
-import { useStampPicker } from '@/composables/useStampPicker';
+import { StampPicker, useStampPicker } from '@/composables/useStampPicker';
 import type { FC } from 'react';
 
 export const MessageOverviewPage: FC = () => {
@@ -16,7 +16,9 @@ export const MessageOverviewPage: FC = () => {
 
       <Card className="space-y-2">
         <h2 className="text-lg font-semibold mb-2">多くのスタンプをつけられたメッセージ</h2>
-        <div>{picker.render()}</div>
+        <div>
+          <StampPicker reducer={picker} />
+        </div>
         <TopReactedMessages stampId={picker.stampId} />
       </Card>
     </Container>

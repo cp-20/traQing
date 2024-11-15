@@ -7,7 +7,7 @@ import {
   ChannelSubscribersCountStat,
 } from '@/components/stats/ChannelStats';
 import { StampRanking } from '@/components/rankings/StampRanking';
-import { useStampPicker } from '@/composables/useStampPicker';
+import { StampPicker, useStampPicker } from '@/composables/useStampPicker';
 import { TopReactedMessages } from '@/components/messages/TopReactedMessages';
 import { ChannelActionTimeline } from '@/components/timelines/ChannelActionTimeline';
 import { ChannelActionHours } from '@/components/hours/ChannelActionHours';
@@ -46,7 +46,7 @@ export const ChannelDetail: FC<Props> = ({ channelId }) => {
           <Card className="max-lg:hidden">
             <div className="font-semibold mb-4">リアクションの多い投稿</div>
             <div className="space-y-2">
-              {stampPicker.render()}
+              <StampPicker reducer={stampPicker} />
               <TopReactedMessages stampId={stampPicker.stampId} channelId={channelId} />
             </div>
           </Card>
@@ -85,7 +85,7 @@ export const ChannelDetail: FC<Props> = ({ channelId }) => {
           <Card className="lg:hidden">
             <div className="font-semibold mb-4">リアクションの多い投稿</div>
             <div className="space-y-2">
-              {stampPicker.render()}
+              <StampPicker reducer={stampPicker} />
               <TopReactedMessages stampId={stampPicker.stampId} channelId={channelId} />
             </div>
           </Card>

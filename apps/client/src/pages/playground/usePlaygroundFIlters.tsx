@@ -1,5 +1,5 @@
 import { ChannelSelect, useChannelSelect } from '@/composables/useChannelSelect';
-import { useStampPicker } from '@/composables/useStampPicker';
+import { StampPicker, useStampPicker } from '@/composables/useStampPicker';
 import { UserSelect, useUserSelect } from '@/composables/useUserSelect';
 import {
   botKindOptions,
@@ -164,7 +164,7 @@ const StampsFilter: FC<Filter<'stamps'>> = ({ reducer }) => {
     <>
       <UserSelect reducer={reducer.actions.userSelectReducer} textInputProps={{ label: 'ユーザー名' }} />
       <ChannelSelect reducer={reducer.actions.channelSelectReducer} textInputProps={{ label: 'チャンネル名' }} />
-      {reducer.actions.stampPicker.render({ textInputProps: { label: 'スタンプ名' } })}
+      <StampPicker reducer={reducer.actions.stampPicker} textInputProps={{ label: 'スタンプ名' }} />
       <UserSelect reducer={reducer.actions.messageUserSelectReducer} textInputProps={{ label: '投稿ユーザー名' }} />
       <Select label="Botフィルタ" data={botKindOptions} value={botKind} onChange={(v) => setBotKind(v as BotKind)} />
       <Select

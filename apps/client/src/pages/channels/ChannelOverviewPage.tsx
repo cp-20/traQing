@@ -7,7 +7,7 @@ import {
   SubscribersChannelRanking,
 } from '@/components/rankings/ChannelRanking';
 import { TopChannelMessagesTimeline } from '@/components/timelines/TopMessagesTimeline';
-import { useStampPicker } from '@/composables/useStampPicker';
+import { StampPicker, useStampPicker } from '@/composables/useStampPicker';
 import { useChannels } from '@/hooks/useChannels';
 import { searchChannels } from '@/lib/search';
 import { Skeleton, TextInput } from '@mantine/core';
@@ -70,7 +70,9 @@ export const ChannelOverviewPage: FC = () => {
       <div className="grid grid-cols-2 max-lg:grid-cols-1 gap-4">
         <Card>
           <h2 className="text-lg font-semibold mb-2">つけられたスタンプのランキング</h2>
-          <div className="mb-4">{picker.render()}</div>
+          <div className="mb-4">
+            <StampPicker reducer={picker} />
+          </div>
           <StampsChannelRanking limit={20} stampId={picker.stampId ?? undefined} />
         </Card>
 

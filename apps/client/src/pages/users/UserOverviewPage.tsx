@@ -8,7 +8,7 @@ import {
 } from '@/components/rankings/UserRanking';
 import { TopUserMessagesTimeline } from '@/components/timelines/TopMessagesTimeline';
 import { UserAvatar } from '@/components/UserAvatar';
-import { useStampPicker } from '@/composables/useStampPicker';
+import { StampPicker, useStampPicker } from '@/composables/useStampPicker';
 import { useUsers } from '@/hooks/useUsers';
 import { searchUsers } from '@/lib/search';
 import { Skeleton, TextInput } from '@mantine/core';
@@ -76,7 +76,9 @@ export const UserOverviewPage: FC = () => {
 
       <Card>
         <h2 className="text-lg font-semibold mb-2">つけた/もらったスタンプのランキング</h2>
-        <div className="mb-4">{picker.render()}</div>
+        <div className="mb-4">
+          <StampPicker reducer={picker} />
+        </div>
         <div className="grid grid-cols-2 max-lg:grid-cols-1 gap-4">
           <div>
             <h3 className="font-semibold mb-2">つけたスタンプ</h3>

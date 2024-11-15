@@ -12,7 +12,7 @@ import {
 import type { FC } from 'react';
 import { StampRanking } from '@/components/rankings/StampRanking';
 import { TopReactedMessages } from '@/components/messages/TopReactedMessages';
-import { useStampPicker } from '@/composables/useStampPicker';
+import { StampPicker, useStampPicker } from '@/composables/useStampPicker';
 import { UserActionTimeline } from '@/components/timelines/UserActionTimeline';
 import { UserActionHours } from '@/components/hours/UserActionHours';
 import { MessagesChannelRanking, StampsChannelRanking } from '@/components/rankings/ChannelRanking';
@@ -64,7 +64,8 @@ export const UserDetail: FC<UserDetailProps> = ({ userId }) => {
           <Card className="max-lg:hidden">
             <div className="font-semibold mb-4">リアクションの多い投稿</div>
             <div className="space-y-2">
-              {stampPicker.render()}
+              <StampPicker reducer={stampPicker} />
+
               <TopReactedMessages stampId={stampPicker.stampId} receivedUserId={userId} />
             </div>
           </Card>
@@ -103,7 +104,7 @@ export const UserDetail: FC<UserDetailProps> = ({ userId }) => {
           <Card className="lg:hidden">
             <div className="font-semibold mb-4">リアクションの多い投稿</div>
             <div className="space-y-2">
-              {stampPicker.render()}
+              <StampPicker reducer={stampPicker} />
               <TopReactedMessages stampId={stampPicker.stampId} receivedUserId={userId} />
             </div>
           </Card>

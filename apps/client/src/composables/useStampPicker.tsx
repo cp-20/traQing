@@ -5,6 +5,25 @@ import { type FC, useState } from 'react';
 
 export const useStampPicker = () => {
   const [stampId, setStampId] = useState<string | null>(null);
+
+  return {
+    stampId,
+    state: {
+      stampId,
+    },
+    actions: {
+      setStampId,
+    },
+  };
+};
+
+type StampPickerProps = {
+  reducer: ReturnType<typeof useStampPicker>;
+  textInputProps?: TextInputProps;
+};
+
+export const StampPicker: FC<StampPickerProps> = ({ reducer, textInputProps }) => {
+  const { setStampId } = reducer.actions;
   const [keyword, setKeyword] = useState<string>('');
   const [opened, setOpened] = useState(false);
   const { stamps } = useMessageStamps();
@@ -13,7 +32,7 @@ export const useStampPicker = () => {
 
   const filteredStamps = stamps && searchStamps(stamps, keyword);
 
-  const render = (props?: { textInputProps: TextInputProps }) => (
+  return (
     <div>
       <Popover width="target" position="bottom" shadow="sm" opened={opened} onChange={setOpened}>
         <Popover.Target>
@@ -34,7 +53,7 @@ export const useStampPicker = () => {
               if (stamp) setStampId(stamp.id);
               if (e.target.value === '') setStampId(null);
             }}
-            {...props?.textInputProps}
+            {...textInputProps}
           />
         </Popover.Target>
         <Popover.Dropdown>
@@ -62,8 +81,6 @@ export const useStampPicker = () => {
       </Popover>
     </div>
   );
-
-  return { stampId, render };
 };
 
 export type StampImageProps = {
