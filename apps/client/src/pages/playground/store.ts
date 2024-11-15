@@ -34,7 +34,7 @@ export type QueryState<Kind extends APIKind> = {
 
 export const loadFromQuery = () => {
   const query = new URLSearchParams(location.search);
-  const apiKind = query.get('apiKind') as APIKind;
+  const apiKind = query.get('apiKind') as APIKind | null;
 
   const dateRange: DateRange | null =
     // biome-ignore lint/style/noNonNullAssertion: has -> get

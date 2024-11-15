@@ -44,6 +44,10 @@ export const PlaygroundPage: FC = () => {
     }
 
     const { apiKind: newAPIKind, state } = loadFromQuery();
+    if (newAPIKind === null) {
+      initialized.current = true;
+      return;
+    }
     if (apiKind !== newAPIKind) {
       setApiKind(newAPIKind);
       return;
