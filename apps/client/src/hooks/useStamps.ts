@@ -6,7 +6,7 @@ type Result<Q extends StampsQuery> = {
   [K in Q extends { groupBy: infer U } ? (U extends undefined ? 'day' : U) : 'day']: string;
 } & { count: number };
 
-const normalizeQuery = <Q extends StampsQuery>(query: Q) => ({
+export const normalizeStampsQuery = <Q extends StampsQuery>(query: Q) => ({
   ...query,
   after: query.after?.toISOString(),
   before: query.before?.toISOString(),
@@ -17,7 +17,7 @@ const normalizeQuery = <Q extends StampsQuery>(query: Q) => ({
 
 export const fetchStamps = async <Q extends StampsQuery>(query: Q) => {
   const res = await client.stamps.$get({
-    query: normalizeQuery(query),
+    query: normalizeStampsQuery(query),
   });
   return (await res.json()) as Result<Q>[];
 };
@@ -50,7 +50,7 @@ export const useStampsByMultipleQueries = <Q extends StampsQuery>(queries: Q[]) 
       const res = await Promise.all(
         queries.map((query) =>
           client.stamps.$get({
-            query: normalizeQuery(query),
+            query: normalizeStampsQuery(query),
           }),
         ),
       );

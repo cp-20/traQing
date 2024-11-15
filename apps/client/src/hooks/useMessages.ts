@@ -6,7 +6,7 @@ type Result<Q extends MessagesQuery> = {
   [K in Q extends { groupBy: infer U } ? (U extends undefined ? 'day' : U) : 'day']: string;
 } & { count: number };
 
-const normalizeQuery = <Q extends MessagesQuery>(query: Q) => ({
+export const normalizeMessagesQuery = <Q extends MessagesQuery>(query: Q) => ({
   ...query,
   after: query.after?.toISOString(),
   before: query.before?.toISOString(),
@@ -17,7 +17,7 @@ const normalizeQuery = <Q extends MessagesQuery>(query: Q) => ({
 
 export const fetchMessages = async <Q extends MessagesQuery>(query: Q) => {
   const res = await client.messages.$get({
-    query: normalizeQuery(query),
+    query: normalizeMessagesQuery(query),
   });
   return (await res.json()) as Result<Q>[];
 };
@@ -50,7 +50,7 @@ export const useMessagesByMultipleQueries = <Q extends MessagesQuery>(queries: Q
       const res = await Promise.all(
         queries.map((query) =>
           client.messages.$get({
-            query: normalizeQuery(query),
+            query: normalizeMessagesQuery(query),
           }),
         ),
       );

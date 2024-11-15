@@ -2,8 +2,8 @@ import { Card } from '@/components/Card';
 import { Container, ContainerTitle } from '@/components/containers/Container';
 import { EffectIcon } from '@/components/icons/EffectIcon';
 import { dateRangeToQuery, useDateRangePicker } from '@/composables/useDateRangePicker';
-import { fetchMessages } from '@/hooks/useMessages';
-import { fetchStamps } from '@/hooks/useStamps';
+import { fetchMessages, normalizeMessagesQuery } from '@/hooks/useMessages';
+import { fetchStamps, normalizeStampsQuery } from '@/hooks/useStamps';
 import { type APIKind, APIKindOptions, type LimitKind, limitKindOptions } from '@/pages/playground/model';
 import { PlaygroundResult } from '@/pages/playground/PlaygroundResult';
 import { loadFromQuery, type QueryState, saveToQuery } from '@/pages/playground/store';
@@ -124,6 +124,11 @@ export const PlaygroundPage: FC = () => {
     request();
   }, [apiKind, query]);
 
+  const normalizedQuery = useMemo(() => {
+    if (apiKind === 'messages') return normalizeMessagesQuery(query as MessagesQuery);
+    if (apiKind === 'stamps') return normalizeStampsQuery(query);
+  }, [apiKind, query]);
+
   return (
     <Container>
       <ContainerTitle>
@@ -177,6 +182,16 @@ export const PlaygroundPage: FC = () => {
             </Button>
           </div>
         </div>
+      </Card>
+
+      <Card>
+        <div className="font-semibold mb-4">コード</div>
+        <pre className="border rounded-md p-4">
+          <code className="text-wrap break-all">{`const query = ${JSON.stringify(normalizedQuery, null, 2)};
+const params = new URLSearchParams(query);
+const result = await fetch('https://traqing.cp20.dev/api/${apiKind}?\$\{params.toString()\}').then((r) => r.json());
+console.log(result);`}</code>
+        </pre>
       </Card>
     </Container>
   );
