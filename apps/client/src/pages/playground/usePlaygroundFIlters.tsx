@@ -63,7 +63,7 @@ const useMessagesFilter = () => {
   return { value, state, actions };
 };
 
-const MessagesFilter: FC<Filter<'messages'>> = ({ reducer }) => {
+const MessagesFilter: FC<PlaygroundFilter<'messages'>> = ({ reducer }) => {
   const { botKind, groupByKind, orderByKind, orderKind } = reducer.state;
   const { setBotKind, setGroupByKind, setOrderByKind, setOrderKind } = reducer.actions;
   return (
@@ -151,20 +151,20 @@ const useStampsFilter = () => {
     userSelectReducer: userSelect,
     channelSelectReducer: channelSelect,
     messageUserSelectReducer: messageUserSelect,
-    stampPicker,
+    stampPickerReducer: stampPicker,
   };
 
   return { value, state, actions };
 };
 
-const StampsFilter: FC<Filter<'stamps'>> = ({ reducer }) => {
+const StampsFilter: FC<PlaygroundFilter<'stamps'>> = ({ reducer }) => {
   const { botKind, groupByKind, orderByKind, orderKind } = reducer.state;
   const { setBotKind, setGroupByKind, setOrderByKind, setOrderKind } = reducer.actions;
   return (
     <>
       <UserSelect reducer={reducer.actions.userSelectReducer} textInputProps={{ label: 'ユーザー名' }} />
       <ChannelSelect reducer={reducer.actions.channelSelectReducer} textInputProps={{ label: 'チャンネル名' }} />
-      <StampPicker reducer={reducer.actions.stampPicker} textInputProps={{ label: 'スタンプ名' }} />
+      <StampPicker reducer={reducer.actions.stampPickerReducer} textInputProps={{ label: 'スタンプ名' }} />
       <UserSelect reducer={reducer.actions.messageUserSelectReducer} textInputProps={{ label: '投稿ユーザー名' }} />
       <Select label="Botフィルタ" data={botKindOptions} value={botKind} onChange={(v) => setBotKind(v as BotKind)} />
       <Select
@@ -189,7 +189,7 @@ const StampsFilter: FC<Filter<'stamps'>> = ({ reducer }) => {
   );
 };
 
-type Filter<Kind extends APIKind> = {
+export type PlaygroundFilter<Kind extends APIKind> = {
   reducer: ReturnType<
     {
       messages: typeof useMessagesFilter;
@@ -210,13 +210,13 @@ export const usePlaygroundFilters = (apiKind: APIKind) => {
 
 type PlaygroundFiltersProps<Kind extends APIKind> = {
   apiKind: Kind;
-  reducer: Filter<Kind>['reducer'];
+  reducer: PlaygroundFilter<Kind>['reducer'];
 };
 
 export const PlaygroundFilters = <Kind extends APIKind>({ apiKind, reducer }: PlaygroundFiltersProps<Kind>) => {
-  if (apiKind === 'messages') return <MessagesFilter reducer={reducer as Filter<'messages'>['reducer']} />;
+  if (apiKind === 'messages') return <MessagesFilter reducer={reducer as PlaygroundFilter<'messages'>['reducer']} />;
   // TODO: 型アサーションを改善する
-  if (apiKind === 'stamps') return <StampsFilter reducer={reducer as Filter<'stamps'>['reducer']} />;
+  if (apiKind === 'stamps') return <StampsFilter reducer={reducer as PlaygroundFilter<'stamps'>['reducer']} />;
   const _: never = apiKind;
   return _;
 };

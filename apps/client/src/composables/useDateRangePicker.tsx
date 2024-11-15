@@ -67,20 +67,25 @@ export const dateRangeKinds = {
   },
 } satisfies Record<string, { label: string; range: DateRange | null }>;
 
-type Type = keyof typeof dateRangeKinds;
+export type DateRangeType = keyof typeof dateRangeKinds;
 
 const fallbackRange: DateRange = dateRangeKinds['last-7-days'].range;
 
-export const useDateRangePicker = (defaultType: Type, defaultRange?: DateRange) => {
+export const useDateRangePicker = (defaultType: DateRangeType, defaultRange?: DateRange) => {
   const id = useId();
   const [opened, setOpened] = useState(false);
-  const [type, setType] = useState<Type>(defaultType);
-  const [settingType, setSettingType] = useState<Type>(defaultType);
+  const [type, setType] = useState<DateRangeType>(defaultType);
+  const [settingType, setSettingType] = useState<DateRangeType>(defaultType);
   const label = dateRangeKinds[type].label;
   const [value, setValue] = useState<DateRange>(defaultRange ?? dateRangeKinds[type].range ?? fallbackRange);
   const [settingValue, setSettingValue] = useState<[Date | null, Date | null]>(
     defaultRange ?? dateRangeKinds[settingType].range ?? [null, null],
   );
+
+  const actions = {
+    setType,
+    setValue,
+  };
 
   const render = (props?: { buttonProps: ButtonProps }) => (
     <Popover
@@ -118,7 +123,7 @@ export const useDateRangePicker = (defaultType: Type, defaultRange?: DateRange) 
                     hidden
                     checked={settingType === key}
                     onChange={() => {
-                      setSettingType(key as Type);
+                      setSettingType(key as DateRangeType);
                       if (range) setSettingValue(range);
                     }}
                   />
@@ -180,5 +185,5 @@ export const useDateRangePicker = (defaultType: Type, defaultRange?: DateRange) 
     </Popover>
   );
 
-  return { value, render };
+  return { value, type, actions, render };
 };

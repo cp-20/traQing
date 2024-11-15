@@ -6,11 +6,16 @@ import { fetchMessages } from '@/hooks/useMessages';
 import { fetchStamps } from '@/hooks/useStamps';
 import { type APIKind, APIKindOptions, type LimitKind, limitKindOptions } from '@/pages/playground/model';
 import { PlaygroundResult } from '@/pages/playground/PlaygroundResult';
-import { PlaygroundFilters, usePlaygroundFilters } from '@/pages/playground/usePlaygroundFIlters';
+import { loadFromQuery, type QueryState, saveToQuery } from '@/pages/playground/store';
+import {
+  type PlaygroundFilter,
+  PlaygroundFilters,
+  usePlaygroundFilters,
+} from '@/pages/playground/usePlaygroundFIlters';
 import { Button, Select } from '@mantine/core';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import type { MessagesQuery } from '@traq-ing/database';
-import { useEffect, useMemo, useState, type FC } from 'react';
+import { useEffect, useMemo, useRef, useState, type FC } from 'react';
 
 export const PlaygroundPage: FC = () => {
   const [apiKind, setApiKind] = useState<APIKind>('messages');
@@ -20,9 +25,60 @@ export const PlaygroundPage: FC = () => {
   const datePicker = useDateRangePicker('last-30-days');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<Record<string, unknown>[]>([]);
+  const [error, setError] = useState(false);
+  const initialized = useRef(false);
 
   const hasPrev = page > 0;
   const hasNext = result.length > Number.parseInt(limit);
+
+  useEffect(() => {
+    if (initialized.current) {
+      saveToQuery(apiKind, {
+        ...filter.state,
+        limit,
+        page,
+        dateRangeType: datePicker.type,
+        ...(datePicker.value && dateRangeToQuery(datePicker.value)),
+      });
+      return;
+    }
+
+    const { apiKind: newAPIKind, state } = loadFromQuery();
+    if (apiKind !== newAPIKind) {
+      setApiKind(newAPIKind);
+      return;
+    }
+
+    if (state.dateRangeType) datePicker.actions.setType(state.dateRangeType);
+    if (state.dateRangeType === 'custom' && state.dateRange) datePicker.actions.setValue(state.dateRange);
+    if (state.limit) setLimit(state.limit);
+    if (state.page) setPage(state.page);
+
+    if (apiKind === 'messages') {
+      const actions = filter.actions as PlaygroundFilter<'messages'>['reducer']['actions'];
+      const { userId, channelId, botKind, groupByKind, orderByKind, orderKind } = state as QueryState<'messages'>;
+      actions.userSelectReducer.actions.setUserId(userId);
+      actions.channelSelectReducer.actions.setChannelId(channelId);
+      if (botKind) actions.setBotKind(botKind);
+      if (groupByKind) actions.setGroupByKind(groupByKind);
+      if (orderByKind) actions.setOrderByKind(orderByKind);
+      if (orderKind) actions.setOrderKind(orderKind);
+    } else if (apiKind === 'stamps') {
+      const actions = filter.actions as PlaygroundFilter<'stamps'>['reducer']['actions'];
+      const { userId, channelId, messageUserId, stampId, botKind, groupByKind, orderByKind, orderKind } =
+        state as QueryState<'stamps'>;
+      console.log(actions);
+      actions.userSelectReducer.actions.setUserId(userId);
+      actions.channelSelectReducer.actions.setChannelId(channelId);
+      actions.messageUserSelectReducer.actions.setUserId(messageUserId);
+      actions.stampPickerReducer.actions.setStampId(stampId);
+      if (botKind) actions.setBotKind(botKind);
+      if (groupByKind) actions.setGroupByKind(groupByKind);
+      if (orderByKind) actions.setOrderByKind(orderByKind);
+      if (orderKind) actions.setOrderKind(orderKind);
+    }
+    initialized.current = true;
+  }, [apiKind, filter.state, limit, page, datePicker.value, datePicker.type, datePicker.actions, filter.actions]);
 
   const query = useMemo(() => {
     return {
@@ -37,16 +93,28 @@ export const PlaygroundPage: FC = () => {
     const request = async () => {
       if (apiKind === 'messages') {
         setLoading(true);
-        const data = await fetchMessages(query as MessagesQuery);
-        setResult(data);
-        setLoading(false);
+        try {
+          const data = await fetchMessages(query as MessagesQuery);
+          setResult(data);
+          setError(false);
+        } catch (err) {
+          setError(true);
+        } finally {
+          setLoading(false);
+        }
       }
 
       if (apiKind === 'stamps') {
         setLoading(true);
-        const data = await fetchStamps(query);
-        setResult(data);
-        setLoading(false);
+        try {
+          const data = await fetchStamps(query);
+          setResult(data);
+          setError(false);
+        } catch (err) {
+          setError(true);
+        } finally {
+          setLoading(false);
+        }
       }
     };
     request();
@@ -91,7 +159,11 @@ export const PlaygroundPage: FC = () => {
               <IconChevronRight />
             </Button>
           </div>
-          <PlaygroundResult result={result.slice(0, Number.parseInt(limit))} />
+          {error ? (
+            <div className="text-red-500">エラーが発生しました</div>
+          ) : (
+            <PlaygroundResult result={result.slice(0, Number.parseInt(limit))} />
+          )}
           <div className="flex gap-2">
             <Button variant="light" fullWidth disabled={!hasPrev || loading} onClick={() => setPage((p) => p - 1)}>
               <IconChevronLeft />
