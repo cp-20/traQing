@@ -47,16 +47,19 @@ export const PlaygroundResult = <Row extends RowType>({ result }: Props<Row>) =>
   return (
     <table className="border-collapse w-full">
       <thead>
-        {Object.entries(rows)
-          .filter(([key]) => result[0][key as ColumnType] !== undefined)
-          .map(([key, value]) => (
-            <th
-              key={key}
-              className={clsx('px-4 py-2 border-gray-300 border text-left', key === 'count' && 'w-20 text-right')}
-            >
-              {value}
-            </th>
-          ))}
+        <tr>
+          {Object.entries(rows)
+            .filter(([key]) => result[0][key as ColumnType] !== undefined)
+            .map(([key, value]) => (
+              <th
+                key={key}
+                scope="col"
+                className={clsx('px-4 py-2 border-gray-300 border text-left', key === 'count' && 'w-20 text-right')}
+              >
+                {value}
+              </th>
+            ))}
+        </tr>
       </thead>
       <tbody>
         {result.map((row, i) => (
