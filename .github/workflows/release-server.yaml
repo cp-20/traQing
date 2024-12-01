@@ -1,0 +1,42 @@
+name: Release server
+
+on:
+  push:
+    tags:
+      - v*.*.*
+    branches-ignore:
+      - '**'
+
+env:
+  IMAGE_NAME: traq-ing-server
+
+jobs:
+  build:
+    name: Build Docker Image
+    permissions:
+      contents: read
+      packages: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate Image Tags
+        uses: docker/metadata-action@v5
+        id: meta
+        with:
+          images: ghcr.io/cp-20/${{ env.IMAGE_NAME }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: cp-20
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
