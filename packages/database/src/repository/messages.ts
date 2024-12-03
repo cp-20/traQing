@@ -105,3 +105,7 @@ export const getLastMessageCreatedAt = async () => {
 
   return message.at(0)?.createdAt;
 };
+
+export const dropMessages = async () => {
+  await db.delete(schema.messages).execute();
+};

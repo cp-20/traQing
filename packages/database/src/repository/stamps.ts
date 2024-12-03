@@ -91,3 +91,7 @@ export const getStamps = async (query: StampsQuery) => {
 
   return results;
 };
+
+export const dropStamps = async () => {
+  await db.delete(schema.messageStamps).execute();
+};

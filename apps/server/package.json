@@ -13,8 +13,9 @@
     "lint": "eslint ./src/**/*.ts ./src/**/*.tsx",
     "build": "tsup --config tsup.config.ts",
     "start": "bun run ./src/index.ts",
-    "update-messages": "bun run ./src/traQ/update-messages.ts",
-    "update-statistics": "bun run ./src/traQ/update-statistics.ts"
+    "update-messages": "bun run ./src/traQ/scripts/update-messages.ts",
+    "update-all-messages": "bun run ./src/traQ/scripts/update-all-messages.ts",
+    "update-statistics": "bun run ./src/traQ/scripts/update-statistics.ts"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.2.2",
