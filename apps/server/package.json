@@ -11,7 +11,6 @@
     "dev:server": "bun run --watch ./src/index.ts",
     "dev:build": "bun run build --watch",
     "lint": "eslint ./src/**/*.ts ./src/**/*.tsx",
-    "collect-data": "bun run ./src/traQ/runner.ts",
     "build": "tsup --config tsup.config.ts",
     "start": "bun run ./src/index.ts"
   },
