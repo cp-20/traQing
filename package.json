@@ -21,6 +21,8 @@
     "start:server": "bun --filter \"@traq-ing/server\" start",
     "start:studio": "bun --filter \"@traq-ing/database\" studio",
     "migration": "bun --filter \"@traq-ing/database\" migration",
+    "run:update-messages": "bun run ./apps/server/src/traQ/update-messages.ts",
+    "run:update-statistics": "bun run ./apps/server/src/traQ/update-statistics.ts",
     "start-db": "docker run --name traq-ing-db -e TZ=\"Asia/Tokyo\" -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=traq_ing -v traq-ing-db:/var/lib/postgresql/data -p 5432:5432 --shm-size=1g -d postgres:16-alpine",
     "stop-db": "docker stop traq-ing-db && docker rm traq-ing-db",
     "update-db-config": "docker cp postgresql.conf traq-ing-db:/var/lib/postgresql/data/postgresql.conf && bun stop-db && bun start-db",
