@@ -1,4 +1,3 @@
-import { updateMessages, updateStatistics } from '@/traQ';
 import { zValidator } from '@hono/zod-validator';
 import {
   MessagesQuerySchema,
@@ -160,43 +159,6 @@ app.on(
     return c.newResponse(file.stream());
   },
 );
-
-let updateMessagesLock = false;
-const updateMessagesHandler = async () => {
-  if (updateMessagesLock) return;
-  updateMessagesLock = true;
-  try {
-    await updateMessages();
-  } catch (err) {
-    console.error(err);
-  }
-  updateMessagesLock = false;
-};
-setInterval(updateMessagesHandler, 1000 * 60 * 60);
-
-let updateStatisticsLock = false;
-const updateStatisticsHandler = async () => {
-  if (updateStatisticsLock) return;
-  updateStatisticsLock = true;
-  try {
-    await updateStatistics();
-  } catch (err) {
-    console.error(err);
-  }
-  updateStatisticsLock = false;
-};
-setInterval(updateStatisticsHandler, 1000 * 60 * 60 * 24);
-
-if (process.env.NODE_ENV === 'production') {
-  (async () => {
-    updateMessagesLock = true;
-    await updateMessagesHandler();
-    updateMessagesLock = false;
-    updateStatisticsLock = true;
-    await updateStatisticsHandler();
-    updateStatisticsLock = false;
-  })();
-}
 
 export default {
   port: 8080,
