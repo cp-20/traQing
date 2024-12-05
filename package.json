@@ -24,7 +24,7 @@
     "run:update-messages": "bun --filter \"@traq-ing/server\" update-messages",
     "run:update-all-messages": "bun --filter \"@traq-ing/server\" update-all-messages",
     "run:update-statistics": "bun --filter \"@traq-ing/server\" update-statistics",
-    "start-db": "docker run --name traq-ing-db -e TZ=\"Asia/Tokyo\" -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=traq_ing -v traq-ing-db:/var/lib/postgresql/data -p 5432:5432 --shm-size=1g -d postgres:16-alpine",
+    "start-db": "docker run --name traq-ing-db -e TZ=\"Asia/Tokyo\" -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=traq_ing -v traq-ing-db:/var/lib/postgresql/data -p 5555:5432 --shm-size=1g -d postgres:16-alpine",
     "stop-db": "docker stop traq-ing-db && docker rm traq-ing-db",
     "update-db-config": "docker cp postgresql.conf traq-ing-db:/var/lib/postgresql/data/postgresql.conf && bun stop-db && bun start-db",
     "lint": "biome lint --fix .",

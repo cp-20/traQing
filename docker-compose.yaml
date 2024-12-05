@@ -30,7 +30,7 @@ services:
     environment:
       - TRAQ_AUTH_CLIENT_ID=${TRAQ_AUTH_CLIENT_ID}
       - TRAQ_TOKEN=${TRAQ_TOKEN}
-      - DATABASE_URL=postgressql://user:password@host.docker.internal:5432/traq_ing
+      - DATABASE_URL=postgressql://user:password@host.docker.internal:5555/traq_ing
 
 networks:
   traq-ing-network:
