@@ -6,7 +6,7 @@
 	encode zstd gzip
 
 	handle_path /api/* {
-		reverse_proxy traq-ing-server:8080
+		reverse_proxy {$SERVER_ORIGIN}
 	}
 
 	route {

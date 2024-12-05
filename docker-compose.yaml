@@ -13,6 +13,8 @@ services:
       watch:
         - path: ./Caddyfile
           action: rebuild
+    environment:
+      - SERVER_ORIGIN=traq-ing-server:8080
   traq-ing-server:
     container_name: traq-ing-server
     build:
