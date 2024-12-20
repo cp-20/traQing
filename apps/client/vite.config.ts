@@ -26,4 +26,9 @@ export default defineConfig({
       credentials: true,
     },
   },
+  resolve: {
+    alias: {
+      '@tabler/icons-react': '@tabler/icons-react/dist/esm/icons/index.mjs',
+    },
+  },
 });
