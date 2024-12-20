@@ -1,6 +1,6 @@
 import { IconChevronLeft } from '@tabler/icons-react';
 import type { FC, ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 type ContainerProps = {
   children: ReactNode;

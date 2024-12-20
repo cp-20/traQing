@@ -7,7 +7,7 @@ import { useUsers } from '@/hooks/useUsers';
 import { assert } from '@/lib/invariant';
 import clsx from 'clsx';
 import type { FC, ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 type RowType = Partial<{
   channel: string;

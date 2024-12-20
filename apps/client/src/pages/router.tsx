@@ -12,21 +12,25 @@ import { SubscriptionSettingsPage } from '@/pages/subscriptions/SubscriptionSett
 import { TagOverviewPage } from '@/pages/tags/TagOverviewPage';
 import { UserDetailPage } from '@/pages/users/UserDetailPage';
 import { UserOverviewPage } from '@/pages/users/UserOverviewPage';
-import { createBrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router';
 
-export const router = createBrowserRouter([
-  { path: '/', element: <Dashboard /> },
-  { path: '/users', element: <UserOverviewPage /> },
-  { path: '/users/:username', element: <UserDetailPage /> },
-  { path: '/channels', element: <ChannelOverviewPage /> },
-  { path: '/channels/*', element: <ChannelDetailPage /> },
-  { path: '/stamps', element: <StampOverviewPage /> },
-  { path: '/stamps/:stampName', element: <StampDetailPage /> },
-  { path: '/messages', element: <MessageOverviewPage /> },
-  { path: '/groups', element: <GroupOverviewPage /> },
-  { path: '/groups/:groupName', element: <GroupDetailPage /> },
-  { path: '/tags', element: <TagOverviewPage /> },
-  { path: '/subscriptions', element: <SubscriptionSettingsPage /> },
-  { path: '/playground', element: <PlaygroundPage /> },
-  { path: '*', element: <NotFoundPage /> },
-]);
+export const AppRouter = () => (
+  <BrowserRouter>
+    <Routes>
+      <Route index element={<Dashboard />} />
+      <Route path="/users" element={<UserOverviewPage />} />
+      <Route path="/users/:username" element={<UserDetailPage />} />
+      <Route path="/channels" element={<ChannelOverviewPage />} />
+      <Route path="/channels/*" element={<ChannelDetailPage />} />
+      <Route path="/stamps" element={<StampOverviewPage />} />
+      <Route path="/stamps/:stampName" element={<StampDetailPage />} />
+      <Route path="/messages" element={<MessageOverviewPage />} />
+      <Route path="/groups" element={<GroupOverviewPage />} />
+      <Route path="/groups/:groupName" element={<GroupDetailPage />} />
+      <Route path="/tags" element={<TagOverviewPage />} />
+      <Route path="/subscriptions" element={<SubscriptionSettingsPage />} />
+      <Route path="/playground" element={<PlaygroundPage />} />
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
+  </BrowserRouter>
+);

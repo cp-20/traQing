@@ -13,7 +13,7 @@ import { useUsers } from '@/hooks/useUsers';
 import { searchUsers } from '@/lib/search';
 import { Skeleton, TextInput } from '@mantine/core';
 import { useState, type FC } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 const SearchUserBlock: FC = () => {
   const [keyword, setKeyword] = useState<string>('');

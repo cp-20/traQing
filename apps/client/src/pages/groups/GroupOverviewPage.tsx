@@ -6,7 +6,7 @@ import { useGroups } from '@/hooks/useGroups';
 import { searchGroups } from '@/lib/search';
 import { TextInput, Skeleton } from '@mantine/core';
 import { useState, type FC } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 const SearchGroupBlock: FC = () => {
   const [keyword, setKeyword] = useState<string>('');
