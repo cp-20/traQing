@@ -4,7 +4,7 @@ import { StampDetail } from '@/pages/stamps/StampDetail';
 import { Loader } from '@mantine/core';
 import clsx from 'clsx';
 import type { FC } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router';
 
 export const StampDetailPage: FC = () => {
   const { stampName } = useParams<{ stampName: string }>();

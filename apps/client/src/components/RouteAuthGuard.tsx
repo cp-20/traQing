@@ -10,7 +10,7 @@ type Props = {
 };
 
 export const RouteAuthGuard: FC<Props> = ({ component, fallback, loading }) => {
-  const { me, isLoading } = useAuth();
+  const { me, isLoading, isValidating } = useAuth();
 
   return (
     <>
@@ -22,7 +22,7 @@ export const RouteAuthGuard: FC<Props> = ({ component, fallback, loading }) => {
       >
         {loading || <Loader type="bars" size="xl" />}
       </div>
-      {!isLoading && (me ? component : fallback)}
+      {(!isLoading || isValidating) && (me ? component : fallback)}
     </>
   );
 };

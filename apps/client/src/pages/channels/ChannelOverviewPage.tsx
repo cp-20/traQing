@@ -12,7 +12,7 @@ import { useChannels } from '@/hooks/useChannels';
 import { searchChannels } from '@/lib/search';
 import { Skeleton, TextInput } from '@mantine/core';
 import { useState, type FC } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 const SearchChannelBlock: FC = () => {
   const [keyword, setKeyword] = useState<string>('');

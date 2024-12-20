@@ -4,7 +4,7 @@ import { ChannelDetail } from '@/pages/channels/ChannelDetail';
 import { Loader } from '@mantine/core';
 import clsx from 'clsx';
 import type { FC } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router';
 
 export const ChannelDetailPage: FC = () => {
   const { '*': channelName } = useParams<{ '*': string }>();

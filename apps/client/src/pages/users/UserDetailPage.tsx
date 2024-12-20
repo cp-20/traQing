@@ -4,7 +4,7 @@ import { UserDetail } from '@/pages/users/UserDetail';
 import { Loader } from '@mantine/core';
 import clsx from 'clsx';
 import type { FC } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router';
 
 export const UserDetailPage: FC = () => {
   const { username } = useParams<{ username: string }>();

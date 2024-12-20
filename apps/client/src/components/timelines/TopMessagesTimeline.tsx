@@ -23,7 +23,7 @@ export const TopUserMessagesTimeline: FC = () => {
     [topUsers],
   );
   const { messages } = useMessagesByMultipleQueries(queries);
-  const labels = [...new Set(messages.flatMap((m) => m.map((m) => m.month)))].toSorted((a, b) => a.localeCompare(b));
+  const labels = [...new Set(messages.flatMap((m) => m.map((m) => m.month)))].sort((a, b) => a.localeCompare(b));
   const datasets = messages.map((message, i) => ({
     label: `@${getUsername(topUsers[i])}`,
     data: labels.map((l) => message.filter((m) => m.month <= l).reduce((acc, cur) => acc + cur.count, 0)),
@@ -48,7 +48,7 @@ export const TopChannelMessagesTimeline: FC = () => {
     [topChannels],
   );
   const { messages } = useMessagesByMultipleQueries(queries);
-  const labels = [...new Set(messages.flatMap((m) => m.map((m) => m.month)))].toSorted((a, b) => a.localeCompare(b));
+  const labels = [...new Set(messages.flatMap((m) => m.map((m) => m.month)))].sort((a, b) => a.localeCompare(b));
   const datasets = messages.map((message, i) => ({
     label: `#${getChannelName(topChannels[i])}`,
     data: labels.map((l) => message.filter((m) => m.month <= l).reduce((acc, cur) => acc + cur.count, 0)),

@@ -8,7 +8,7 @@ import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { searchStamps } from '@/lib/search';
 import { Skeleton, TextInput } from '@mantine/core';
 import { useState, type FC } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 const SearchStampBlock: FC = () => {
   const [keyword, setKeyword] = useState<string>('');
