@@ -49,7 +49,7 @@ export const UserActionTimeline: FC<UserMessageTimelineProps> = ({ userId }) => 
       ...gaveStamps.map((s) => s.month),
       ...receivedStamps.map((s) => s.month),
     ]).values(),
-  ].toSorted((a, b) => a.localeCompare(b));
+  ].sort((a, b) => a.localeCompare(b));
 
   const data = {
     labels,

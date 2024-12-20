@@ -34,9 +34,8 @@ export const ChannelActionTimeline: FC<Props> = ({ channelId }) => {
   const { messages } = useMessages(messagesQuery);
   const { stamps } = useStamps(stampsQuery);
 
-  const labels = [...new Set([...messages.map((m) => m.month), ...stamps.map((s) => s.month)]).values()].toSorted(
-    (a, b) => a.localeCompare(b),
-  );
+  const combined = [...messages.map((m) => m.month), ...stamps.map((s) => s.month)];
+  const labels = [...new Set(combined)].sort((a, b) => a.localeCompare(b));
 
   const data = {
     labels,
