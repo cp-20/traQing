@@ -3,7 +3,7 @@ name: Release client
 on:
   push:
     tags:
-      - v*.*.*
+      - '*.*.*'
     branches-ignore:
       - '**'
 
