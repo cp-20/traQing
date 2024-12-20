@@ -33,8 +33,8 @@
     "format:check": "biome format ."
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.2",
+    "@biomejs/biome": "1.9.4",
     "npm-run-all": "^4.1.5",
-    "typescript": "^5.5.4"
+    "typescript": "^5.7.2"
   }
 }

@@ -18,16 +18,16 @@
     "update-statistics": "bun run ./src/traQ/scripts/update-statistics.ts"
   },
   "dependencies": {
-    "@hono/zod-validator": "^0.2.2",
+    "@hono/zod-validator": "^0.4.2",
     "@traq-ing/database": "workspace:*",
-    "hono": "^4.5.3",
+    "hono": "^4.6.14",
     "js-sha256": "^0.11.0",
     "sharp": "^0.33.5",
     "traq-bot-ts": "1.4.1",
-    "zod": "^3.23.8"
+    "zod": "^3.24.1"
   },
   "devDependencies": {
-    "bun-types": "latest",
-    "drizzle-kit": "^0.23.1"
+    "bun-types": "^1.1.40",
+    "drizzle-kit": "^0.30.1"
   }
 }
