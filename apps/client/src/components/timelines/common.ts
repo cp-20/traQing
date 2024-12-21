@@ -23,6 +23,7 @@ export const commonTimelineChartOptions = mergeOptions(getCommonLineChartOptions
 }) satisfies ChartOptions;
 
 export const timelineCommonQuery = {
+  target: 'count',
   groupBy: 'month',
   orderBy: 'date',
   order: 'asc',

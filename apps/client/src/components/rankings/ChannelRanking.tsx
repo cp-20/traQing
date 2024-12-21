@@ -58,8 +58,9 @@ export const MessagesChannelRanking: FC<MessagesChannelRankingProps> = ({ range,
     () =>
       ({
         userId,
+        target: 'count',
         groupBy: 'channel',
-        orderBy: 'count',
+        orderBy: 'target',
         order: 'desc',
         limit: limit ?? 10,
         ...(range && dateRangeToQuery(range)),
@@ -77,8 +78,9 @@ export const MessagesChannelRankingWithSubscription: FC<MessagesChannelRankingPr
     () =>
       ({
         userId,
+        target: 'count',
         groupBy: 'channel',
-        orderBy: 'count',
+        orderBy: 'target',
         order: 'desc',
         limit: limit ?? 10,
         ...(range && dateRangeToQuery(range)),

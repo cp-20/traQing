@@ -14,7 +14,7 @@ import {
 } from '@/pages/playground/usePlaygroundFIlters';
 import { Button, Select } from '@mantine/core';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
-import type { MessagesQuery } from '@traq-ing/database';
+import type { MessagesQuery, StampsQuery } from '@traq-ing/database';
 import { useEffect, useMemo, useRef, useState, type FC } from 'react';
 
 export const PlaygroundPage: FC = () => {
@@ -111,7 +111,7 @@ export const PlaygroundPage: FC = () => {
       if (apiKind === 'stamps') {
         setLoading(true);
         try {
-          const data = await fetchStamps(query);
+          const data = await fetchStamps(query as StampsQuery);
           setResult(data);
           setError(false);
         } catch (err) {
@@ -126,7 +126,7 @@ export const PlaygroundPage: FC = () => {
 
   const normalizedQuery = useMemo(() => {
     if (apiKind === 'messages') return normalizeMessagesQuery(query as MessagesQuery);
-    if (apiKind === 'stamps') return normalizeStampsQuery(query);
+    if (apiKind === 'stamps') return normalizeStampsQuery(query as StampsQuery);
   }, [apiKind, query]);
 
   return (

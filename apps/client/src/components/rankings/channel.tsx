@@ -65,7 +65,7 @@ export const ChannelRankingItemWithUsers: FC<ChannelRankingItemWithUsersProps> =
       ({
         channelId,
         groupBy: 'user',
-        orderBy: 'count',
+        orderBy: 'target',
         order: 'desc',
         limit: onlyTop ? 1 : undefined,
         ...(range && dateRangeToQuery(range)),
