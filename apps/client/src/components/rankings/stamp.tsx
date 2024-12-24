@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import type { FC, ReactNode } from 'react';
 
 import {
   RankingItemBar,
@@ -12,7 +12,7 @@ import { useMessageStamps } from '@/hooks/useMessageStamps';
 export type StampRankingItemProps = {
   stampId: string;
   rank: number;
-  value: number;
+  value: ReactNode;
   rate?: number;
 };
 

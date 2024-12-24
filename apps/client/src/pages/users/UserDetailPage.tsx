@@ -1,41 +1,113 @@
+import { Card } from '@/components/Card';
+import { UserAvatar } from '@/components/UserAvatar';
 import { useUsers } from '@/hooks/useUsers';
-import { assert } from '@/lib/invariant';
-import { UserDetail } from '@/pages/users/UserDetail';
-import { Loader } from '@mantine/core';
-import clsx from 'clsx';
+import {
+  UserGaveStampStat,
+  UserGroupStat,
+  UserMessageCountStat,
+  UserReceivedStampStat,
+  UserSubscriptionStat,
+  UserTagStat,
+} from '@/components/stats/UserStats';
 import type { FC } from 'react';
-import { Link, useParams } from 'react-router';
+import { StampRanking } from '@/components/rankings/StampRanking';
+import { TopReactedMessages } from '@/components/messages/TopReactedMessages';
+import { StampPicker, useStampPicker } from '@/composables/useStampPicker';
+import { UserActionTimeline } from '@/components/timelines/UserActionTimeline';
+import { UserActionHours } from '@/components/hours/UserActionHours';
+import { MessagesChannelRanking, StampsChannelRanking } from '@/components/rankings/ChannelRanking';
+import { Container, ContainerTitle } from '@/components/containers/Container';
+import type { UserContext } from '@/pages/users/UserGuard';
+import { useOutletContext } from 'react-router';
 
 export const UserDetailPage: FC = () => {
-  const { username } = useParams<{ username: string }>();
-  const { getUserId, users } = useUsers();
-  assert(username);
-  const userId = getUserId(username);
+  const { userId } = useOutletContext() as UserContext;
+  const stampPicker = useStampPicker();
+  const { getUserFromId } = useUsers();
+  const user = getUserFromId(userId);
+
+  if (user === undefined) return null;
 
   return (
-    <div className="bg-gray-100 min-h-screen relative">
-      <div
-        className={clsx(
-          'grid place-content-center absolute inset-0 bg-gray-100 duration-200 transition-all ease-in',
-          users !== undefined && 'invisible opacity-0',
-        )}
-      >
-        <Loader type="bars" size="xl" />
-      </div>
-      {users !== undefined && !userId && (
-        <div className="min-h-screen flex flex-col justify-center items-center gap-4">
-          <div className="text-2xl font-semibold">
-            <span>@{username}</span>
-            <span> というユーザーが見つかりません</span>
-          </div>
-          <div>
-            <Link to="/" className="underline text-blue-500">
-              トップページに戻る
-            </Link>
-          </div>
+    <Container>
+      <ContainerTitle>
+        <div>
+          <UserAvatar userId={user.id} size={128} loading="eager" />
         </div>
-      )}
-      {userId && <UserDetail userId={userId} />}
-    </div>
+        <div className="ml-4">
+          <div className="text-2xl font-semibold">{user.displayName}</div>
+          <div className="text-gray-500">@{user.name}</div>
+        </div>
+      </ContainerTitle>
+      <div className="grid grid-cols-2 sm:gap-8 gap-4 max-lg:grid-cols-1">
+        <div className="flex flex-col sm:gap-8 gap-4 @container">
+          <div className="grid grid-cols-3 gap-4 auto-rows-min max-xs:grid-cols-1">
+            <UserMessageCountStat userId={userId} />
+            <UserGaveStampStat userId={userId} />
+            <UserReceivedStampStat userId={userId} />
+            <UserGroupStat userId={userId} />
+            <UserTagStat userId={userId} />
+            <UserSubscriptionStat userId={userId} />
+          </div>
+          <div className="grid grid-cols-1 gap-4 sm:gap-8 @lg:grid-cols-2 sm:@lg:gap-4">
+            <Card>
+              <div className="font-semibold mb-2">つけたスタンプ</div>
+              <StampRanking gaveUserId={userId} />
+            </Card>
+            <Card>
+              <div className="font-semibold mb-2">もらったスタンプ</div>
+              <StampRanking receivedUserId={userId} />
+            </Card>
+          </div>
+          <Card className="max-lg:hidden">
+            <div className="font-semibold mb-4">リアクションの多い投稿</div>
+            <div className="space-y-2">
+              <StampPicker reducer={stampPicker} />
+
+              <TopReactedMessages stampId={stampPicker.stampId} receivedUserId={userId} />
+            </div>
+          </Card>
+        </div>
+        <div className="flex flex-col sm:gap-8 gap-4">
+          <Card>
+            <div className="font-semibold mb-4">各アクションの時系列遷移</div>
+            <div>
+              <UserActionTimeline userId={userId} />
+            </div>
+          </Card>
+          <Card>
+            <div className="font-semibold mb-4">各アクションの時間帯</div>
+            <div>
+              <UserActionHours userId={userId} />
+            </div>
+          </Card>
+          <Card>
+            <div className="font-semibold mb-4">よく投稿するチャンネル</div>
+            <div>
+              <MessagesChannelRanking userId={userId} limit={20} />
+            </div>
+          </Card>
+          <Card>
+            <div className="font-semibold mb-4">スタンプをよく付けるチャンネル</div>
+            <div>
+              <StampsChannelRanking gaveUserId={userId} />
+            </div>
+          </Card>
+          <Card>
+            <div className="font-semibold mb-4">スタンプをよく付けられるチャンネル</div>
+            <div>
+              <StampsChannelRanking receivedUserId={userId} />
+            </div>
+          </Card>
+          <Card className="lg:hidden">
+            <div className="font-semibold mb-4">リアクションの多い投稿</div>
+            <div className="space-y-2">
+              <StampPicker reducer={stampPicker} />
+              <TopReactedMessages stampId={stampPicker.stampId} receivedUserId={userId} />
+            </div>
+          </Card>
+        </div>
+      </div>
+    </Container>
   );
 };

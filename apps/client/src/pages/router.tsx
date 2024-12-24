@@ -11,7 +11,9 @@ import { StampOverviewPage } from '@/pages/stamps/StampOverViewPage';
 import { SubscriptionSettingsPage } from '@/pages/subscriptions/SubscriptionSettingsPage';
 import { TagOverviewPage } from '@/pages/tags/TagOverviewPage';
 import { UserDetailPage } from '@/pages/users/UserDetailPage';
+import { UserGuard } from '@/pages/users/UserGuard';
 import { UserOverviewPage } from '@/pages/users/UserOverviewPage';
+import { YearlyRecapPage } from '@/pages/users/YearlyRecap';
 import { BrowserRouter, Routes, Route } from 'react-router';
 
 export const AppRouter = () => (
@@ -19,7 +21,10 @@ export const AppRouter = () => (
     <Routes>
       <Route index element={<Dashboard />} />
       <Route path="/users" element={<UserOverviewPage />} />
-      <Route path="/users/:username" element={<UserDetailPage />} />
+      <Route path="/users" element={<UserGuard />}>
+        <Route path=":username" element={<UserDetailPage />} />
+        <Route path=":username/recap/:year" element={<YearlyRecapPage />} />
+      </Route>
       <Route path="/channels" element={<ChannelOverviewPage />} />
       <Route path="/channels/*" element={<ChannelDetailPage />} />
       <Route path="/stamps" element={<StampOverviewPage />} />

@@ -1,5 +1,6 @@
 import { zValidator } from '@hono/zod-validator';
 import {
+  MessageContentsQuerySchema,
   MessagesQuerySchema,
   StampRelationsQuerySchema,
   StampsQuerySchema,
@@ -7,6 +8,7 @@ import {
   getChannelStampsRanking,
   getGaveMessageStampsRanking,
   getMessages,
+  getMessageContents,
   getMessagesRanking,
   getMessagesTimeline,
   getReceivedMessageStampsRanking,
@@ -16,6 +18,8 @@ import {
   getSubscriptionRanking,
   getTagRanking,
   getUserGroupRanking,
+  StampsMeanUsageQuerySchema,
+  getStampsMeanUsage,
 } from '@traq-ing/database';
 import { Hono } from 'hono';
 import { getCookie } from 'hono/cookie';
@@ -36,6 +40,7 @@ import {
 } from '@/gateway';
 import { HTTPException } from 'hono/http-exception';
 import { createMiddleware } from 'hono/factory';
+import { extractWords } from '@/extractor';
 
 const app = new Hono<{
   Variables: { token: string };
@@ -81,6 +86,25 @@ const routes = app
   .get('/messages', zValidator('query', MessagesQuerySchema), cacheMiddleware, async (c) =>
     c.json(await getMessages(c.req.valid('query')), 200),
   )
+  .get(
+    '/message-contents',
+    zValidator('query', MessageContentsQuerySchema.omit({ offset: true })),
+    cacheMiddleware,
+    async (c) => {
+      const { limit, ...query } = c.req.valid('query');
+      const contents = await getMessageContents(query);
+      const words = [];
+      for (const content of contents) {
+        words.push(...(await extractWords(content.content)));
+      }
+      const wordCountMap = new Map<string, number>();
+      for (const word of words) {
+        wordCountMap.set(word, (wordCountMap.get(word) ?? 0) + 1);
+      }
+      const wordCount = [...wordCountMap.entries()].sort((a, b) => b[1] - a[1]);
+      return c.json(wordCount.slice(0, limit), 200);
+    },
+  )
   .get('/channel-messages-ranking', cacheMiddleware, async (c) => c.json(await getChannelMessageRanking(), 200))
   .get('/messages-ranking', cacheMiddleware, async (c) => c.json(await getMessagesRanking(), 200))
   .get('/messages-timeline', cacheMiddleware, async (c) => c.json(await getMessagesTimeline(), 200))
@@ -109,6 +133,9 @@ const routes = app
   .get('/messages/:id', cacheMiddleware, async (c) => c.json(await getMessage(c.req.param('id')), 200))
   .get('/stamps', zValidator('query', StampsQuerySchema), async (c) =>
     c.json(await getStamps(c.req.valid('query')), 200),
+  )
+  .get('/stamps-mean-usage', zValidator('query', StampsMeanUsageQuerySchema), async (c) =>
+    c.json(await getStampsMeanUsage(c.req.valid('query')), 200),
   )
   .get('/stamp-relations', zValidator('query', StampRelationsQuerySchema), async (c) =>
     c.json(await getStampRelations(c.req.valid('query')), 200),

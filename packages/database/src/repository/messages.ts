@@ -103,6 +103,41 @@ export const getMessages = async (query: MessagesQuery): GetMessagesResult<Messa
   return results;
 };
 
+export const MessageContentsQuerySchema = z
+  .object({
+    userId: z.string(),
+    channelId: z.string(),
+    before: z.coerce.date(),
+    after: z.coerce.date(),
+    isBot: z.coerce.boolean(),
+    limit: z.preprocess((x) => Number(x), z.number().int().positive()),
+    offset: z.preprocess((x) => Number(x), z.number().int().nonnegative()),
+  })
+  .partial();
+
+export type MessageContentsQuery = z.infer<typeof MessageContentsQuerySchema>;
+
+export const getMessageContents = async (query: MessageContentsQuery) => {
+  const conditions = [
+    query.userId && eq(schema.messages.userId, query.userId),
+    query.channelId && eq(schema.messages.channelId, query.channelId),
+    query.after && gt(schema.messages.createdAt, query.after),
+    query.before && lt(schema.messages.createdAt, query.before),
+    query.isBot && eq(schema.messages.isBot, query.isBot),
+  ];
+
+  const results = await db
+    .select({ content: schema.messages.content })
+    .from(schema.messages)
+    .where(and(...conditions.filter((x) => !!x)))
+    .orderBy(asc(schema.messages.createdAt))
+    .limit(query.limit ?? 10000)
+    .offset(query.offset ?? 0)
+    .execute();
+
+  return results;
+};
+
 export const getLastMessageCreatedAt = async () => {
   const message = await db
     .select({ createdAt: schema.messages.createdAt })

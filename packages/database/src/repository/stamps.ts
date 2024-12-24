@@ -92,6 +92,66 @@ export const getStamps = async (query: StampsQuery) => {
   return results;
 };
 
+export const StampsMeanUsageQuerySchema = z
+  .object({
+    userId: z.string(),
+    messageUserId: z.string(),
+    channelId: z.string(),
+    before: z.coerce.date(),
+    after: z.coerce.date(),
+    isBot: z.coerce.boolean(),
+  })
+  .partial()
+  .extend({
+    target: z.union([z.literal('user'), z.literal('messageUser'), z.literal('channel')]),
+  });
+
+export type StampsMeanUsageQuery = z.infer<typeof StampsMeanUsageQuerySchema>;
+
+export const getStampsMeanUsage = async (query: StampsMeanUsageQuery) => {
+  const target = {
+    user: schema.messageStamps.userId,
+    messageUser: schema.messageStamps.messageUserId,
+    channel: schema.messageStamps.channelId,
+  }[query.target];
+
+  const conditions = [
+    query.userId && eq(schema.messageStamps.userId, query.userId),
+    query.messageUserId && eq(schema.messageStamps.messageUserId, query.messageUserId),
+    query.channelId && eq(schema.messageStamps.channelId, query.channelId),
+    query.after && gt(schema.messageStamps.createdAt, query.after),
+    query.before && lt(schema.messageStamps.createdAt, query.before),
+    query.isBot && eq(schema.messageStamps.isBot, query.isBot),
+  ];
+
+  const result = await db
+    .select({
+      [query.target]: target,
+      stamp: schema.messageStamps.stampId,
+      count: count(),
+    })
+    .from(schema.messageStamps)
+    .where(and(...conditions.filter((x) => !!x)))
+    .groupBy(schema.messageStamps.stampId, target)
+    .execute();
+
+  const stampsUsageTotal = new Map<string, number>();
+  const stampsUsageCount = new Map<string, number>();
+
+  for (const { stamp, count } of result) {
+    stampsUsageTotal.set(stamp, (stampsUsageTotal.get(stamp) ?? 0) + count);
+    stampsUsageCount.set(stamp, (stampsUsageCount.get(stamp) ?? 0) + 1);
+  }
+
+  const stampsUsageMean = [...stampsUsageTotal.entries()].map(([stamp, total]) => ({
+    stamp,
+    // biome-ignore lint/style/noNonNullAssertion: 絶対にある
+    mean: total / stampsUsageCount.get(stamp)!,
+  }));
+
+  return stampsUsageMean;
+};
+
 export const dropStamps = async () => {
   await db.delete(schema.messageStamps).execute();
 };
