@@ -49,6 +49,7 @@ export const TopGaveStamps: FC<CommonRecapComponentProps> = ({ userId, year }) =
           stampId={s.stamp}
           rank={i + 1}
           value={`平均 x${(s.count / s.mean).toFixed(1)}`}
+          rate={s.count / s.mean / (topStamps[0].count / topStamps[0].mean)}
         />
       ))}
     </div>
@@ -99,6 +100,7 @@ export const TopReceivedStamps: FC<CommonRecapComponentProps> = ({ userId, year 
           stampId={s.stamp}
           rank={i + 1}
           value={`平均 x${(s.count / s.mean).toFixed(1)}`}
+          rate={s.count / s.mean / (topStamps[0].count / topStamps[0].mean)}
         />
       ))}
     </div>

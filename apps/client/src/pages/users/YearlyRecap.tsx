@@ -8,13 +8,16 @@ import { useOutletContext, useParams } from 'react-router';
 import { TopGaveStamps, TopReceivedStamps } from '@/components/recap/stamps';
 import { WordCloudRecap } from '@/components/recap/wordcloud';
 import { PostCalendar } from '@/components/recap/post-calendar';
-import { TopPostedChannels, TopReactionsGaveChannels } from '@/components/recap/channels';
 import {
   TotalMessages,
   TotalMessagesLength,
   TotalReactionsGave,
   TotalReactionsReceived,
 } from '@/components/recap/stats';
+import { MessagesChannelRanking, StampsChannelRanking } from '@/components/rankings/ChannelRanking';
+import { yearToDateRange } from '@/components/recap/common';
+import { TopReactedMessages } from '@/components/messages/TopReactedMessages';
+import { HighlightedMessages } from '@/components/recap/messages';
 
 export const YearlyRecapPage: FC = () => {
   const { year: yearRaw } = useParams<{ year: string }>();
@@ -49,11 +52,11 @@ export const YearlyRecapPage: FC = () => {
       <div className="grid grid-cols-2 gap-4">
         <Card>
           <div className="font-semibold mb-2">よく投稿したチャンネル</div>
-          <TopPostedChannels userId={userId} year={year} />
+          <MessagesChannelRanking userId={userId} range={yearToDateRange(year)} />
         </Card>
         <Card>
           <div className="font-semibold mb-2">よくスタンプを付けたチャンネル</div>
-          <TopReactionsGaveChannels userId={userId} year={year} />
+          <StampsChannelRanking gaveUserId={userId} range={yearToDateRange(year)} />
         </Card>
       </div>
 
@@ -69,8 +72,13 @@ export const YearlyRecapPage: FC = () => {
       </div>
 
       <Card>
-        <div className="font-semibold mb-2">ワードクラウド</div>
+        <div className="font-semibold mb-2">よく使った言葉</div>
         <WordCloudRecap userId={userId} year={year} />
+      </Card>
+
+      <Card>
+        <div className="font-semibold mb-2">注目の投稿</div>
+        <HighlightedMessages userId={userId} year={year} />
       </Card>
 
       <div className="h-screen" />

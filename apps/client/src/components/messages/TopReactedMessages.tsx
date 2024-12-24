@@ -4,27 +4,31 @@ import { TraqMessage } from '@/components/messages/TraqMessage';
 import type { StampsQuery } from '@traq-ing/database';
 import clsx from 'clsx';
 import { type FC, useMemo } from 'react';
+import { dateRangeToQuery, type DateRange } from '@/composables/useDateRangePicker';
 
 type Props = {
+  range?: DateRange;
   stampId: string | null;
   channelId?: string;
   gaveUserId?: string;
   receivedUserId?: string;
+  limit?: number;
 };
 
-export const TopReactedMessages: FC<Props> = ({ stampId, channelId, gaveUserId, receivedUserId }) => {
+export const TopReactedMessages: FC<Props> = ({ range, stampId, channelId, gaveUserId, receivedUserId, limit }) => {
   const query = useMemo(
     () =>
       ({
+        ...(range && dateRangeToQuery(range)),
         channelId,
         userId: gaveUserId,
         messageUserId: receivedUserId,
         stampId: stampId ?? undefined,
         groupBy: 'message',
         orderBy: 'count',
-        limit: 10,
+        limit: limit ?? 10,
       }) satisfies StampsQuery,
-    [stampId, channelId, gaveUserId, receivedUserId],
+    [range, stampId, channelId, gaveUserId, receivedUserId, limit],
   );
   const { stamps, loading } = useStamps(query);
 
