@@ -43,6 +43,13 @@
       "when": 1728308091831,
       "tag": "0005_living_hex",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1735042424172,
+      "tag": "0006_conscious_mystique",
+      "breakpoints": true
     }
   ]
 }
