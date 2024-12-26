@@ -78,8 +78,8 @@ export const HighlightedMessages: FC<CommonRecapComponentProps> = ({ userId, yea
   };
 
   return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-10 gap-2">
+    <div className="space-y-4 @container">
+      <div className="grid grid-cols-10 max-md:grid-cols-6 max-sm:grid-cols-3 gap-2">
         {highlightStamps.map((stampId) => (
           <div key={stampId}>
             <input

@@ -48,7 +48,7 @@ export const YearlyRecapPage: FC = () => {
         <PostCalendar userId={userId} year={year} />
       </Card>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 max-lg:grid-cols-1 gap-4">
         <Card>
           <div className="font-semibold mb-2">よく投稿したチャンネル</div>
           <MessagesChannelRanking userId={userId} range={yearToDateRange(year)} />
@@ -59,7 +59,7 @@ export const YearlyRecapPage: FC = () => {
         </Card>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 max-lg:grid-cols-1 gap-4">
         <Card>
           <div className="font-semibold mb-2">よく付けたスタンプ</div>
           <TopGaveStamps userId={userId} year={year} />
@@ -80,7 +80,7 @@ export const YearlyRecapPage: FC = () => {
         <HighlightedMessages userId={userId} year={year} />
       </Card>
 
-      <div className="h-screen" />
+      <div className="h-16" />
     </div>
   );
 };
