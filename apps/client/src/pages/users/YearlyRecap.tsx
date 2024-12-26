@@ -16,7 +16,6 @@ import {
 } from '@/components/recap/stats';
 import { MessagesChannelRanking, StampsChannelRanking } from '@/components/rankings/ChannelRanking';
 import { yearToDateRange } from '@/components/recap/common';
-import { TopReactedMessages } from '@/components/messages/TopReactedMessages';
 import { HighlightedMessages } from '@/components/recap/messages';
 
 export const YearlyRecapPage: FC = () => {
