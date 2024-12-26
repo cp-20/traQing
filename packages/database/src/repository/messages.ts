@@ -1,6 +1,6 @@
 import { db } from '@/db';
 import { sqlGetDate, sqlGetHour, sqlGetMonth } from '@/util';
-import { and, asc, count, desc, eq, gt, lt } from 'drizzle-orm';
+import { and, asc, count, desc, eq, gt, lt, sql, sum } from 'drizzle-orm';
 import { z } from 'zod';
 import * as schema from '@/schema';
 
@@ -28,20 +28,23 @@ export const MessagesQuerySchema = z
       z.literal('user'),
       z.literal('channel'),
     ]),
-    orderBy: z.union([z.literal('date'), z.literal('count')]),
+    orderBy: z.union([z.literal('date'), z.literal('target')]),
     order: z.union([z.literal('asc'), z.literal('desc')]),
     limit: z.preprocess((x) => Number(x), z.number().int().positive()),
     offset: z.preprocess((x) => Number(x), z.number().int().nonnegative()),
+    target: z.union([z.literal('count'), z.literal('contentSum')]),
   })
   .partial();
 
 export type MessagesQuery = z.infer<typeof MessagesQuerySchema>;
 
-type GetMessagesResult<Q extends MessagesQuery> = Promise<
+export type GetMessagesResult<Q extends MessagesQuery> = Promise<
   Array<
     {
       [K in Q extends { groupBy: infer U } ? (U extends undefined ? never : U) : never]: string;
-    } & { count: number }
+    } & {
+      [K in Q extends { target: infer U } ? (U extends undefined ? never : U) : never]: number;
+    }
   >
 >;
 
@@ -53,6 +56,11 @@ export const getMessages = async (query: MessagesQuery): GetMessagesResult<Messa
     user: schema.messages.userId,
     channel: schema.messages.channelId,
   }[query.groupBy ?? 'day'];
+
+  const target = {
+    count: count(schema.messages.id),
+    contentSum: sum(sql`length(${schema.messages.content})`),
+  }[query.target ?? 'count'];
 
   const groupBy = {
     month: sqlGetMonth(schema.messages.createdAt),
@@ -66,8 +74,8 @@ export const getMessages = async (query: MessagesQuery): GetMessagesResult<Messa
 
   const orderBy = {
     date: query.groupBy ? order(groupBy) : order(schema.messages.createdAt),
-    count: order(count(schema.messages.id)),
-  }[query.orderBy ?? 'count'];
+    target: order(target),
+  }[query.orderBy ?? 'target'];
 
   const conditions = [
     query.userId && eq(schema.messages.userId, query.userId),
@@ -80,7 +88,7 @@ export const getMessages = async (query: MessagesQuery): GetMessagesResult<Messa
   const initialQuery = db
     .select({
       ...(query.groupBy ? { [query.groupBy]: select } : {}),
-      count: count(schema.messages.id),
+      [query.target ?? 'count']: target,
     })
     .from(schema.messages)
     .where(and(...conditions.filter((x) => !!x)))
@@ -91,6 +99,41 @@ export const getMessages = async (query: MessagesQuery): GetMessagesResult<Messa
   const finalQuery = query.groupBy ? initialQuery.groupBy(groupBy) : initialQuery;
 
   const results = await finalQuery.execute();
+
+  return results;
+};
+
+export const MessageContentsQuerySchema = z
+  .object({
+    userId: z.string(),
+    channelId: z.string(),
+    before: z.coerce.date(),
+    after: z.coerce.date(),
+    isBot: z.coerce.boolean(),
+    limit: z.preprocess((x) => Number(x), z.number().int().positive()),
+    offset: z.preprocess((x) => Number(x), z.number().int().nonnegative()),
+  })
+  .partial();
+
+export type MessageContentsQuery = z.infer<typeof MessageContentsQuerySchema>;
+
+export const getMessageContents = async (query: MessageContentsQuery) => {
+  const conditions = [
+    query.userId && eq(schema.messages.userId, query.userId),
+    query.channelId && eq(schema.messages.channelId, query.channelId),
+    query.after && gt(schema.messages.createdAt, query.after),
+    query.before && lt(schema.messages.createdAt, query.before),
+    query.isBot && eq(schema.messages.isBot, query.isBot),
+  ];
+
+  const results = await db
+    .select({ content: schema.messages.content })
+    .from(schema.messages)
+    .where(and(...conditions.filter((x) => !!x)))
+    .orderBy(asc(schema.messages.createdAt))
+    .limit(query.limit ?? 10000)
+    .offset(query.offset ?? 0)
+    .execute();
 
   return results;
 };

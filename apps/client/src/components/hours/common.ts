@@ -27,6 +27,7 @@ export const commonHoursChartOption = mergeOptions(getCommonLineChartOptions(fal
 
 export const commonHoursQuery = {
   groupBy: 'hour',
+  target: 'count',
 } satisfies MessagesQuery & StampsQuery;
 
 const diff = new Date().getTimezoneOffset() / 60;

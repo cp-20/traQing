@@ -52,8 +52,9 @@ export const MessagesUserRanking: FC<MessagesUserRankingProps> = ({ range, chann
     () =>
       ({
         channelId,
+        target: 'count',
         groupBy: 'user',
-        orderBy: 'count',
+        orderBy: 'target',
         order: 'desc',
         limit: limit ?? 10,
         ...(range && dateRangeToQuery(range)),

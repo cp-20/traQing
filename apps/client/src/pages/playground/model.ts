@@ -71,7 +71,7 @@ export const orderByKindOptions: OptionsByAPIKind<OrderByKind> = {
   messages: [
     { value: 'none', label: 'ソートなし' },
     { value: 'date', label: '日付' },
-    { value: 'count', label: '回数' },
+    { value: 'target', label: '取得要素' },
   ],
   stamps: [
     { value: 'none', label: 'ソートなし' },

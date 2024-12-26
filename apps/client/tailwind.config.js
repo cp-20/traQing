@@ -15,20 +15,7 @@ export default {
     colors: {
       transparent: 'transparent',
       current: 'currentColor',
-      black: colors.black,
-      white: colors.white,
-      gray: colors.gray,
-      emerald: colors.emerald,
-      indigo: colors.indigo,
-      yellow: colors.yellow,
-      blue: colors.blue,
-      red: colors.red,
-      pink: colors.pink,
-      purple: colors.purple,
-      green: colors.green,
-      orange: colors.orange,
-      teal: colors.teal,
-      cyan: colors.cyan,
+      ...colors,
       text: {
         primary: '#49535b',
       },
@@ -36,6 +23,15 @@ export default {
     extend: {
       fontFamily: {
         mono: 'SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace',
+      },
+      animation: {
+        'wipe-right': 'wipe-right 0.3s ease-out',
+      },
+      keyframes: {
+        'wipe-right': {
+          '0%': { transform: 'translateX(10%)', opacity: 0 },
+          '100%': { transform: 'translateX(0)', opacity: 1 },
+        },
       },
     },
   },

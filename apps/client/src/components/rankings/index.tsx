@@ -78,7 +78,7 @@ export const RankingItemRank: FC<RankingItemRankProps> = ({ rank }) => {
 };
 
 export type RankingItemValueProps = {
-  value: number;
+  value: ReactNode;
 };
 
 export const RankingItemValue: FC<RankingItemValueProps> = ({ value }) => (
