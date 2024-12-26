@@ -1,11 +1,11 @@
-import { memorize, TTLCache } from '@/cache';
+import { memorize, memorizeWithKey, purgeCache, TTLCache } from '@/cache';
 import { sleep } from 'bun';
 import { describe, test, setSystemTime, expect, mock } from 'bun:test';
 
 describe('TTLCache', () => {
   test('10sのTTLでキャッシュが期限切れになる', async () => {
     const fetcher = mock(async () => 'value');
-    const cache = new TTLCache<string, string>(10000);
+    const cache = new TTLCache<string, string>(10);
 
     setSystemTime(new Date('2024-01-01T00:00:00Z'));
     expect(await cache.get('key', fetcher), 'value').toBe('value');
@@ -21,7 +21,7 @@ describe('TTLCache', () => {
   });
 
   test('同一期間に二重でリクエストが飛ばない', async () => {
-    const cache = new TTLCache<string, string>(10000);
+    const cache = new TTLCache<string, string>(10);
 
     const fetcher = mock(async () => {
       await sleep(100);
@@ -42,7 +42,7 @@ describe('TTLCache', () => {
 describe('memorize', () => {
   test('10sのTTLでキャッシュが期限切れになる', async () => {
     const fetcher = mock(async (a: number, b: number) => a + b);
-    const memorized = memorize(10000, fetcher);
+    const memorized = memorize(10, fetcher);
 
     setSystemTime(new Date('2024-01-01T00:00:00Z'));
     expect(await memorized(1, 2)).toBe(3);
@@ -66,5 +66,37 @@ describe('memorize', () => {
 
     await Promise.all([memorized(1, 2), memorized(1, 2), memorized(1, 2), memorized(1, 2), memorized(1, 2)]);
     expect(fetcher).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('memorizeWithKey', () => {
+  test('キャッシュされる', async () => {
+    const fetcher = mock(async (a: number, b: number) => a + b);
+    const memorized = memorizeWithKey(10, 'key', fetcher);
+
+    setSystemTime(new Date('2024-01-01T00:00:00Z'));
+    expect(await memorized(1, 2)).toBe(3);
+    expect(fetcher).toHaveBeenCalledTimes(1);
+
+    setSystemTime(new Date('2024-01-01T00:00:01Z'));
+    expect(await memorized(1, 2)).toBe(3);
+    expect(fetcher).toHaveBeenCalledTimes(1);
+  });
+
+  test('purge できる', async () => {
+    const fetcher = mock(async (a: number, b: number) => a + b);
+    const memorized = memorizeWithKey(10, 'key', fetcher);
+
+    setSystemTime(new Date('2024-01-01T00:00:00Z'));
+    expect(await memorized(1, 2)).toBe(3);
+    expect(fetcher).toHaveBeenCalledTimes(1);
+
+    setSystemTime(new Date('2024-01-01T00:00:01Z'));
+    expect(await memorized(1, 2)).toBe(3);
+    expect(fetcher).toHaveBeenCalledTimes(1);
+
+    purgeCache('key');
+    expect(await memorized(1, 2)).toBe(3);
+    expect(fetcher).toHaveBeenCalledTimes(2);
   });
 });

@@ -4,36 +4,37 @@ import {
   MessagesQuerySchema,
   StampRelationsQuerySchema,
   StampsQuerySchema,
-  getChannelMessageRanking,
-  getChannelStampsRanking,
-  getGaveMessageStampsRanking,
-  getMessages,
-  getMessageContents,
-  getMessagesRanking,
-  getMessagesTimeline,
-  getReceivedMessageStampsRanking,
-  getStampRanking,
-  getStampRelations,
-  getStamps,
-  getSubscriptionRanking,
-  getTagRanking,
-  getUserGroupRanking,
   StampsMeanUsageQuerySchema,
-  getStampsMeanUsage,
 } from '@traq-ing/database';
 import { Hono } from 'hono';
 import { getCookie } from 'hono/cookie';
 import { z } from 'zod';
 import { tokenKey, traqAuthRoutes } from './auth';
 import {
+  forgotCaches,
+  getChannelMessageRankingCached,
   getChannels,
+  getChannelStampsRankingCached,
   getChannelSubscribers,
   getFile,
+  getGaveMessageStampsRankingCached,
   getMe,
   getMessage,
+  getMessageContentsCached,
+  getMessagesCached,
+  getMessagesRankingCached,
   getMessageStamps,
+  getMessagesTimelineCached,
   getOgInfo,
+  getReceivedMessageStampsRankingCached,
+  getStampRankingCached,
+  getStampRelationsCached,
+  getStampsCached,
+  getStampsMeanUsageCached,
+  getSubscriptionRankingCached,
   getSubscriptions,
+  getTagRankingCached,
+  getUserGroupRankingCached,
   getUserGroups,
   getUsers,
   setSubscriptionLevel,
@@ -41,6 +42,12 @@ import {
 import { HTTPException } from 'hono/http-exception';
 import { createMiddleware } from 'hono/factory';
 import { extractWords } from '@/extractor';
+import { getCaches } from '@/cache';
+
+const secretKey = process.env.SECRET_KEY;
+if (secretKey === undefined) {
+  throw new Error('SECRET_KEY is required');
+}
 
 const app = new Hono<{
   Variables: { token: string };
@@ -84,7 +91,7 @@ const routes = app
     },
   )
   .get('/messages', zValidator('query', MessagesQuerySchema), cacheMiddleware, async (c) =>
-    c.json(await getMessages(c.req.valid('query')), 200),
+    c.json(await getMessagesCached(c.req.valid('query')), 200),
   )
   .get(
     '/message-contents',
@@ -92,7 +99,7 @@ const routes = app
     cacheMiddleware,
     async (c) => {
       const { limit, ...query } = c.req.valid('query');
-      const contents = await getMessageContents(query);
+      const contents = await getMessageContentsCached(query);
       const words = [];
       for (const content of contents) {
         words.push(...(await extractWords(content.content)));
@@ -105,40 +112,42 @@ const routes = app
       return c.json(wordCount.slice(0, limit), 200);
     },
   )
-  .get('/channel-messages-ranking', cacheMiddleware, async (c) => c.json(await getChannelMessageRanking(), 200))
-  .get('/messages-ranking', cacheMiddleware, async (c) => c.json(await getMessagesRanking(), 200))
-  .get('/messages-timeline', cacheMiddleware, async (c) => c.json(await getMessagesTimeline(), 200))
-  .get('/stamp-ranking', cacheMiddleware, async (c) => c.json(await getStampRanking(), 200))
-  .get('/channel-stamps-ranking', cacheMiddleware, async (c) => c.json(await getChannelStampsRanking(), 200))
-  .get('/gave-stamps-ranking', cacheMiddleware, async (c) => c.json(await getGaveMessageStampsRanking(), 200))
-  .get('/received-stamps-ranking', cacheMiddleware, async (c) => c.json(await getReceivedMessageStampsRanking(), 200))
+  .get('/channel-messages-ranking', cacheMiddleware, async (c) => c.json(await getChannelMessageRankingCached(), 200))
+  .get('/messages-ranking', cacheMiddleware, async (c) => c.json(await getMessagesRankingCached(), 200))
+  .get('/messages-timeline', cacheMiddleware, async (c) => c.json(await getMessagesTimelineCached(), 200))
+  .get('/stamp-ranking', cacheMiddleware, async (c) => c.json(await getStampRankingCached(), 200))
+  .get('/channel-stamps-ranking', cacheMiddleware, async (c) => c.json(await getChannelStampsRankingCached(), 200))
+  .get('/gave-stamps-ranking', cacheMiddleware, async (c) => c.json(await getGaveMessageStampsRankingCached(), 200))
+  .get('/received-stamps-ranking', cacheMiddleware, async (c) =>
+    c.json(await getReceivedMessageStampsRankingCached(), 200),
+  )
   .get(
     '/group-ranking',
     zValidator('query', z.object({ groupBy: z.enum(['user', 'group']) })),
     cacheMiddleware,
-    async (c) => c.json(await getUserGroupRanking(c.req.valid('query').groupBy), 200),
+    async (c) => c.json(await getUserGroupRankingCached(c.req.valid('query').groupBy), 200),
   )
   .get(
     '/tag-ranking',
     zValidator('query', z.object({ groupBy: z.enum(['user', 'tag']) })),
     cacheMiddleware,
-    async (c) => c.json(await getTagRanking(c.req.valid('query').groupBy), 200),
+    async (c) => c.json(await getTagRankingCached(c.req.valid('query').groupBy), 200),
   )
   .get(
     '/subscription-ranking',
     zValidator('query', z.object({ groupBy: z.enum(['user', 'channel']) })),
     cacheMiddleware,
-    async (c) => c.json(await getSubscriptionRanking(c.req.valid('query').groupBy), 200),
+    async (c) => c.json(await getSubscriptionRankingCached(c.req.valid('query').groupBy), 200),
   )
   .get('/messages/:id', cacheMiddleware, async (c) => c.json(await getMessage(c.req.param('id')), 200))
   .get('/stamps', zValidator('query', StampsQuerySchema), async (c) =>
-    c.json(await getStamps(c.req.valid('query')), 200),
+    c.json(await getStampsCached(c.req.valid('query')), 200),
   )
   .get('/stamps-mean-usage', zValidator('query', StampsMeanUsageQuerySchema), async (c) =>
-    c.json(await getStampsMeanUsage(c.req.valid('query')), 200),
+    c.json(await getStampsMeanUsageCached(c.req.valid('query')), 200),
   )
   .get('/stamp-relations', zValidator('query', StampRelationsQuerySchema), async (c) =>
-    c.json(await getStampRelations(c.req.valid('query')), 200),
+    c.json(await getStampRelationsCached(c.req.valid('query')), 200),
   )
   .get('/users', cacheMiddleware, async (c) => c.json(await getUsers(), 200))
   .get('/groups', cacheMiddleware, async (c) => c.json(await getUserGroups(), 200))
@@ -170,7 +179,22 @@ const routes = app
       c.header('Cache-Control', 'private, max-age=31536000');
       return c.newResponse(file.stream());
     },
-  );
+  )
+  .get('/caches', async (c) => {
+    if (c.req.header('x-secret-key') !== secretKey) {
+      throw new HTTPException(401, { message: 'Unauthorized' });
+    }
+
+    return c.json(getCaches(), 200);
+  })
+  .delete('/caches', async (c) => {
+    if (c.req.header('x-secret-key') !== secretKey) {
+      throw new HTTPException(401, { message: 'Unauthorized' });
+    }
+    forgotCaches();
+    console.log('Caches cleared');
+    return c.json({ message: 'Caches cleared' }, 204);
+  });
 
 app.on(
   'GET',

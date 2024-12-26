@@ -20,7 +20,7 @@ export class TTLCache<K, V> {
   private setCache(key: K, value: V) {
     this.cache.set(key, {
       value,
-      expiresAt: Date.now() + this.ttl,
+      expiresAt: Date.now() + this.ttl * 1000,
     });
   }
 
@@ -56,6 +56,15 @@ export class TTLCache<K, V> {
 
     return pendingPromise;
   }
+
+  list() {
+    return [...this.cache.keys()];
+  }
+
+  purge() {
+    // purge all cache
+    this.cache.clear();
+  }
 }
 
 export const memorize = <Args extends unknown[], Result>(
@@ -63,6 +72,32 @@ export const memorize = <Args extends unknown[], Result>(
   fn: (...args: Args) => Promise<Result>,
 ): ((...args: Args) => Promise<Result>) => {
   const cache = new TTLCache<string, Result>(ttl);
+
+  const fetcher = async (...args: Args): Promise<Result> => {
+    const key = JSON.stringify(args);
+    return cache.get(key, () => fn(...args));
+  };
+
+  return fetcher;
+};
+
+const masterCache = new Map<string, TTLCache<string, unknown>>();
+
+export const getCaches = () => {
+  return [...masterCache].map(([key, cache]) => ({ key, cache: cache.list() }));
+};
+
+export const purgeCache = (key: string) => {
+  masterCache.get(key)?.purge();
+};
+
+export const memorizeWithKey = <Args extends unknown[], Result>(
+  ttl: number,
+  key: string,
+  fn: (...args: Args) => Promise<Result>,
+): ((...args: Args) => Promise<Result>) => {
+  const cache = new TTLCache<string, Result>(ttl);
+  masterCache.set(key, cache);
 
   const fetcher = async (...args: Args): Promise<Result> => {
     const key = JSON.stringify(args);
