@@ -1,3 +1,4 @@
+import { forgotCaches } from '@/gateway';
 import { api } from '@/traQ/api';
 import {
   getUserGroupRelations,
@@ -12,6 +13,7 @@ import {
   getChannelPins,
   insertChannelPins,
   deleteChannelPins,
+  updateMaterializedViews,
 } from '@traq-ing/database';
 import { sleep } from 'bun';
 
@@ -146,4 +148,6 @@ export const updateStatistics = async () => {
   console.log(`Successfully inserted ${channelPinsDiff.added.length} channel pins`);
   if (channelPinsDiff.deleted.length > 0) await deleteChannelPins(channelPinsDiff.deleted);
   console.log(`Successfully deleted ${channelPinsDiff.deleted.length} channel pins`);
+
+  await updateMaterializedViews();
 };
