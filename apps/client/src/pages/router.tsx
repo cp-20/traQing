@@ -14,12 +14,14 @@ import { UserDetailPage } from '@/pages/users/UserDetailPage';
 import { UserGuard } from '@/pages/users/UserGuard';
 import { UserOverviewPage } from '@/pages/users/UserOverviewPage';
 import { YearlyRecapPage } from '@/pages/users/YearlyRecap';
+import { YourRecapPage } from '@/pages/your-recap';
 import { BrowserRouter, Routes, Route } from 'react-router';
 
 export const AppRouter = () => (
   <BrowserRouter>
     <Routes>
       <Route index element={<Dashboard />} />
+      <Route path="/your-recap/:year" element={<YourRecapPage />} />
       <Route path="/users" element={<UserOverviewPage />} />
       <Route path="/users" element={<UserGuard />}>
         <Route path=":username" element={<UserDetailPage />} />
