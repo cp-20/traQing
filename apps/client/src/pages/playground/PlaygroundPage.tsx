@@ -189,7 +189,7 @@ export const PlaygroundPage: FC = () => {
         <pre className="border rounded-md p-4">
           <code className="text-wrap break-all">{`const query = ${JSON.stringify(normalizedQuery, null, 2)};
 const params = new URLSearchParams(query);
-const result = await fetch('https://traqing.cp20.dev/api/${apiKind}?\$\{params.toString()\}').then((r) => r.json());
+const result = await fetch(\`https://traqing.cp20.dev/api/${apiKind}?\$\{params.toString()\}\`).then((r) => r.json());
 console.log(result);`}</code>
         </pre>
       </Card>
