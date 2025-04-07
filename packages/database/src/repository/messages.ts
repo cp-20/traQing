@@ -20,7 +20,7 @@ export const MessagesQuerySchema = z
     channelId: z.string(),
     before: z.coerce.date(),
     after: z.coerce.date(),
-    isBot: z.coerce.boolean(),
+    isBot: z.preprocess((input) => JSON.parse(`${input}`), z.boolean()),
     groupBy: z.union([
       z.literal('month'),
       z.literal('day'),
@@ -109,7 +109,7 @@ export const MessageContentsQuerySchema = z
     channelId: z.string(),
     before: z.coerce.date(),
     after: z.coerce.date(),
-    isBot: z.coerce.boolean(),
+    isBot: z.preprocess((input) => JSON.parse(`${input}`), z.boolean()),
     limit: z.preprocess((x) => Number(x), z.number().int().positive()),
     offset: z.preprocess((x) => Number(x), z.number().int().nonnegative()),
   })

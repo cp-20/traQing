@@ -12,7 +12,7 @@ export const StampsQuerySchema = z
     stampId: z.string(),
     before: z.coerce.date(),
     after: z.coerce.date(),
-    isBot: z.coerce.boolean(),
+    isBot: z.preprocess((input) => JSON.parse(`${input}`), z.boolean()),
     groupBy: z.union([
       z.literal('month'),
       z.literal('day'),
@@ -99,7 +99,7 @@ export const StampsMeanUsageQuerySchema = z
     channelId: z.string(),
     before: z.coerce.date(),
     after: z.coerce.date(),
-    isBot: z.coerce.boolean(),
+    isBot: z.preprocess((input) => JSON.parse(`${input}`), z.boolean()),
   })
   .partial()
   .extend({
