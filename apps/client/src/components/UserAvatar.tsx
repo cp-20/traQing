@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import type { FC } from 'react';
+import type { FC, JSX } from 'react';
 
 type Props = {
   userId: string;

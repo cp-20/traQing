@@ -1,8 +1,8 @@
-import { useCountUp } from 'react-countup';
 import clsx from 'clsx';
 import { type ReactNode, type ComponentProps, type FC, useState, useRef, useEffect } from 'react';
 import { useIntersection } from '@mantine/hooks';
 import { Card } from '@/components/Card';
+import { useCountUp } from './countup';
 
 type Props = {
   label: ReactNode;
@@ -23,7 +23,6 @@ export const AnimatedStat: FC<Props> = ({ label, value, valueProps, unit, annota
     start,
     end: value,
     duration: duration ?? 2,
-    startOnMount: false,
     onEnd: () => setEnded(true),
   });
 

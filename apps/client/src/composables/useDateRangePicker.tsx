@@ -140,7 +140,7 @@ export const useDateRangePicker = (defaultType: DateRangeType, defaultRange?: Da
               value={settingValue}
               onChange={(v) => {
                 setSettingType('custom');
-                setSettingValue(v);
+                setSettingValue([new Date(v[0]), new Date(v[1])]);
               }}
               type="range"
               allowSingleDateInRange

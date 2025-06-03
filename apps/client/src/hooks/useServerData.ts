@@ -4,14 +4,11 @@ import type { ClientResponse } from 'hono/client';
 import useSWR from 'swr';
 import type { Channel, Message, MyUserDetail, Stamp, User, UserGroup } from 'traq-bot-ts';
 
-// biome-ignore lint/suspicious/noExplicitAny: 型パズルに必要なany
-type BlankRecordToNever<T> = T extends any ? (T extends null ? null : keyof T extends never ? never : T) : never;
-
 const fetchWrapper = <T>(
   fetcher: () => Promise<
     ClientResponse<T, 200, 'json'> | ClientResponse<unknown, 400, 'json'> | ClientResponse<unknown, 500, 'json'>
   >,
-): (() => Promise<BlankRecordToNever<T>>) => {
+): (() => Promise<T>) => {
   return async () => {
     const res = await fetcher();
     if (!res.ok) {
