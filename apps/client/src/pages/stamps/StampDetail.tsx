@@ -37,12 +37,12 @@ export const StampDetail: FC<Props> = ({ stampId }) => {
             <StampCountStat stampId={stampId} />
             <RangeStampCountStat
               stampId={stampId}
-              range={dateRangeKinds['last-30-days'].range}
+              range={dateRangeKinds['last-30-days'].getRange()}
               label={`押された回数 (${dateRangeKinds['last-30-days'].label})`}
             />
             <RangeStampCountStat
               stampId={stampId}
-              range={dateRangeKinds['last-7-days'].range}
+              range={dateRangeKinds['last-7-days'].getRange()}
               label={`押された回数 (${dateRangeKinds['last-7-days'].label})`}
             />
           </div>
