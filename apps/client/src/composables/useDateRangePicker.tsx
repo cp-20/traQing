@@ -1,6 +1,6 @@
 import { Button, type ButtonProps, Popover } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
-import { useId, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 
 export type DateRange = [Date, Date];
 
@@ -32,44 +32,45 @@ export const daysBeforeNow = (days: number) => new Date(Date.now() - msInDay * d
 export const dateRangeKinds = {
   custom: {
     label: 'カスタム',
-    range: null,
+    getRange: () => null,
   },
   'last-24-hours': {
     label: '過去24時間',
-    range: [daysBeforeNow(1), new Date()],
+    getRange: () => [daysBeforeNow(1), new Date()],
   },
   yesterday: {
     label: '昨日',
-    range: adjustDate([daysBeforeNow(1), daysBeforeNow(1)]),
+    getRange: () => adjustDate([daysBeforeNow(1), daysBeforeNow(1)]),
   },
   'last-7-days': {
     label: '過去7日間',
-    range: [daysBeforeNow(7), new Date()],
+    getRange: () => [daysBeforeNow(7), new Date()],
   },
   'last-week': {
     label: '先週',
-    range: adjustDate([daysBeforeNow(new Date().getDay() + 7), daysBeforeNow(new Date().getDay() + 1)]),
+    getRange: () => adjustDate([daysBeforeNow(new Date().getDay() + 7), daysBeforeNow(new Date().getDay() + 1)]),
   },
   'last-30-days': {
     label: '過去1か月',
-    range: [daysBeforeNow(28), new Date()],
+    getRange: () => [daysBeforeNow(28), new Date()],
   },
   'last-month': {
     label: '先月',
-    range: adjustDate([
-      daysBeforeNow(daysBeforeNow(new Date().getDate()).getDate() + new Date().getDate() - 1),
-      daysBeforeNow(new Date().getDate()),
-    ]),
+    getRange: () =>
+      adjustDate([
+        daysBeforeNow(daysBeforeNow(new Date().getDate()).getDate() + new Date().getDate() - 1),
+        daysBeforeNow(new Date().getDate()),
+      ]),
   },
   'last-1-year': {
     label: '過去1年間',
-    range: [daysBeforeNow(365), new Date()],
+    getRange: () => [daysBeforeNow(365), new Date()],
   },
-} satisfies Record<string, { label: string; range: DateRange | null }>;
+} satisfies Record<string, { label: string; getRange: () => DateRange | null }>;
 
 export type DateRangeType = keyof typeof dateRangeKinds;
 
-const fallbackRange: DateRange = dateRangeKinds['last-7-days'].range;
+const getFallbackRange = (): DateRange => dateRangeKinds['last-7-days'].getRange();
 
 export const useDateRangePicker = (defaultType: DateRangeType, defaultRange?: DateRange) => {
   const id = useId();
@@ -77,15 +78,23 @@ export const useDateRangePicker = (defaultType: DateRangeType, defaultRange?: Da
   const [type, setType] = useState<DateRangeType>(defaultType);
   const [settingType, setSettingType] = useState<DateRangeType>(defaultType);
   const label = dateRangeKinds[type].label;
-  const [value, setValue] = useState<DateRange>(defaultRange ?? dateRangeKinds[type].range ?? fallbackRange);
+  const [value, setValue] = useState<DateRange>(defaultRange ?? dateRangeKinds[type].getRange() ?? getFallbackRange());
   const [settingValue, setSettingValue] = useState<[Date | null, Date | null]>(
-    defaultRange ?? dateRangeKinds[settingType].range ?? [null, null],
+    defaultRange ?? dateRangeKinds[settingType].getRange() ?? [null, null],
   );
 
   const actions = {
     setType,
     setValue,
   };
+
+  useEffect(() => {
+    const range = dateRangeKinds[type].getRange();
+    if (range !== null) {
+      setValue(range);
+      setSettingValue(range);
+    }
+  }, [type]);
 
   const render = (props?: { buttonProps: ButtonProps }) => (
     <Popover
@@ -113,7 +122,7 @@ export const useDateRangePicker = (defaultType: DateRangeType, defaultRange?: Da
         <div className="space-y-2">
           <div className="flex gap-2">
             <div className="flex flex-col w-32">
-              {Object.entries(dateRangeKinds).map(([key, { label, range }]) => (
+              {Object.entries(dateRangeKinds).map(([key, { label, getRange }]) => (
                 <div key={key}>
                   <input
                     className="peer"
@@ -124,6 +133,7 @@ export const useDateRangePicker = (defaultType: DateRangeType, defaultRange?: Da
                     checked={settingType === key}
                     onChange={() => {
                       setSettingType(key as DateRangeType);
+                      const range = getRange();
                       if (range) setSettingValue(range);
                     }}
                   />

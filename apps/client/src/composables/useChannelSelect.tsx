@@ -2,7 +2,7 @@ import { ChannelIcon } from '@/components/icons/ChannelIcon';
 import { useChannels } from '@/hooks/useChannels';
 import { searchChannels } from '@/lib/search';
 import { Popover, ScrollArea, TextInput, type TextInputProps } from '@mantine/core';
-import { type FC, useMemo, useState } from 'react';
+import { type FC, useEffect, useMemo, useState } from 'react';
 
 type Props = {
   reducer: ReturnType<typeof useChannelSelect>;
@@ -23,12 +23,23 @@ export const ChannelSelect: FC<Props> = ({ reducer, textInputProps }) => {
   const { setChannelId } = reducer.actions;
   const [keyword, setKeyword] = useState<string>('');
   const [opened, setOpened] = useState(false);
-  const [isInvalid, setIsInvalid] = useState(false);
   const { channels, getChannelName, getChannelId } = useChannels();
 
   const channelNameSet = useMemo(() => new Set(channels?.map((c) => getChannelName(c.id))), [channels, getChannelName]);
 
   const filteredChannels = useMemo(() => channels && searchChannels(channels, keyword), [channels, keyword]);
+  const currentChannel = useMemo(
+    () => channels?.find((c) => c.id === reducer.state.channelId),
+    [channels, reducer.state.channelId],
+  );
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: 外部から setChannelId された時の処理
+  useEffect(() => {
+    if (!channels) return;
+    if (currentChannel && getChannelName(currentChannel.id) !== keyword) {
+      setKeyword(getChannelName(currentChannel.id) ?? '');
+    }
+  }, [currentChannel, channels, getChannelName]);
 
   return (
     <div>
@@ -39,12 +50,12 @@ export const ChannelSelect: FC<Props> = ({ reducer, textInputProps }) => {
             value={keyword}
             onFocus={() => setOpened(true)}
             leftSection={<ChannelIcon className="text-text-primary" />}
-            error={isInvalid}
             onBlur={(e) => {
+              setOpened(false);
               if (channelNameSet.has(e.target.value)) {
                 setChannelId(getChannelId(e.target.value) ?? '');
               } else {
-                setIsInvalid(e.target.value !== '' && !channelNameSet.has(e.target.value));
+                setKeyword(reducer.state.channelId ? (getChannelName(reducer.state.channelId) ?? '') : '');
               }
               if (e.target.value === '') setChannelId(null);
             }}

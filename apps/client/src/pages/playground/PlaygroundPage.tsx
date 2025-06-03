@@ -11,7 +11,7 @@ import {
   type PlaygroundFilter,
   PlaygroundFilters,
   usePlaygroundFilters,
-} from '@/pages/playground/usePlaygroundFIlters';
+} from '@/pages/playground/usePlaygroundFilters';
 import { Button, Select } from '@mantine/core';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import type { MessagesQuery, StampsQuery } from '@traq-ing/database';
@@ -71,7 +71,6 @@ export const PlaygroundPage: FC = () => {
       const actions = filter.actions as PlaygroundFilter<'stamps'>['reducer']['actions'];
       const { userId, channelId, messageUserId, stampId, botKind, groupByKind, orderByKind, orderKind } =
         state as QueryState<'stamps'>;
-      console.log(actions);
       actions.userSelectReducer.actions.setUserId(userId);
       actions.channelSelectReducer.actions.setChannelId(channelId);
       actions.messageUserSelectReducer.actions.setUserId(messageUserId);
@@ -189,7 +188,7 @@ export const PlaygroundPage: FC = () => {
         <pre className="border border-gray-200 rounded-md p-4">
           <code className="text-wrap break-all">{`const query = ${JSON.stringify(normalizedQuery, null, 2)};
 const params = new URLSearchParams(query);
-const result = await fetch(\`https://traqing.cp20.dev/api/${apiKind}?\$\{params.toString()\}\`).then((r) => r.json());
+const result = await fetch(\`${location.origin}/api/${apiKind}?\$\{params.toString()\}\`).then((r) => r.json());
 console.log(result);`}</code>
         </pre>
       </Card>

@@ -1,4 +1,5 @@
 import { ChannelIcon } from '@/components/icons/ChannelIcon';
+import { TraqMessage } from '@/components/messages/TraqMessage';
 import { UserAvatar } from '@/components/UserAvatar';
 import { StampImage } from '@/composables/useStampPicker';
 import { useChannels } from '@/hooks/useChannels';
@@ -13,6 +14,7 @@ type RowType = Partial<{
   channel: string;
   user: string;
   messageUser: string;
+  message: string;
   stamp: string;
   month: string;
   day: string;
@@ -26,6 +28,7 @@ const rows: { [K in ColumnType]: string } = {
   channel: 'チャンネル',
   user: 'ユーザー',
   messageUser: '投稿ユーザー',
+  message: 'メッセージ',
   stamp: 'スタンプ',
   month: '月',
   day: '日',
@@ -135,5 +138,9 @@ const convertColumn = (column: ColumnType, value: string | number): ReactNode =>
   if (column === 'stamp') {
     return <StampName stampId={value as string} />;
   }
+  if (column === 'message') {
+    return <TraqMessage messageId={value as string} />;
+  }
+
   return value;
 };

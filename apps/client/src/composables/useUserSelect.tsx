@@ -2,7 +2,7 @@ import { UserAvatar } from '@/components/UserAvatar';
 import { useUsers } from '@/hooks/useUsers';
 import { searchUsers } from '@/lib/search';
 import { Popover, ScrollArea, TextInput, type TextInputProps } from '@mantine/core';
-import { type FC, useMemo, useState } from 'react';
+import { type FC, useEffect, useMemo, useState } from 'react';
 
 type Props = {
   reducer: ReturnType<typeof useUserSelect>;
@@ -29,6 +29,14 @@ export const UserSelect: FC<Props> = ({ reducer, textInputProps }) => {
   const currentUser = useMemo(() => users?.find((u) => u.id === userId), [users, userId]);
   const filteredStamps = useMemo(() => users && searchUsers(users, keyword), [users, keyword]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: 外部から setUserId された時の処理
+  useEffect(() => {
+    if (!currentUser) return;
+    if (currentUser.name !== keyword) {
+      setKeyword(currentUser.name);
+    }
+  }, [userId, currentUser]);
+
   return (
     <div>
       <Popover width="target" position="bottom" shadow="sm" opened={opened} onChange={setOpened}>
@@ -44,6 +52,14 @@ export const UserSelect: FC<Props> = ({ reducer, textInputProps }) => {
                 </div>
               ) : null
             }
+            onBlur={(e) => {
+              setOpened(false);
+              const user = users?.find((s) => s.name === e.target.value);
+              if (!user) {
+                setKeyword(currentUser?.name ?? '');
+              }
+              if (e.target.value === '') setUserId(null);
+            }}
             onChange={(e) => {
               setKeyword(e.target.value);
               const user = users?.find((s) => s.name === e.target.value);

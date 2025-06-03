@@ -1,7 +1,7 @@
 import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { searchStamps } from '@/lib/search';
 import { Popover, Skeleton, TextInput, type TextInputProps } from '@mantine/core';
-import { type FC, useState } from 'react';
+import { type FC, type JSX, useEffect, useState } from 'react';
 
 export const useStampPicker = () => {
   const [stampId, setStampId] = useState<string | null>(null);
@@ -28,9 +28,17 @@ export const StampPicker: FC<StampPickerProps> = ({ reducer, textInputProps }) =
   const [opened, setOpened] = useState(false);
   const { stamps } = useMessageStamps();
 
-  const currentStamp = stamps?.find((s) => s.name === keyword);
+  const currentStamp = stamps?.find((s) => s.id === reducer.state.stampId);
 
   const filteredStamps = stamps && searchStamps(stamps, keyword);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: 外部から setStampId された時の処理
+  useEffect(() => {
+    if (!currentStamp) return;
+    if (currentStamp.name !== keyword) {
+      setKeyword(currentStamp.name);
+    }
+  }, [reducer.state.stampId, currentStamp]);
 
   return (
     <div>
@@ -47,6 +55,15 @@ export const StampPicker: FC<StampPickerProps> = ({ reducer, textInputProps }) =
                 </div>
               ) : null
             }
+            onBlur={(e) => {
+              setOpened(false);
+              const stamp = stamps?.find((s) => s.name === e.target.value);
+              if (stamp) {
+                setStampId(stamp.id);
+              } else {
+                setKeyword(currentStamp?.name ?? '');
+              }
+            }}
             onChange={(e) => {
               setKeyword(e.target.value);
               const stamp = stamps?.find((s) => s.name === e.target.value);

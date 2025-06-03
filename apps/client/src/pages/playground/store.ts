@@ -1,6 +1,6 @@
 import type { DateRange, DateRangeType } from '@/composables/useDateRangePicker';
 import type { APIKind, BotKind, GroupByKind, LimitKind, OrderByKind, OrderKind } from '@/pages/playground/model';
-import type { PlaygroundFilter } from '@/pages/playground/usePlaygroundFIlters';
+import type { PlaygroundFilter } from '@/pages/playground/usePlaygroundFilters';
 
 export const saveToQuery = (apiKind: APIKind, state: Record<string, string | number | Date | null>) => {
   const query = new URLSearchParams();

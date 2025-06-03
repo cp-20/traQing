@@ -22,7 +22,7 @@ const formatDate = (date: Date) => {
 
 type TraqMessageProps = {
   messageId: string;
-  annotation: ReactNode;
+  annotation?: ReactNode;
 };
 
 export const TraqMessage: FC<TraqMessageProps> = ({ messageId, annotation }) => {
@@ -117,7 +117,7 @@ export const TraqMessage: FC<TraqMessageProps> = ({ messageId, annotation }) => 
           <Text c="dimmed" fz="sm">
             {formattedDate}
           </Text>
-          <div className="ml-auto">{annotation}</div>
+          {annotation && <div className="ml-auto">{annotation}</div>}
         </div>
         <div className="flex flex-col gap-1 min-w-0 flex-1">
           {/* biome-ignore lint/security/noDangerouslySetInnerHtml: Markdownレンダリング処理を外部でやるため */}
