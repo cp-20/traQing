@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import { deleteCookie, getCookie, setCookie } from 'hono/cookie';
 import { sha256 } from 'js-sha256';
+import z from 'zod';
 
 const baseUrl = 'https://q.trap.jp/api/v3/oauth2';
 
@@ -68,6 +69,12 @@ export const sendTraqAuthTokenRequest = (code: string, codeVerifier: string) => 
   });
 };
 
+const tokenSchema = z.object({
+  token_type: z.string(),
+  access_token: z.string(),
+  expires_in: z.number(),
+});
+
 export const traqAuthRoutes = () => {
   const app = new Hono();
 
@@ -108,7 +115,8 @@ export const traqAuthRoutes = () => {
       }
 
       const tokenRes = await sendTraqAuthTokenRequest(code, codeVerifier);
-      const tokenData = await tokenRes.json();
+      const rawTokenData = await tokenRes.json();
+      const tokenData = tokenSchema.parse(rawTokenData);
 
       const token = tokenData.access_token;
       deleteCookie(c, codeVerifierKey(state));
@@ -121,6 +129,7 @@ export const traqAuthRoutes = () => {
         secure: true,
         httpOnly: true,
         sameSite: 'None',
+        maxAge: tokenData.expires_in,
       });
 
       const callbackUrl = getCookie(c, `traq-auth-callback-${state}`);
