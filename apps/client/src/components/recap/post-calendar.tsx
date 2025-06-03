@@ -80,7 +80,7 @@ export const PostCalendar: FC<CommonRecapComponentProps> = ({ userId, year }) =>
                     <Tooltip withArrow label={`${formatDate(date)} (${count}投稿)`}>
                       <span
                         className={clsx(
-                          'block p-[1px] size-[max(12px,calc(100cqw/53-2px))] border border-gray-300 rounded',
+                          'block p-px size-[max(12px,calc(100cqw/53-2px))] border border-gray-300 rounded',
                           count === 0 && 'bg-gray-50',
                           0 < count && count <= 3 && 'bg-blue-100',
                           3 < count && count <= 5 && 'bg-sky-100',

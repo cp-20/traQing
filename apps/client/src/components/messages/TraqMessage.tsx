@@ -108,7 +108,7 @@ export const TraqMessage: FC<TraqMessageProps> = ({ messageId, annotation }) => 
   }, new Map<string, number>());
 
   return (
-    <div className="border p-4 rounded-md flex flex-col">
+    <div className="border border-gray-200 p-4 rounded-md flex flex-col">
       <div className="flex flex-col gap-2" ref={messageContainerRef}>
         <div className="flex gap-1 items-center">
           <img className="rounded-full" src={`/api/files/${user.iconFileId}`} alt="" width={24} height={24} />
@@ -164,7 +164,7 @@ const QuotedMessage: FC<QuotedMessageProps> = ({ messageId, markdownIt }) => {
 
   const markdown = markdownIt.render(message.content);
   return (
-    <div className="border-l-4 pl-2 py-1">
+    <div className="border-l-4 border-gray-200 pl-2 py-1">
       <div className="flex gap-1">
         <div>
           <img className="rounded-full" src={`/api/files/${user.iconFileId}`} alt="" width={20} height={20} />
@@ -190,7 +190,7 @@ const QuotedMessage: FC<QuotedMessageProps> = ({ messageId, markdownIt }) => {
 
 const TraqMessageSkeleton: FC = () => {
   return (
-    <div className="border p-4 rounded-md flex flex-col gap-4">
+    <div className="border border-gray-200 p-4 rounded-md flex flex-col gap-4">
       <div className="flex flex-col gap-2">
         <div className="flex gap-1 items-center">
           <div>
@@ -220,7 +220,7 @@ const UrlRichPreview: FC<UrlRichPreviewProps> = ({ url }) => {
   return (
     <a
       href={url}
-      className="border rounded-md flex flex-col gap-2 mb-4 hover:bg-gray-100 transition-all duration-200 max-w-96"
+      className="border border-gray-200 rounded-md flex flex-col gap-2 mb-4 hover:bg-gray-100 transition-all duration-200 max-w-96"
     >
       {ogp.type === 'article' && ogp.image && (
         <div className="flex justify-center">
