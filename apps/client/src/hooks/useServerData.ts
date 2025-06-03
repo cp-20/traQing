@@ -2,6 +2,7 @@ import { client } from '@/features/api';
 import type { StampRelationsQuery } from '@traq-ing/database';
 import type { ClientResponse } from 'hono/client';
 import useSWR from 'swr';
+import useImmutableSWR from 'swr/immutable';
 import type { Channel, Message, MyUserDetail, Stamp, User, UserGroup } from 'traq-bot-ts';
 
 const fetchWrapper = <T>(
@@ -119,21 +120,21 @@ export const useChannelSubscribersData = (channelId: string) => {
 };
 
 export const useChannelsData = () => {
-  return useSWR<Channel[]>(
+  return useImmutableSWR<Channel[]>(
     '/api/channels',
     fetchWrapper(() => client.channels.$get()),
   );
 };
 
 export const useGroupsData = () => {
-  return useSWR<UserGroup[]>(
+  return useImmutableSWR<UserGroup[]>(
     '/api/groups',
     fetchWrapper(() => client.groups.$get()),
   );
 };
 
 export const useUsersData = () => {
-  return useSWR<User[]>(
+  return useImmutableSWR<User[]>(
     '/api/users',
     fetchWrapper(() => client.users.$get()),
   );
@@ -147,14 +148,14 @@ export const useMeData = () => {
 };
 
 export const useMessageStampsData = () => {
-  return useSWR<Stamp[]>(
+  return useImmutableSWR<Stamp[]>(
     '/api/message-stamps',
     fetchWrapper(() => client['message-stamps'].$get()),
   );
 };
 
 export const useStampRelationsData = (query: StampRelationsQuery) => {
-  return useSWR<{ user: string; messageUser: string; count: number }[]>(
+  return useImmutableSWR<{ user: string; messageUser: string; count: number }[]>(
     '/api/stamp-relations',
     fetchWrapper(() =>
       client['stamp-relations'].$get({
@@ -172,8 +173,8 @@ export type OpenGraph = {
   type: 'summary' | 'article';
 };
 export const useOpenGraphData = (url: string) => {
-  return useSWR<OpenGraph>(
-    `/api/open-graph?url=${encodeURIComponent(url)}`,
+  return useImmutableSWR<OpenGraph>(
+    `/api/og?url=${encodeURIComponent(url)}`,
     fetchWrapper(() => client.og.$get({ query: { url } })),
   );
 };

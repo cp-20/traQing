@@ -212,34 +212,34 @@ const TraqMessageSkeleton: FC = () => {
 type UrlRichPreviewProps = { url: string };
 
 const UrlRichPreview: FC<UrlRichPreviewProps> = ({ url }) => {
-  const ogp = useOpenGraph(url);
-  if (ogp === undefined) {
-    return <Skeleton h={64} w={384} className="mb-2" />;
-  }
+  const data = useOpenGraph(url);
+
+  if (data.status === 'loading') return <Skeleton h={64} w={384} className="mb-2" />;
+  if (data.status === 'error') return null;
+
+  const og = data.data;
 
   return (
     <a
       href={url}
       className="border border-gray-200 rounded-md flex flex-col gap-2 mb-4 hover:bg-gray-100 transition-all duration-200 max-w-96"
     >
-      {ogp.type === 'article' && ogp.image && (
+      {og.type === 'article' && og.image && (
         <div className="flex justify-center">
-          <img src={ogp.image} alt="" />
+          <img src={og.image} alt="" />
         </div>
       )}
       <div className="flex items-center">
-        {ogp.type === 'summary' && ogp.image && (
-          <div className="border-r max-w-24">{<img src={ogp.image} alt="" />}</div>
-        )}
+        {og.type === 'summary' && og.image && <div className="border-r max-w-24">{<img src={og.image} alt="" />}</div>}
         <div className="px-4 py-2">
           <Text fz="sm" className="font-semibold">
-            {ogp.title}
+            {og.title}
           </Text>
-          <Text fz="sm" lineClamp={ogp.type === 'summary' ? 3 : 2}>
-            {ogp.description}
+          <Text fz="sm" lineClamp={og.type === 'summary' ? 3 : 2}>
+            {og.description}
           </Text>
           <Text fz="xs" c="dimmed">
-            {ogp.origin}
+            {og.origin}
           </Text>
         </div>
       </div>
