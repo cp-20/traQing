@@ -73,7 +73,18 @@ export const traqAuthRoutes = () => {
 
   const routes = app
     .get('/request', async (c) => {
+      const callbackUrl = c.req.query('callback');
       const { redirectUri, codeVerifier, state } = getTraqAuthCodeRequestUrl();
+
+      if (callbackUrl) {
+        setCookie(c, `traq-auth-callback-${state}`, callbackUrl, {
+          maxAge: 60 * 60,
+          secure: true,
+          httpOnly: true,
+          sameSite: 'Lax',
+        });
+      }
+
       setCookie(c, codeVerifierKey(state), codeVerifier, {
         maxAge: 60 * 60,
         secure: true,
@@ -111,6 +122,12 @@ export const traqAuthRoutes = () => {
         httpOnly: true,
         sameSite: 'None',
       });
+
+      const callbackUrl = getCookie(c, `traq-auth-callback-${state}`);
+      if (callbackUrl?.startsWith('/')) {
+        deleteCookie(c, `traq-auth-callback-${state}`);
+        return c.redirect(callbackUrl);
+      }
 
       return c.redirect('/');
     });
