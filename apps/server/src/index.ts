@@ -193,7 +193,7 @@ const routes = app
     }
     forgotCaches();
     console.log('Caches cleared');
-    return c.json({ message: 'Caches cleared' }, 204);
+    return c.status(204);
   });
 
 app.on(
