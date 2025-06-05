@@ -149,8 +149,15 @@ export const useDateRangePicker = (defaultType: DateRangeType, defaultRange?: Da
             <DatePicker
               value={settingValue}
               onChange={(v) => {
+                // YYYY-MM-DD format
+                // FIXME: https://github.com/mantinedev/mantine/issues/7937
+                const realValue = v as [string | null, string | null];
+
                 setSettingType('custom');
-                setSettingValue([new Date(v[0]), new Date(v[1])]);
+                setSettingValue([
+                  realValue[0] ? new Date(`${realValue[0]}:00:00:00`) : null,
+                  realValue[1] ? new Date(`${realValue[1]}:00:00:00`) : null,
+                ] as DateRange);
               }}
               type="range"
               allowSingleDateInRange
