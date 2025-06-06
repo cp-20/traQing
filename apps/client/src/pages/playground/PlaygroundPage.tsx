@@ -16,6 +16,7 @@ import { Button, Select } from '@mantine/core';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import type { MessagesQuery, StampsQuery } from '@traq-ing/database';
 import { useEffect, useMemo, useRef, useState, type FC } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 
 export const PlaygroundPage: FC = () => {
   const [apiKind, setApiKind] = useState<APIKind>('messages');
@@ -170,7 +171,9 @@ export const PlaygroundPage: FC = () => {
           {error ? (
             <div className="text-red-500">エラーが発生しました</div>
           ) : (
-            <PlaygroundResult result={result.slice(0, Number.parseInt(limit))} />
+            <ErrorBoundary fallback={<div className="text-red-500">エラーが発生しました</div>}>
+              <PlaygroundResult result={result.slice(0, Number.parseInt(limit))} />
+            </ErrorBoundary>
           )}
           <div className="flex gap-2">
             <Button variant="light" fullWidth disabled={!hasPrev || loading} onClick={() => setPage((p) => p - 1)}>
