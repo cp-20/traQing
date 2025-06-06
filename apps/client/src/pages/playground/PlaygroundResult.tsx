@@ -48,7 +48,7 @@ export const PlaygroundResult = <Row extends RowType>({ result }: Props<Row>) =>
   }
 
   return (
-    <table className="border-collapse w-full">
+    <table className="border-collapse w-full table-fixed">
       <thead>
         <tr>
           {Object.entries(rows)

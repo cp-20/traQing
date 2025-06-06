@@ -38,3 +38,13 @@
   padding-left: 8px;
   margin-left: 0;
 }
+
+.traq-markdown pre {
+  background-color: #f3f4f6;
+  padding: 8px 16px;
+  margin: 0 0 8px 0;
+  border-radius: 4px;
+  font-family: 'Consolas', Courier, monospace;
+  overflow-x: auto;
+  min-width: 0;
+}
