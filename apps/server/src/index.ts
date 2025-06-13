@@ -6,7 +6,7 @@ import {
   StampsQuerySchema,
   StampsMeanUsageQuerySchema,
 } from '@traq-ing/database';
-import { Hono } from 'hono';
+import { type Context, Hono } from 'hono';
 import { getCookie } from 'hono/cookie';
 import { z } from 'zod';
 import { tokenKey, traqAuthRoutes } from './auth';
@@ -58,12 +58,28 @@ const cacheMiddleware = createMiddleware(async (c, next) => {
   await next();
 });
 
+const getToken = (c: Context): string | null => {
+  const cookieToken = getCookie(c, tokenKey);
+  if (typeof cookieToken === 'string') {
+    return cookieToken;
+  }
+
+  const bearerToken = c.req.header('Authorization');
+  if (typeof bearerToken === 'string' && bearerToken.startsWith('Bearer ')) {
+    return bearerToken.slice(7);
+  }
+
+  return null;
+};
+
 const routes = app
   .use(async (c, next) => {
     if (c.req.path.startsWith('/auth')) return await next();
 
-    const token = getCookie(c, tokenKey);
-    if (typeof token !== 'string') throw new HTTPException(401, { message: 'Unauthorized' });
+    const token = getToken(c);
+    if (token === null) {
+      throw new HTTPException(401, { message: 'Unauthorized' });
+    }
     await getMe(token);
 
     c.set('token', token);
