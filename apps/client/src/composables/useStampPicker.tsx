@@ -56,6 +56,8 @@ export const StampPicker: FC<StampPickerProps> = ({ reducer, textInputProps }) =
               ) : null
             }
             onBlur={(e) => {
+              if (e.relatedTarget?.classList.contains('stamp-picker-button')) return;
+
               setOpened(false);
               const stamp = stamps?.find((s) => s.name === e.target.value);
               if (stamp) {
@@ -87,6 +89,7 @@ export const StampPicker: FC<StampPickerProps> = ({ reducer, textInputProps }) =
                     setStampId(s.id);
                     setOpened(false);
                   }}
+                  className="stamp-picker-button"
                 >
                   <div className="bg-gray-400 animate-pulse" />
                   <StampImage stampId={s.id} />

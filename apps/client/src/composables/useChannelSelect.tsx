@@ -51,6 +51,7 @@ export const ChannelSelect: FC<Props> = ({ reducer, textInputProps }) => {
             onFocus={() => setOpened(true)}
             leftSection={<ChannelIcon className="text-text-primary" />}
             onBlur={(e) => {
+              if (e.relatedTarget?.classList.contains('channel-select-button')) return;
               setOpened(false);
               if (channelNameSet.has(e.target.value)) {
                 setChannelId(getChannelId(e.target.value) ?? '');
@@ -81,7 +82,7 @@ export const ChannelSelect: FC<Props> = ({ reducer, textInputProps }) => {
                     setChannelId(c.id);
                     setOpened(false);
                   }}
-                  className="flex items-center gap-2 hover:bg-gray-100 px-4 py-1"
+                  className="channel-select-button flex items-center gap-2 hover:bg-gray-100 px-4 py-1"
                 >
                   <ChannelIcon className="shrink-0" />
                   <div className="flex flex-col items-start">

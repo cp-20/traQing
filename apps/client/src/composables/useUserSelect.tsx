@@ -53,6 +53,7 @@ export const UserSelect: FC<Props> = ({ reducer, textInputProps }) => {
               ) : null
             }
             onBlur={(e) => {
+              if (e.relatedTarget?.classList.contains('user-select-button')) return;
               setOpened(false);
               const user = users?.find((s) => s.name === e.target.value);
               if (!user) {
@@ -83,7 +84,7 @@ export const UserSelect: FC<Props> = ({ reducer, textInputProps }) => {
                     setUserId(u.id);
                     setOpened(false);
                   }}
-                  className="flex items-center gap-2 hover:bg-gray-100 px-4 py-1"
+                  className="user-select-button flex items-center gap-2 hover:bg-gray-100 px-4 py-1"
                 >
                   <UserAvatar userId={u.id} />
                   <div className="flex flex-col items-start">
