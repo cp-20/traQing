@@ -5,7 +5,7 @@ import { StampImage } from '@/composables/useStampPicker';
 import { useChannels } from '@/hooks/useChannels';
 import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { useUsers } from '@/hooks/useUsers';
-import { assert } from '@/lib/invariant';
+import { Skeleton } from '@mantine/core';
 import clsx from 'clsx';
 import type { FC, ReactNode } from 'react';
 import { Link } from 'react-router';
@@ -92,7 +92,14 @@ export const PlaygroundResult = <Row extends RowType>({ result }: Props<Row>) =>
 const ChannelName: FC<{ channelId: string }> = ({ channelId }) => {
   const { getChannelName } = useChannels();
   const channel = getChannelName(channelId);
-  assert(channel);
+  if (channel === undefined) {
+    return (
+      <div className="flex gap-2 items-center">
+        <ChannelIcon className="size-6" />
+        <Skeleton w="10rem" h="1.2rem" />
+      </div>
+    );
+  }
   return (
     <Link to={`/channels/${channel}`} className="flex group hover:text-blue-500">
       <ChannelIcon className="size-6" />
@@ -104,7 +111,14 @@ const ChannelName: FC<{ channelId: string }> = ({ channelId }) => {
 const UserName: FC<{ userId: string }> = ({ userId }) => {
   const { getUserFromId } = useUsers();
   const user = getUserFromId(userId);
-  assert(user);
+  if (user === undefined) {
+    return (
+      <div className="flex gap-2 items-center">
+        <Skeleton w="1.5rem" h="1.5rem" circle />
+        <Skeleton w="10rem" h="1.2rem" />
+      </div>
+    );
+  }
   return (
     <Link to={`/users/${encodeURIComponent(user.name)}`} className="flex gap-2 items-center group hover:text-blue-500">
       <UserAvatar userId={userId} className="size-6" />
@@ -119,7 +133,14 @@ const UserName: FC<{ userId: string }> = ({ userId }) => {
 const StampName: FC<{ stampId: string }> = ({ stampId }) => {
   const { getStamp } = useMessageStamps();
   const stamp = getStamp(stampId);
-  assert(stamp);
+  if (stamp === undefined) {
+    return (
+      <div className="flex gap-2 items-center">
+        <Skeleton w="1.5rem" h="1.5rem" />
+        <Skeleton w="10rem" h="1.2rem" />
+      </div>
+    );
+  }
   return (
     <Link to={`/stamps/${stamp.name}`} className="flex gap-2 items-center group hover:text-blue-500">
       <StampImage stampId={stampId} className="size-6" />
