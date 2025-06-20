@@ -58,7 +58,7 @@ export const getStamps = async (query: StampsQuery) => {
   const order = query.order === 'asc' ? asc : desc;
 
   const orderBy = {
-    date: query.groupBy ? order(groupBy) : order(schema.messages.createdAt),
+    date: query.groupBy ? order(groupBy) : order(schema.messageStamps.createdAt),
     count: order(count()),
   }[query.orderBy ?? 'count'];
 
