@@ -1,21 +1,20 @@
-import { forgotCaches } from '@/gateway';
-import { api } from '@/traQ/api';
 import {
-  getUserGroupRelations,
-  insertUserGroupRelations,
-  deleteUserGroupRelations,
-  getTags,
-  insertTags,
-  deleteTags,
-  getChannelSubscriptions,
-  insertChannelSubscriptions,
-  deleteChannelSubscriptions,
-  getChannelPins,
-  insertChannelPins,
   deleteChannelPins,
+  deleteChannelSubscriptions,
+  deleteTags,
+  deleteUserGroupRelations,
+  getChannelPins,
+  getChannelSubscriptions,
+  getTags,
+  getUserGroupRelations,
+  insertChannelPins,
+  insertChannelSubscriptions,
+  insertTags,
+  insertUserGroupRelations,
   updateMaterializedViews,
 } from '@traq-ing/database';
 import { sleep } from 'bun';
+import { api } from '@/traQ/api';
 
 const getDiff = <T>(before: T[], after: T[], comp: (a: T, b: T) => boolean) => {
   const added = after.filter((a) => !before.some((b) => comp(a, b)));
@@ -105,6 +104,7 @@ export const updateStatistics = async () => {
       );
     } catch (err) {
       // 403エラーの場合はスキップ
+      console.error(`Failed to fetch channel subscriptions for channel ${channel.id}:`, err);
     }
     await sleep(100);
   }

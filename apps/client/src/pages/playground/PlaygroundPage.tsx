@@ -1,3 +1,8 @@
+import { Button, Select } from '@mantine/core';
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import type { MessagesQuery, StampsQuery } from '@traq-ing/database';
+import { type FC, useEffect, useMemo, useRef, useState } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { Card } from '@/components/Card';
 import { Container, ContainerTitle } from '@/components/containers/Container';
 import { EffectIcon } from '@/components/icons/EffectIcon';
@@ -12,11 +17,6 @@ import {
   PlaygroundFilters,
   usePlaygroundFilters,
 } from '@/pages/playground/usePlaygroundFilters';
-import { Button, Select } from '@mantine/core';
-import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
-import type { MessagesQuery, StampsQuery } from '@traq-ing/database';
-import { useEffect, useMemo, useRef, useState, type FC } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
 
 export const PlaygroundPage: FC = () => {
   const [apiKind, setApiKind] = useState<APIKind>('messages');
@@ -102,6 +102,7 @@ export const PlaygroundPage: FC = () => {
           setResult(data);
           setError(false);
         } catch (err) {
+          console.error(err);
           setError(true);
         } finally {
           setLoading(false);
@@ -115,6 +116,7 @@ export const PlaygroundPage: FC = () => {
           setResult(data);
           setError(false);
         } catch (err) {
+          console.error(err);
           setError(true);
         } finally {
           setLoading(false);

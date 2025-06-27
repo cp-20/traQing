@@ -12,7 +12,7 @@ const tokenizer = await new Promise<kuromoji.Tokenizer<kuromoji.IpadicFeatures>>
 const onlySpecialCharactersRegex = /^[\s!"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]+$/;
 const onlyNumbersRegex = /^\d+$/;
 const urlRegex = /https?:\/\/\S+/g;
-const mentionRegex = /!\{"type":"(?:user|channel)","raw":"(.+?)","id":"[a-z0-9\-]+"\}/g;
+const mentionRegex = /!\{"type":"(?:user|channel)","raw":"(.+?)","id":"[a-z0-9-]+"\}/g;
 
 export const extractWords = async (text: string) => {
   const urlStripped = text.replace(urlRegex, '');
