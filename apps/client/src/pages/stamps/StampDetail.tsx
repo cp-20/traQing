@@ -1,3 +1,4 @@
+import type { FC } from 'react';
 import { Card } from '@/components/Card';
 import { Container, ContainerTitle } from '@/components/containers/Container';
 import { StampHours } from '@/components/hours/StampHours';
@@ -10,7 +11,6 @@ import { dateRangeKinds } from '@/composables/useDateRangePicker';
 import { StampImage } from '@/composables/useStampPicker';
 import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { assert } from '@/lib/invariant';
-import type { FC } from 'react';
 
 type Props = {
   stampId: string;

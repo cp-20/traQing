@@ -1,8 +1,8 @@
 import { Skeleton } from '@mantine/core';
 import { IconCrown } from '@tabler/icons-react';
-import { useEffect, useState, type FC, type ReactNode } from 'react';
-import { Link } from 'react-router';
 import clsx from 'clsx';
+import { type FC, type ReactNode, useEffect, useState } from 'react';
+import { Link } from 'react-router';
 
 export type RankingItemSkeletonProps = {
   rank: number;

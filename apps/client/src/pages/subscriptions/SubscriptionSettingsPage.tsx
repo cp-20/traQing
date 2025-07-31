@@ -1,9 +1,9 @@
+import type { FC } from 'react';
 import { Card } from '@/components/Card';
 import { Container, ContainerTitle } from '@/components/containers/Container';
 import { NotificationIcon } from '@/components/NotificationIcon';
 import { MessagesChannelRankingWithSubscription } from '@/components/rankings/ChannelRanking';
 import { useDateRangePicker } from '@/composables/useDateRangePicker';
-import type { FC } from 'react';
 
 export const SubscriptionSettingsPage: FC = () => {
   const picker = useDateRangePicker('last-30-days');

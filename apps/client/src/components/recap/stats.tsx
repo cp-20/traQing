@@ -1,11 +1,11 @@
+import type { MessagesQuery, StampsQuery } from '@traq-ing/database';
+import { type FC, useMemo } from 'react';
 import { AnimatedStat } from '@/components/animated-stats';
 import { RankingIcon } from '@/components/RankingIcon';
 import { yearToQuery } from '@/components/recap/common';
 import { StatSkeleton } from '@/components/stats';
 import { useMessages } from '@/hooks/useMessages';
 import { useStamps } from '@/hooks/useStamps';
-import type { MessagesQuery, StampsQuery } from '@traq-ing/database';
-import { type FC, useMemo } from 'react';
 
 const RankAnnotation: FC<{ rank: number }> = ({ rank }) => {
   if (rank === 0) return <span>未ランクイン</span>;

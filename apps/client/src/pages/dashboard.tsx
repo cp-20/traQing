@@ -1,3 +1,5 @@
+import type { FC } from 'react';
+import { Link } from 'react-router';
 import LogoImage from '@/assets/logo.svg';
 import { Card } from '@/components/Card';
 import { ChannelIcon } from '@/components/icons/ChannelIcon';
@@ -12,8 +14,6 @@ import { MessagesChannelRanking } from '@/components/rankings/ChannelRanking';
 import { StampRanking } from '@/components/rankings/StampRanking';
 import { MessagesUserRanking } from '@/components/rankings/UserRanking';
 import { useDateRangePicker } from '@/composables/useDateRangePicker';
-import type { FC } from 'react';
-import { Link } from 'react-router';
 
 export const Dashboard: FC = () => {
   const range = useDateRangePicker('last-7-days');

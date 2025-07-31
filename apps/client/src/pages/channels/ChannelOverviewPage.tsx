@@ -1,3 +1,6 @@
+import { Skeleton, TextInput } from '@mantine/core';
+import { type FC, useState } from 'react';
+import { Link } from 'react-router';
 import { Card } from '@/components/Card';
 import { Container, ContainerTitle } from '@/components/containers/Container';
 import { ChannelIcon } from '@/components/icons/ChannelIcon';
@@ -10,9 +13,6 @@ import { TopChannelMessagesTimeline } from '@/components/timelines/TopMessagesTi
 import { StampPicker, useStampPicker } from '@/composables/useStampPicker';
 import { useChannels } from '@/hooks/useChannels';
 import { searchChannels } from '@/lib/search';
-import { Skeleton, TextInput } from '@mantine/core';
-import { useState, type FC } from 'react';
-import { Link } from 'react-router';
 
 const SearchChannelBlock: FC = () => {
   const [keyword, setKeyword] = useState<string>('');

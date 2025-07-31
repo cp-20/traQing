@@ -1,6 +1,6 @@
-import clsx from 'clsx';
-import { type ReactNode, type ComponentProps, type FC, useState, useRef, useEffect } from 'react';
 import { useIntersection } from '@mantine/hooks';
+import clsx from 'clsx';
+import { type ComponentProps, type FC, type ReactNode, useEffect, useRef, useState } from 'react';
 import { Card } from '@/components/Card';
 import { useCountUp } from './countup';
 

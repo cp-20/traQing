@@ -1,14 +1,14 @@
-import { mergeOptions, getCommonLineChartOptions } from '@/lib/commonChartOptions';
 import type { MessagesQuery, StampsQuery } from '@traq-ing/database';
 import {
   CategoryScale,
   Chart as ChartJS,
   type ChartOptions,
-  LineElement,
   LinearScale,
+  LineElement,
   PointElement,
   Tooltip,
 } from 'chart.js';
+import { getCommonLineChartOptions, mergeOptions } from '@/lib/commonChartOptions';
 
 ChartJS.register(CategoryScale, LinearScale, LineElement, Tooltip, PointElement);
 

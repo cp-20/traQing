@@ -1,6 +1,6 @@
+import type { FC } from 'react';
 import { Stat, StatSkeleton } from '@/components/stats';
 import { useChannelMessagesRanking, useChannelStampsRanking, useSubscriptionRanking } from '@/hooks/useServerData';
-import type { FC } from 'react';
 
 type ChannelStatsProps = {
   channelId: string;

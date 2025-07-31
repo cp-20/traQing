@@ -1,8 +1,8 @@
-import { useMessagesTimelineData } from '@/hooks/useServerData';
-import { getCommonLineChartOptions, mergeOptions } from '@/lib/commonChartOptions';
 import { Chart as ChartJS, type ChartOptions, Filler } from 'chart.js';
 import type { FC } from 'react';
 import { Line } from 'react-chartjs-2';
+import { useMessagesTimelineData } from '@/hooks/useServerData';
+import { getCommonLineChartOptions, mergeOptions } from '@/lib/commonChartOptions';
 
 ChartJS.register(Filler);
 

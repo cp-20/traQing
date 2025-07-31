@@ -1,7 +1,7 @@
-import { Card } from '@/components/Card';
 import { Skeleton } from '@mantine/core';
 import clsx from 'clsx';
 import type { ComponentProps, FC, ReactNode } from 'react';
+import { Card } from '@/components/Card';
 
 export type StatProps = {
   label: ReactNode;

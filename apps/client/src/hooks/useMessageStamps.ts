@@ -1,5 +1,5 @@
-import { useMessageStampsData } from '@/hooks/useServerData';
 import { useCallback } from 'react';
+import { useMessageStampsData } from '@/hooks/useServerData';
 
 export const useMessageStamps = () => {
   const { data: stamps } = useMessageStampsData();

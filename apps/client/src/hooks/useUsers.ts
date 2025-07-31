@@ -1,5 +1,5 @@
-import { useUsersData } from '@/hooks/useServerData';
 import { useCallback, useMemo } from 'react';
+import { useUsersData } from '@/hooks/useServerData';
 
 export const useUsers = () => {
   const { data: users } = useUsersData();

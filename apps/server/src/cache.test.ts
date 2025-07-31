@@ -1,6 +1,6 @@
-import { memorize, memorizeWithKey, purgeCache, TTLCache } from '@/cache';
+import { describe, expect, mock, setSystemTime, test } from 'bun:test';
 import { sleep } from 'bun';
-import { describe, test, setSystemTime, expect, mock } from 'bun:test';
+import { memorize, memorizeWithKey, purgeCache, TTLCache } from '@/cache';
 
 describe('TTLCache', () => {
   test('10sのTTLでキャッシュが期限切れになる', async () => {

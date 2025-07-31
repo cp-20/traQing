@@ -1,5 +1,5 @@
-import { useGroupsData } from '@/hooks/useServerData';
 import { useCallback } from 'react';
+import { useGroupsData } from '@/hooks/useServerData';
 
 export const useGroups = () => {
   const { data: groups } = useGroupsData();

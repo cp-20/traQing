@@ -1,8 +1,8 @@
+import type { FC } from 'react';
 import { Card } from '@/components/Card';
 import { Container, ContainerTitle } from '@/components/containers/Container';
 import { TagIcon } from '@/components/icons/TagIcon';
 import { TagRanking } from '@/components/rankings/TagRanking';
-import type { FC } from 'react';
 
 export const TagOverviewPage: FC = () => {
   return (

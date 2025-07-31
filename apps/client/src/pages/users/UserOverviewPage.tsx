@@ -1,3 +1,6 @@
+import { Skeleton, TextInput } from '@mantine/core';
+import { type FC, useState } from 'react';
+import { Link } from 'react-router';
 import { Card } from '@/components/Card';
 import { Container, ContainerTitle } from '@/components/containers/Container';
 import { UserIcon } from '@/components/icons/UserIcon';
@@ -11,9 +14,6 @@ import { UserAvatar } from '@/components/UserAvatar';
 import { StampPicker, useStampPicker } from '@/composables/useStampPicker';
 import { useUsers } from '@/hooks/useUsers';
 import { searchUsers } from '@/lib/search';
-import { Skeleton, TextInput } from '@mantine/core';
-import { useState, type FC } from 'react';
-import { Link } from 'react-router';
 
 const SearchUserBlock: FC = () => {
   const [keyword, setKeyword] = useState<string>('');

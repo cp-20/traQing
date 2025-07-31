@@ -1,9 +1,9 @@
-import { client } from '@/features/api';
 import type { StampRelationsQuery } from '@traq-ing/database';
 import type { ClientResponse } from 'hono/client';
 import useSWR from 'swr';
 import useImmutableSWR from 'swr/immutable';
 import type { Channel, Message, MyUserDetail, Stamp, User, UserGroup } from 'traq-bot-ts';
+import { client } from '@/features/api';
 
 const fetchWrapper = <T>(
   fetcher: () => Promise<

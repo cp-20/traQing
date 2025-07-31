@@ -1,8 +1,8 @@
+import { Popover, ScrollArea, TextInput, type TextInputProps } from '@mantine/core';
+import { type FC, useEffect, useMemo, useState } from 'react';
 import { UserAvatar } from '@/components/UserAvatar';
 import { useUsers } from '@/hooks/useUsers';
 import { searchUsers } from '@/lib/search';
-import { Popover, ScrollArea, TextInput, type TextInputProps } from '@mantine/core';
-import { type FC, useEffect, useMemo, useState } from 'react';
 
 type Props = {
   reducer: ReturnType<typeof useUserSelect>;

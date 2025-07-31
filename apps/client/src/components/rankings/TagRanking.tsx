@@ -1,8 +1,8 @@
+import clsx from 'clsx';
+import { type FC, Fragment } from 'react';
 import { RankingItemSkeleton } from '@/components/rankings';
 import { TagRankingItem } from '@/components/rankings/tag';
 import { useTagRanking } from '@/hooks/useServerData';
-import clsx from 'clsx';
-import { Fragment, type FC } from 'react';
 
 type RankingViewProps = {
   loading: boolean;

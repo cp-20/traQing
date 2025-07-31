@@ -1,4 +1,8 @@
-import { UserAvatar } from '@/components/UserAvatar';
+import { ActionIcon, Skeleton } from '@mantine/core';
+import type { MessagesQuery } from '@traq-ing/database';
+import { type FC, useCallback, useMemo } from 'react';
+import { ChannelIcon } from '@/components/icons/ChannelIcon';
+import { NotificationIcon } from '@/components/NotificationIcon';
 import {
   RankingItem,
   RankingItemBar,
@@ -7,16 +11,12 @@ import {
   RankingItemValue,
   RankingItemWithLink,
 } from '@/components/rankings';
+import { UserAvatar } from '@/components/UserAvatar';
+import { type DateRange, dateRangeToQuery } from '@/composables/useDateRangePicker';
 import { useChannels } from '@/hooks/useChannels';
 import { useMessages } from '@/hooks/useMessages';
-import { useUsers } from '@/hooks/useUsers';
-import { type DateRange, dateRangeToQuery } from '@/composables/useDateRangePicker';
-import { ActionIcon, Skeleton } from '@mantine/core';
-import type { MessagesQuery } from '@traq-ing/database';
-import { type FC, useCallback, useMemo } from 'react';
-import { ChannelIcon } from '@/components/icons/ChannelIcon';
 import { useSubscriptions } from '@/hooks/useSubscriptions';
-import { NotificationIcon } from '@/components/NotificationIcon';
+import { useUsers } from '@/hooks/useUsers';
 
 export type ChannelRankingItemProps = {
   channelId: string;

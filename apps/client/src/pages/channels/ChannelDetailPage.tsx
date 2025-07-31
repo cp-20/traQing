@@ -1,10 +1,10 @@
-import { useChannels } from '@/hooks/useChannels';
-import { assert } from '@/lib/invariant';
-import { ChannelDetail } from '@/pages/channels/ChannelDetail';
 import { Loader } from '@mantine/core';
 import clsx from 'clsx';
 import type { FC } from 'react';
 import { Link, useParams } from 'react-router';
+import { useChannels } from '@/hooks/useChannels';
+import { assert } from '@/lib/invariant';
+import { ChannelDetail } from '@/pages/channels/ChannelDetail';
 
 export const ChannelDetailPage: FC = () => {
   const { '*': channelName } = useParams<{ '*': string }>();

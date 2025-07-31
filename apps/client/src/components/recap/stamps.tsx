@@ -1,9 +1,9 @@
+import type { StampsMeanUsageQuery, StampsQuery } from '@traq-ing/database';
+import { type FC, useMemo } from 'react';
 import { StampRankingItem } from '@/components/rankings/stamp';
-import { RankingSkeleton, yearToQuery, type CommonRecapComponentProps } from '@/components/recap/common';
+import { type CommonRecapComponentProps, RankingSkeleton, yearToQuery } from '@/components/recap/common';
 import { useStamps } from '@/hooks/useStamps';
 import { useStampsMeanUsage } from '@/hooks/useStampsMeanUsage';
-import type { StampsQuery, StampsMeanUsageQuery } from '@traq-ing/database';
-import { type FC, useMemo } from 'react';
 
 export const TopGaveStamps: FC<CommonRecapComponentProps> = ({ userId, year }) => {
   const stampsQuery = useMemo(

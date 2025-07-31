@@ -1,19 +1,19 @@
-import { ChannelIcon } from '@/components/icons/ChannelIcon';
-import { useChannels } from '@/hooks/useChannels';
 import type { FC } from 'react';
+import { Card } from '@/components/Card';
+import { Container, ContainerTitle } from '@/components/containers/Container';
+import { ChannelActionHours } from '@/components/hours/ChannelActionHours';
+import { ChannelIcon } from '@/components/icons/ChannelIcon';
+import { TopReactedMessages } from '@/components/messages/TopReactedMessages';
+import { StampRanking } from '@/components/rankings/StampRanking';
+import { MessagesUserRanking, StampsGaveUserRanking } from '@/components/rankings/UserRanking';
 import {
   ChannelMessageCountStat,
   ChannelStampCountStat,
   ChannelSubscribersCountStat,
 } from '@/components/stats/ChannelStats';
-import { StampRanking } from '@/components/rankings/StampRanking';
-import { StampPicker, useStampPicker } from '@/composables/useStampPicker';
-import { TopReactedMessages } from '@/components/messages/TopReactedMessages';
 import { ChannelActionTimeline } from '@/components/timelines/ChannelActionTimeline';
-import { ChannelActionHours } from '@/components/hours/ChannelActionHours';
-import { MessagesUserRanking, StampsGaveUserRanking } from '@/components/rankings/UserRanking';
-import { Container, ContainerTitle } from '@/components/containers/Container';
-import { Card } from '@/components/Card';
+import { StampPicker, useStampPicker } from '@/composables/useStampPicker';
+import { useChannels } from '@/hooks/useChannels';
 
 type Props = {
   channelId: string;

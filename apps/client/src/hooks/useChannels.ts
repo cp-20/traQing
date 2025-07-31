@@ -1,5 +1,5 @@
-import { useChannelsData } from '@/hooks/useServerData';
 import { useCallback, useMemo } from 'react';
+import { useChannelsData } from '@/hooks/useServerData';
 
 export const useChannels = () => {
   const { data: channels } = useChannelsData();

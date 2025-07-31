@@ -1,5 +1,5 @@
+import { and, eq, or } from 'drizzle-orm';
 import { db } from '@/db';
-import { eq, and, or } from 'drizzle-orm';
 import * as schema from '@/schema';
 
 export const getChannelPins = async () => {

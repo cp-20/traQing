@@ -1,6 +1,6 @@
+import { useCallback, useMemo } from 'react';
 import { client } from '@/features/api';
 import { useSubscriptionsData } from '@/hooks/useServerData';
-import { useCallback, useMemo } from 'react';
 
 export const useSubscriptions = () => {
   const { data: subscriptions, mutate } = useSubscriptionsData();

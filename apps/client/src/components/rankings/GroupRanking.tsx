@@ -1,9 +1,9 @@
+import clsx from 'clsx';
+import type { FC } from 'react';
+import { Fragment } from 'react';
 import { RankingItemSkeleton } from '@/components/rankings';
 import { GroupRankingItem } from '@/components/rankings/group';
 import { useGroupRanking } from '@/hooks/useServerData';
-import clsx from 'clsx';
-import { Fragment } from 'react';
-import type { FC } from 'react';
 
 type RankingViewProps = {
   loading: boolean;

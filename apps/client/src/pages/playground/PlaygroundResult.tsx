@@ -1,3 +1,7 @@
+import { Skeleton } from '@mantine/core';
+import clsx from 'clsx';
+import type { FC, ReactNode } from 'react';
+import { Link } from 'react-router';
 import { ChannelIcon } from '@/components/icons/ChannelIcon';
 import { TraqMessage } from '@/components/messages/TraqMessage';
 import { UserAvatar } from '@/components/UserAvatar';
@@ -5,10 +9,6 @@ import { StampImage } from '@/composables/useStampPicker';
 import { useChannels } from '@/hooks/useChannels';
 import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { useUsers } from '@/hooks/useUsers';
-import { Skeleton } from '@mantine/core';
-import clsx from 'clsx';
-import type { FC, ReactNode } from 'react';
-import { Link } from 'react-router';
 
 type RowType = Partial<{
   channel: string;

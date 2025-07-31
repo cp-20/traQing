@@ -1,8 +1,8 @@
+import { type ChangeEvent, type FC, useState } from 'react';
 import { TopReactedMessages } from '@/components/messages/TopReactedMessages';
-import { yearToDateRange, type CommonRecapComponentProps } from '@/components/recap/common';
+import { type CommonRecapComponentProps, yearToDateRange } from '@/components/recap/common';
 import { StampImage } from '@/composables/useStampPicker';
 import { useMessageStamps } from '@/hooks/useMessageStamps';
-import { useState, type ChangeEvent, type FC } from 'react';
 
 export const HighlightedMessages: FC<CommonRecapComponentProps> = ({ userId, year }) => {
   const { getStamp } = useMessageStamps();

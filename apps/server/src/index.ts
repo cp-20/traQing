@@ -3,27 +3,30 @@ import {
   MessageContentsQuerySchema,
   MessagesQuerySchema,
   StampRelationsQuerySchema,
-  StampsQuerySchema,
   StampsMeanUsageQuerySchema,
+  StampsQuerySchema,
 } from '@traq-ing/database';
 import { type Context, Hono } from 'hono';
 import { getCookie } from 'hono/cookie';
+import { createMiddleware } from 'hono/factory';
+import { HTTPException } from 'hono/http-exception';
 import { z } from 'zod';
-import { tokenKey, traqAuthRoutes } from './auth';
+import { getCaches } from '@/cache';
+import { extractWords } from '@/extractor';
 import {
   forgotCaches,
   getChannelMessageRankingCached,
-  getChannels,
   getChannelStampsRankingCached,
   getChannelSubscribers,
+  getChannels,
   getFile,
   getGaveMessageStampsRankingCached,
   getMe,
   getMessage,
   getMessageContentsCached,
+  getMessageStamps,
   getMessagesCached,
   getMessagesRankingCached,
-  getMessageStamps,
   getMessagesTimelineCached,
   getOgInfo,
   getReceivedMessageStampsRankingCached,
@@ -39,10 +42,7 @@ import {
   getUsers,
   setSubscriptionLevel,
 } from '@/gateway';
-import { HTTPException } from 'hono/http-exception';
-import { createMiddleware } from 'hono/factory';
-import { extractWords } from '@/extractor';
-import { getCaches } from '@/cache';
+import { tokenKey, traqAuthRoutes } from './auth';
 
 const secretKey = process.env.SECRET_KEY;
 if (secretKey === undefined) {

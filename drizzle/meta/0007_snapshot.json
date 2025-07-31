@@ -57,10 +57,7 @@
       "compositePrimaryKeys": {
         "channel_pins_channel_id_message_id_pk": {
           "name": "channel_pins_channel_id_message_id_pk",
-          "columns": [
-            "channel_id",
-            "message_id"
-          ]
+          "columns": ["channel_id", "message_id"]
         }
       },
       "uniqueConstraints": {},
@@ -121,10 +118,7 @@
       "compositePrimaryKeys": {
         "channel_subscriptions_user_id_channel_id_pk": {
           "name": "channel_subscriptions_user_id_channel_id_pk",
-          "columns": [
-            "user_id",
-            "channel_id"
-          ]
+          "columns": ["user_id", "channel_id"]
         }
       },
       "uniqueConstraints": {},
@@ -435,12 +429,8 @@
           "name": "message_stamps_message_id_messages_id_fk",
           "tableFrom": "message_stamps",
           "tableTo": "messages",
-          "columnsFrom": [
-            "message_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["message_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -448,11 +438,7 @@
       "compositePrimaryKeys": {
         "message_stamps_user_id_stamp_id_message_id_pk": {
           "name": "message_stamps_user_id_stamp_id_message_id_pk",
-          "columns": [
-            "user_id",
-            "stamp_id",
-            "message_id"
-          ]
+          "columns": ["user_id", "stamp_id", "message_id"]
         }
       },
       "uniqueConstraints": {},
@@ -635,10 +621,7 @@
       "compositePrimaryKeys": {
         "tags_user_id_name_pk": {
           "name": "tags_user_id_name_pk",
-          "columns": [
-            "user_id",
-            "name"
-          ]
+          "columns": ["user_id", "name"]
         }
       },
       "uniqueConstraints": {},
@@ -705,10 +688,7 @@
       "compositePrimaryKeys": {
         "user_group_relations_user_id_group_id_pk": {
           "name": "user_group_relations_user_id_group_id_pk",
-          "columns": [
-            "user_id",
-            "group_id"
-          ]
+          "columns": ["user_id", "group_id"]
         }
       },
       "uniqueConstraints": {},

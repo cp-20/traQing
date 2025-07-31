@@ -1,12 +1,12 @@
+import { Skeleton, TextInput } from '@mantine/core';
+import { type FC, useState } from 'react';
+import { Link } from 'react-router';
 import { Card } from '@/components/Card';
 import { Container, ContainerTitle } from '@/components/containers/Container';
 import { GroupIcon } from '@/components/icons/GroupIcon';
 import { GroupMembersRanking } from '@/components/rankings/GroupRanking';
 import { useGroups } from '@/hooks/useGroups';
 import { searchGroups } from '@/lib/search';
-import { TextInput, Skeleton } from '@mantine/core';
-import { useState, type FC } from 'react';
-import { Link } from 'react-router';
 
 const SearchGroupBlock: FC = () => {
   const [keyword, setKeyword] = useState<string>('');

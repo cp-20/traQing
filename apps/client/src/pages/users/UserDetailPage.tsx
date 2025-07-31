@@ -1,6 +1,11 @@
+import type { FC } from 'react';
+import { useOutletContext } from 'react-router';
 import { Card } from '@/components/Card';
-import { UserAvatar } from '@/components/UserAvatar';
-import { useUsers } from '@/hooks/useUsers';
+import { Container, ContainerTitle } from '@/components/containers/Container';
+import { UserActionHours } from '@/components/hours/UserActionHours';
+import { TopReactedMessages } from '@/components/messages/TopReactedMessages';
+import { MessagesChannelRanking, StampsChannelRanking } from '@/components/rankings/ChannelRanking';
+import { StampRanking } from '@/components/rankings/StampRanking';
 import {
   UserGaveStampStat,
   UserGroupStat,
@@ -9,16 +14,11 @@ import {
   UserSubscriptionStat,
   UserTagStat,
 } from '@/components/stats/UserStats';
-import type { FC } from 'react';
-import { StampRanking } from '@/components/rankings/StampRanking';
-import { TopReactedMessages } from '@/components/messages/TopReactedMessages';
-import { StampPicker, useStampPicker } from '@/composables/useStampPicker';
 import { UserActionTimeline } from '@/components/timelines/UserActionTimeline';
-import { UserActionHours } from '@/components/hours/UserActionHours';
-import { MessagesChannelRanking, StampsChannelRanking } from '@/components/rankings/ChannelRanking';
-import { Container, ContainerTitle } from '@/components/containers/Container';
+import { UserAvatar } from '@/components/UserAvatar';
+import { StampPicker, useStampPicker } from '@/composables/useStampPicker';
+import { useUsers } from '@/hooks/useUsers';
 import type { UserContext } from '@/pages/users/UserGuard';
-import { useOutletContext } from 'react-router';
 
 export const UserDetailPage: FC = () => {
   const { userId } = useOutletContext() as UserContext;

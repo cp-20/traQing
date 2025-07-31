@@ -1,9 +1,9 @@
+import type { FC } from 'react';
 import { Card } from '@/components/Card';
 import { Container, ContainerTitle } from '@/components/containers/Container';
 import { MessageIcon } from '@/components/icons/MessageIcon';
 import { TopReactedMessages } from '@/components/messages/TopReactedMessages';
 import { StampPicker, useStampPicker } from '@/composables/useStampPicker';
-import type { FC } from 'react';
 
 export const MessageOverviewPage: FC = () => {
   const picker = useStampPicker();

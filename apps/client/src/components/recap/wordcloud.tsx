@@ -1,9 +1,9 @@
+import { Skeleton } from '@mantine/core';
+import type { MessageContentsQuery } from '@traq-ing/database';
+import { type FC, useEffect, useMemo, useRef, useState } from 'react';
 import { type CommonRecapComponentProps, yearToQuery } from '@/components/recap/common';
 import WordCloud from '@/components/WordCloud';
 import { useMessageContents } from '@/hooks/useMessageContents';
-import { Skeleton } from '@mantine/core';
-import type { MessageContentsQuery } from '@traq-ing/database';
-import { type FC, useRef, useState, useMemo, useEffect } from 'react';
 
 export const WordCloudRecap: FC<CommonRecapComponentProps> = ({ userId, year }) => {
   const containerRef = useRef<HTMLDivElement>(null);

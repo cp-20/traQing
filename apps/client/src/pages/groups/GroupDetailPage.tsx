@@ -1,10 +1,10 @@
-import { useGroups } from '@/hooks/useGroups';
-import { assert } from '@/lib/invariant';
-import { GroupDetail } from '@/pages/groups/GroupDetail';
 import { Loader } from '@mantine/core';
 import clsx from 'clsx';
 import type { FC } from 'react';
 import { Link, useParams } from 'react-router';
+import { useGroups } from '@/hooks/useGroups';
+import { assert } from '@/lib/invariant';
+import { GroupDetail } from '@/pages/groups/GroupDetail';
 
 export const GroupDetailPage: FC = () => {
   const { groupName } = useParams<{ groupName: string }>();

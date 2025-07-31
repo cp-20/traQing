@@ -1,6 +1,6 @@
+import type { FC } from 'react';
 import { RankingItemSkeleton } from '@/components/rankings';
 import { type DateRange, dateRangeToQuery } from '@/composables/useDateRangePicker';
-import type { FC } from 'react';
 
 export type CommonRecapComponentProps = {
   userId: string;

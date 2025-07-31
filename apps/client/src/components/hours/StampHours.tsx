@@ -1,9 +1,9 @@
-import { commonHoursChartOption, commonHoursQuery, getHourDataset, hours } from '@/components/hours/common';
-import { useStamps } from '@/hooks/useStamps';
 import type { StampsQuery } from '@traq-ing/database';
 import type { ChartOptions } from 'chart.js';
 import { type FC, useMemo } from 'react';
 import { Line } from 'react-chartjs-2';
+import { commonHoursChartOption, commonHoursQuery, getHourDataset, hours } from '@/components/hours/common';
+import { useStamps } from '@/hooks/useStamps';
 
 const option = {
   ...commonHoursChartOption,

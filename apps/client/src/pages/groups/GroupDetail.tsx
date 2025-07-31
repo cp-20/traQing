@@ -1,3 +1,4 @@
+import type { FC } from 'react';
 import { Card } from '@/components/Card';
 import { Container, ContainerTitle } from '@/components/containers/Container';
 import { GroupIcon } from '@/components/icons/GroupIcon';
@@ -8,7 +9,6 @@ import {
 } from '@/components/rankings/UserRanking';
 import { useGroups } from '@/hooks/useGroups';
 import { assert } from '@/lib/invariant';
-import type { FC } from 'react';
 
 type Props = {
   groupId: string;

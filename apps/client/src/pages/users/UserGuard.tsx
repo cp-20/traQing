@@ -1,9 +1,9 @@
-import { useUsers } from '@/hooks/useUsers';
-import { assert } from '@/lib/invariant';
 import { Loader } from '@mantine/core';
 import clsx from 'clsx';
 import type { FC } from 'react';
 import { Link, Outlet, useParams } from 'react-router';
+import { useUsers } from '@/hooks/useUsers';
+import { assert } from '@/lib/invariant';
 
 export type UserContext = {
   userId: string;

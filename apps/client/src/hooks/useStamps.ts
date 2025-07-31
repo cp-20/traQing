@@ -1,6 +1,6 @@
-import { client } from '@/features/api';
 import type { StampsQuery } from '@traq-ing/database';
 import { useEffect, useState } from 'react';
+import { client } from '@/features/api';
 
 type Result<Q extends StampsQuery> = {
   [K in Q extends { groupBy: infer U } ? (U extends undefined ? 'day' : U) : 'day']: string;

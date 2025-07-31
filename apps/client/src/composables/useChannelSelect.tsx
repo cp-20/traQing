@@ -1,8 +1,8 @@
+import { Popover, ScrollArea, TextInput, type TextInputProps } from '@mantine/core';
+import { type FC, useEffect, useMemo, useState } from 'react';
 import { ChannelIcon } from '@/components/icons/ChannelIcon';
 import { useChannels } from '@/hooks/useChannels';
 import { searchChannels } from '@/lib/search';
-import { Popover, ScrollArea, TextInput, type TextInputProps } from '@mantine/core';
-import { type FC, useEffect, useMemo, useState } from 'react';
 
 type Props = {
   reducer: ReturnType<typeof useChannelSelect>;

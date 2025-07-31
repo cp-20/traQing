@@ -1,7 +1,7 @@
-import { useAuth } from '@/hooks/useAuth';
-import { assert } from '@/lib/invariant';
 import type { FC } from 'react';
 import { Navigate, useParams } from 'react-router';
+import { useAuth } from '@/hooks/useAuth';
+import { assert } from '@/lib/invariant';
 
 export const YourRecapPage: FC = () => {
   const { me } = useAuth();

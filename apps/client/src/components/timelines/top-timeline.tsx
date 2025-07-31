@@ -1,8 +1,8 @@
-import { commonTimelineChartOptions } from '@/components/timelines/common';
-import { mergeOptions } from '@/lib/commonChartOptions';
 import { Chart as ChartJS, type ChartOptions, Legend } from 'chart.js';
 import type { FC } from 'react';
 import { Line } from 'react-chartjs-2';
+import { commonTimelineChartOptions } from '@/components/timelines/common';
+import { mergeOptions } from '@/lib/commonChartOptions';
 
 ChartJS.register(Legend);
 

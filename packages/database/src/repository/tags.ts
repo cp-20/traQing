@@ -1,5 +1,5 @@
+import { and, count, desc, eq, or } from 'drizzle-orm';
 import { db } from '@/db';
-import { eq, and, count, desc, or } from 'drizzle-orm';
 import * as schema from '@/schema';
 
 export const getTags = async () => {

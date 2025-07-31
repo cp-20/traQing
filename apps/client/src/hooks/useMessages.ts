@@ -1,6 +1,6 @@
-import { client } from '@/features/api';
 import type { GetMessagesResult, MessagesQuery } from '@traq-ing/database';
 import { useEffect, useState } from 'react';
+import { client } from '@/features/api';
 
 type Result<Q extends MessagesQuery> = Awaited<GetMessagesResult<Q>>;
 

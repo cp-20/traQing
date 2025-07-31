@@ -1,10 +1,10 @@
-import { useMessageStamps } from '@/hooks/useMessageStamps';
-import { assert } from '@/lib/invariant';
-import { StampDetail } from '@/pages/stamps/StampDetail';
 import { Loader } from '@mantine/core';
 import clsx from 'clsx';
 import type { FC } from 'react';
 import { Link, useParams } from 'react-router';
+import { useMessageStamps } from '@/hooks/useMessageStamps';
+import { assert } from '@/lib/invariant';
+import { StampDetail } from '@/pages/stamps/StampDetail';
 
 export const StampDetailPage: FC = () => {
   const { stampName } = useParams<{ stampName: string }>();

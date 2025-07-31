@@ -1,6 +1,6 @@
-import { TagIcon } from '@/components/icons/TagIcon';
-import { RankingItemBar, RankingItemRank, RankingItemValue, RankingItem } from '@/components/rankings';
 import type { FC } from 'react';
+import { TagIcon } from '@/components/icons/TagIcon';
+import { RankingItem, RankingItemBar, RankingItemRank, RankingItemValue } from '@/components/rankings';
 
 type TagRankingItemProps = {
   tag: string;

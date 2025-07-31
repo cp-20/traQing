@@ -1,12 +1,12 @@
+import type { FC } from 'react';
 import {
-  RankingItemSkeleton,
-  RankingItemWithLink,
   RankingItemBar,
   RankingItemRank,
+  RankingItemSkeleton,
   RankingItemValue,
+  RankingItemWithLink,
 } from '@/components/rankings';
 import { useGroups } from '@/hooks/useGroups';
-import type { FC } from 'react';
 
 type GroupRankingItemProps = {
   groupId: string;

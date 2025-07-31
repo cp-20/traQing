@@ -1,7 +1,7 @@
-import { useMessageStamps } from '@/hooks/useMessageStamps';
-import { searchStamps } from '@/lib/search';
 import { Popover, Skeleton, TextInput, type TextInputProps } from '@mantine/core';
 import { type FC, type JSX, useEffect, useState } from 'react';
+import { useMessageStamps } from '@/hooks/useMessageStamps';
+import { searchStamps } from '@/lib/search';
 
 export const useStampPicker = () => {
   const [stampId, setStampId] = useState<string | null>(null);

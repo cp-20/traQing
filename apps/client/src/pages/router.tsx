@@ -1,3 +1,4 @@
+import { BrowserRouter, Route, Routes } from 'react-router';
 import { ChannelDetailPage } from '@/pages/channels/ChannelDetailPage';
 import { ChannelOverviewPage } from '@/pages/channels/ChannelOverviewPage';
 import { Dashboard } from '@/pages/dashboard';
@@ -15,7 +16,6 @@ import { UserGuard } from '@/pages/users/UserGuard';
 import { UserOverviewPage } from '@/pages/users/UserOverviewPage';
 import { YearlyRecapPage } from '@/pages/users/YearlyRecap';
 import { YourRecapPage } from '@/pages/your-recap';
-import { BrowserRouter, Routes, Route } from 'react-router';
 
 export const AppRouter = () => (
   <BrowserRouter>

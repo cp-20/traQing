@@ -1,5 +1,5 @@
-import { db } from '@/db';
 import { and, count, desc, eq, or } from 'drizzle-orm';
+import { db } from '@/db';
 import * as schema from '@/schema';
 
 export const getUserGroupRelations = async () => {

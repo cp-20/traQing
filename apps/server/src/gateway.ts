@@ -1,5 +1,3 @@
-import { memorize, memorizeWithKey, purgeCache } from '@/cache';
-import { api, machineToken } from '@/traQ/api';
 import {
   getChannelMessageRanking,
   getChannelStampsRanking,
@@ -18,6 +16,8 @@ import {
   getUserGroupRanking,
 } from '@traq-ing/database';
 import sharp from 'sharp';
+import { memorize, memorizeWithKey, purgeCache } from '@/cache';
+import { api, machineToken } from '@/traQ/api';
 
 const getAuthHeader = (token: string) => ({ headers: { Authorization: `Bearer ${token}` } });
 

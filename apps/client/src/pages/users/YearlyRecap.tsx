@@ -1,22 +1,22 @@
-import { Card } from '@/components/Card';
-import { UserAvatar } from '@/components/UserAvatar';
-import { useUsers } from '@/hooks/useUsers';
-import { assert } from '@/lib/invariant';
-import type { UserContext } from '@/pages/users/UserGuard';
 import type { FC } from 'react';
 import { useOutletContext, useParams } from 'react-router';
-import { TopGaveStamps, TopReceivedStamps } from '@/components/recap/stamps';
-import { WordCloudRecap } from '@/components/recap/wordcloud';
+import { Card } from '@/components/Card';
+import { MessagesChannelRanking, StampsChannelRanking } from '@/components/rankings/ChannelRanking';
+import { yearToDateRange } from '@/components/recap/common';
+import { HighlightedMessages } from '@/components/recap/messages';
 import { PostCalendar } from '@/components/recap/post-calendar';
+import { TopGaveStamps, TopReceivedStamps } from '@/components/recap/stamps';
 import {
   TotalMessages,
   TotalMessagesLength,
   TotalReactionsGave,
   TotalReactionsReceived,
 } from '@/components/recap/stats';
-import { MessagesChannelRanking, StampsChannelRanking } from '@/components/rankings/ChannelRanking';
-import { yearToDateRange } from '@/components/recap/common';
-import { HighlightedMessages } from '@/components/recap/messages';
+import { WordCloudRecap } from '@/components/recap/wordcloud';
+import { UserAvatar } from '@/components/UserAvatar';
+import { useUsers } from '@/hooks/useUsers';
+import { assert } from '@/lib/invariant';
+import type { UserContext } from '@/pages/users/UserGuard';
 
 export const YearlyRecapPage: FC = () => {
   const { year: yearRaw } = useParams<{ year: string }>();

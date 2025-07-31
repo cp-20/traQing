@@ -1,8 +1,8 @@
-import { db } from '@/db';
-import { sqlGetDate, sqlGetHour, sqlGetMonth } from '@/util';
 import { and, asc, count, desc, eq, gt, lt, sql, sum } from 'drizzle-orm';
 import { z } from 'zod';
+import { db } from '@/db';
 import * as schema from '@/schema';
+import { sqlGetDate, sqlGetHour, sqlGetMonth } from '@/util';
 
 type Message = typeof schema.messages.$inferSelect;
 export const insertMessages = async (messages: Message[]) => {

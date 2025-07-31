@@ -1,11 +1,11 @@
-import { api } from '@/traQ/api';
 import {
   getLastMessageCreatedAt,
-  insertMessages,
   insertMessageStamps,
+  insertMessages,
   updateMaterializedViews,
 } from '@traq-ing/database';
 import { sleep } from 'bun';
+import { api } from '@/traQ/api';
 
 export const updateMessages = async (getAll: boolean) => {
   const after = await (async () => {

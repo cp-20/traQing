@@ -1,15 +1,15 @@
+import { Skeleton, Text } from '@mantine/core';
+import type { Store, traQMarkdownIt } from '@traptitech/traq-markdown-it';
+import { type FC, type ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useChannels } from '@/hooks/useChannels';
 import { useGroups } from '@/hooks/useGroups';
 import { useMessage } from '@/hooks/useMessage';
 import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { useUsers } from '@/hooks/useUsers';
-import { Skeleton, Text } from '@mantine/core';
-import type { Store, traQMarkdownIt } from '@traptitech/traq-markdown-it';
-import { type FC, type ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import './TraqMessage.css';
-import { useOpenGraph } from '@/hooks/useOpenGraph';
 import { StampImage } from '@/composables/useStampPicker';
+import { useOpenGraph } from '@/hooks/useOpenGraph';
 
 const formatDate = (date: Date) => {
   const year = date.getFullYear();

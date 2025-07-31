@@ -1,6 +1,6 @@
-import { client } from '@/features/api';
 import type { StampsMeanUsageQuery } from '@traq-ing/database';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { client } from '@/features/api';
 
 export const normalizeStampsMeanUsageQuery = <Q extends StampsMeanUsageQuery>(query: Q) => ({
   ...query,

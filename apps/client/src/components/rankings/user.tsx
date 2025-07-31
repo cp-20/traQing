@@ -1,4 +1,4 @@
-import { UserAvatar } from '@/components/UserAvatar';
+import type { FC } from 'react';
 import {
   RankingItemBar,
   RankingItemRank,
@@ -6,8 +6,8 @@ import {
   RankingItemValue,
   RankingItemWithLink,
 } from '@/components/rankings';
+import { UserAvatar } from '@/components/UserAvatar';
 import { useUsers } from '@/hooks/useUsers';
-import type { FC } from 'react';
 
 export type UserRankingItemProps = {
   userId: string;

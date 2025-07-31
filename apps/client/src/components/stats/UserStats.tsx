@@ -1,3 +1,4 @@
+import type { FC } from 'react';
 import { Stat, StatSkeleton } from '@/components/stats';
 import {
   useGaveMessageStampsRanking,
@@ -7,7 +8,6 @@ import {
   useSubscriptionRanking,
   useTagRanking,
 } from '@/hooks/useServerData';
-import type { FC } from 'react';
 
 type UserStatsProps = {
   userId: string;

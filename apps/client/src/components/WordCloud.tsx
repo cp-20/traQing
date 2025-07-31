@@ -1,11 +1,11 @@
 // ref: https://github.com/Yoctol/react-d3-cloud/blob/b7a35e3d6a5db85a616847328c6f798213fb9667/src/WordCloud.tsx
 
-import { useRef, memo, type FC, useEffect } from 'react';
 import cloud from 'd3-cloud';
-import isDeepEqual from 'react-fast-compare';
-import { type BaseType, type ValueFn, select } from 'd3-selection';
 import { scaleOrdinal } from 'd3-scale';
 import { schemeCategory10 } from 'd3-scale-chromatic';
+import { type BaseType, select, type ValueFn } from 'd3-selection';
+import { type FC, memo, useEffect, useRef } from 'react';
+import isDeepEqual from 'react-fast-compare';
 
 interface Datum {
   text: string;

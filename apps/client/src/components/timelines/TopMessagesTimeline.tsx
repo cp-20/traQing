@@ -1,11 +1,11 @@
-import { useMessagesByMultipleQueries } from '@/hooks/useMessages';
-import { useChannelMessagesRanking, useMessagesRanking } from '@/hooks/useServerData';
-import { useUsers } from '@/hooks/useUsers';
 import type { MessagesQuery } from '@traq-ing/database';
 import { type FC, useMemo } from 'react';
 import { timelineCommonQuery } from '@/components/timelines/common';
-import { useChannels } from '@/hooks/useChannels';
 import { TimelineView } from '@/components/timelines/top-timeline';
+import { useChannels } from '@/hooks/useChannels';
+import { useMessagesByMultipleQueries } from '@/hooks/useMessages';
+import { useChannelMessagesRanking, useMessagesRanking } from '@/hooks/useServerData';
+import { useUsers } from '@/hooks/useUsers';
 
 export const TopUserMessagesTimeline: FC = () => {
   const { getUsername } = useUsers();
