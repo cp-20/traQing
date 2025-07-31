@@ -1,4 +1,3 @@
-import { sqlGetMonth } from '@/util';
 import { asc, count, desc } from 'drizzle-orm';
 import {
   boolean,
@@ -11,6 +10,7 @@ import {
   timestamp,
   uuid,
 } from 'drizzle-orm/pg-core';
+import { sqlGetMonth } from '@/util';
 
 export const messages = pgTable(
   'messages',
@@ -28,6 +28,7 @@ export const messages = pgTable(
     channelIdIndex: index('messages_channel_id_idx').on(t.channelId),
     createdAtIndex: index('messages_created_at_idx').on(t.createdAt),
     pinnedIndex: index('messages_pinned_idx').on(t.pinned),
+    userIdChannelIdIndex: index('messages_user_id_channel_id_idx').on(t.userId, t.channelId),
   }),
 );
 
@@ -87,6 +88,16 @@ export const messageStamps = pgTable(
     messageIdIndex: index('message_stamps_message_id_idx').on(t.messageId),
     messageUserIndex: index('message_stamps_message_user_id_idx').on(t.messageUserId),
     createdAtIndex: index('message_stamps_created_at_idx').on(t.createdAt),
+    stampIdUserIdIndex: index('message_stamps_stamp_id_user_id_idx').on(t.stampId, t.userId),
+    stampIdMessageUserIdIndex: index('message_stamps_stamp_id_message_user_id_idx').on(t.stampId, t.messageUserId),
+    stampIdChannelIdIndex: index('message_stamps_stamp_id_channel_id_idx').on(t.stampId, t.channelId),
+    stampIdMessageIdIndex: index('message_stamps_stamp_id_message_id_idx').on(t.stampId, t.messageId),
+    userIdStampIdIndex: index('message_stamps_user_id_stamp_id_idx').on(t.userId, t.stampId),
+    userIdChannelIdIndex: index('message_stamps_user_id_channel_id_idx').on(t.userId, t.channelId),
+    messageUserIdChannelIdIndex: index('message_stamps_message_user_id_channel_id_idx').on(
+      t.messageUserId,
+      t.channelId,
+    ),
   }),
 );
 
