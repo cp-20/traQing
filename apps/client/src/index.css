@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400..700&display=swap')
-layer(base);
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400..700&display=swap")
+  layer(base);
 
-@import 'tailwindcss';
+@import "tailwindcss";
 @config "../tailwind.config.js";
 
 body {

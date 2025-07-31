@@ -13,12 +13,12 @@
     "studio": "drizzle-kit studio --host 0.0.0.0 --port 5000"
   },
   "dependencies": {
-    "drizzle-orm": "0.44.1",
+    "drizzle-orm": "0.44.4",
     "postgres": "3.4.7"
   },
   "devDependencies": {
-    "bun-types": "^1.2.15",
-    "drizzle-kit": "0.31.1",
+    "bun-types": "^1.2.19",
+    "drizzle-kit": "0.31.4",
     "tsup": "8.5.0"
   }
 }

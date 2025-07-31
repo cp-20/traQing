@@ -44,7 +44,7 @@
   padding: 8px 16px;
   margin: 0 0 8px 0;
   border-radius: 4px;
-  font-family: 'Consolas', Courier, monospace;
+  font-family: "Consolas", Courier, monospace;
   overflow-x: auto;
   min-width: 0;
 }

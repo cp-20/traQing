@@ -151,7 +151,7 @@ export const useDateRangePicker = (defaultType: DateRangeType, defaultRange?: Da
               onChange={(v) => {
                 // YYYY-MM-DD format
                 // FIXME: https://github.com/mantinedev/mantine/issues/7937
-                const realValue = v as [string | null, string | null];                
+                const realValue = v as [string | null, string | null];
 
                 setSettingType('custom');
                 setSettingValue([
