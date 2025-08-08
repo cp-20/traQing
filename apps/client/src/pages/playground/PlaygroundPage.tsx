@@ -146,11 +146,12 @@ export const PlaygroundPage: FC = () => {
               data={APIKindOptions}
               value={apiKind}
               onChange={(v) => setApiKind(v as APIKind)}
+              allowDeselect={false}
             />
           </div>
           <div className="grid grid-cols-2 max-md:grid-cols-1 gap-2">
             <PlaygroundFilters apiKind={apiKind} reducer={filter} />
-            <Select label="取得件数" data={limitKindOptions} value={limit} onChange={(v) => setLimit(v as LimitKind)} />
+            <Select label="取得件数" data={limitKindOptions} value={limit} onChange={(v) => setLimit(v as LimitKind)} allowDeselect={false}/>
             <div>
               <div className="text-sm/[1.75] font-medium">取得期間</div>
               {datePicker.render({ buttonProps: { fullWidth: true } })}
