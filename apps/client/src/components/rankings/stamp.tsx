@@ -8,6 +8,7 @@ import {
   RankingItemWithLink,
 } from '@/components/rankings';
 import { useMessageStamps } from '@/hooks/useMessageStamps';
+import { StampImage } from '../StampImage';
 
 export type StampRankingItemProps = {
   stampId: string;
@@ -26,7 +27,7 @@ export const StampRankingItem: FC<StampRankingItemProps> = ({ stampId, rank, val
     <RankingItemWithLink to={`/stamps/${encodeURIComponent(stamp.name)}`}>
       {rate && <RankingItemBar rate={rate} />}
       <RankingItemRank rank={rank} />
-      <img src={`/api/files/${stamp.fileId}?width=48&height=48`} alt="" className="size-6" width="24" height="24" />
+      <StampImage stampId={stampId} size={24} />
       <span className="font-medium">{stamp.name}</span>
       <RankingItemValue value={value} />
     </RankingItemWithLink>

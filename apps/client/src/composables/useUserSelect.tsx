@@ -48,7 +48,7 @@ export const UserSelect: FC<Props> = ({ reducer, textInputProps }) => {
             leftSection={
               currentUser ? (
                 <div className="inline-grid place-content-center p-1">
-                  <UserAvatar userId={currentUser.id} />
+                  <UserAvatar user={currentUser} />
                 </div>
               ) : null
             }
@@ -86,7 +86,7 @@ export const UserSelect: FC<Props> = ({ reducer, textInputProps }) => {
                   }}
                   className="user-select-button flex items-center gap-2 hover:bg-gray-100 px-4 py-1"
                 >
-                  <UserAvatar userId={u.id} />
+                  <UserAvatar user={u} />
                   <div className="flex flex-col items-start">
                     <span className="text-sm">{u.displayName}</span>
                     <span className="text-xs text-gray-400 -mt-1">@{u.name.split('#')[0]}</span>

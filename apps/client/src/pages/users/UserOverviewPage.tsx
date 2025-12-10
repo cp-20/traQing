@@ -31,7 +31,7 @@ const SearchUserBlock: FC = () => {
             to={`/users/${encodeURIComponent(user.name)}`}
             className="flex items-center gap-2 px-4 py-2 hover:bg-blue-100 transition-colors duration-200"
           >
-            <UserAvatar userId={user.id} />
+            <UserAvatar user={user} />
             <span className="font-semibold">{user.displayName}</span>
             <span className="text-gray-400">@{user.name}</span>
           </Link>

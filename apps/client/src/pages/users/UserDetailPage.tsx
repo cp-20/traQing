@@ -32,7 +32,7 @@ export const UserDetailPage: FC = () => {
     <Container>
       <ContainerTitle>
         <div>
-          <UserAvatar userId={user.id} size={128} loading="eager" />
+          <UserAvatar user={user} size={128} loading="eager" />
         </div>
         <div className="ml-4">
           <div className="text-2xl font-semibold">{user.displayName}</div>

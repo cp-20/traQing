@@ -8,8 +8,9 @@ import { useMessage } from '@/hooks/useMessage';
 import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { useUsers } from '@/hooks/useUsers';
 import './TraqMessage.css';
-import { StampImage } from '@/composables/useStampPicker';
 import { useOpenGraph } from '@/hooks/useOpenGraph';
+import { StampImage } from '../StampImage';
+import { UserAvatar } from '../UserAvatar';
 
 const formatDate = (date: Date) => {
   const year = date.getFullYear();
@@ -111,7 +112,7 @@ export const TraqMessage: FC<TraqMessageProps> = ({ messageId, annotation }) => 
     <div className="border border-gray-200 p-4 rounded-md flex flex-col">
       <div className="flex flex-col gap-2" ref={messageContainerRef}>
         <div className="flex gap-1 items-center">
-          <img className="rounded-full" src={`/api/files/${user.iconFileId}`} alt="" width={24} height={24} />
+          <UserAvatar user={user} size={24} />
           <Text fw="bold">{user.displayName}</Text>
           <Text>(@{user.name})</Text>
           <Text c="dimmed" fz="sm">
@@ -167,7 +168,7 @@ const QuotedMessage: FC<QuotedMessageProps> = ({ messageId, markdownIt }) => {
     <div className="border-l-4 border-gray-200 pl-2 py-1">
       <div className="flex gap-1">
         <div>
-          <img className="rounded-full" src={`/api/files/${user.iconFileId}`} alt="" width={20} height={20} />
+          <UserAvatar user={user} size={20} />
         </div>
         <Text fz="sm" fw="bold">
           {user.displayName}

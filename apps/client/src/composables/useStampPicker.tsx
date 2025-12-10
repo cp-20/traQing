@@ -1,5 +1,6 @@
-import { Popover, Skeleton, TextInput, type TextInputProps } from '@mantine/core';
-import { type FC, type JSX, useEffect, useState } from 'react';
+import { Popover, TextInput, type TextInputProps } from '@mantine/core';
+import { type FC, useEffect, useState } from 'react';
+import { StampImage } from '@/components/StampImage';
 import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { searchStamps } from '@/lib/search';
 
@@ -51,7 +52,7 @@ export const StampPicker: FC<StampPickerProps> = ({ reducer, textInputProps }) =
             leftSection={
               currentStamp ? (
                 <div className="inline-grid place-content-center p-1">
-                  <StampImage stampId={currentStamp.id} />
+                  <StampImage stampId={currentStamp.id} size={24} />
                 </div>
               ) : null
             }
@@ -92,7 +93,7 @@ export const StampPicker: FC<StampPickerProps> = ({ reducer, textInputProps }) =
                   className="stamp-picker-button"
                 >
                   <div className="bg-gray-400 animate-pulse" />
-                  <StampImage stampId={s.id} />
+                  <StampImage stampId={s.id} size={24} />
                 </button>
               ))}
             </div>
@@ -100,27 +101,5 @@ export const StampPicker: FC<StampPickerProps> = ({ reducer, textInputProps }) =
         </Popover.Dropdown>
       </Popover>
     </div>
-  );
-};
-
-export type StampImageProps = {
-  stampId: string;
-  size?: number;
-} & JSX.IntrinsicElements['img'];
-
-export const StampImage: FC<StampImageProps> = ({ stampId, size = 24, ...props }) => {
-  const { getStamp } = useMessageStamps();
-  const stamp = getStamp(stampId);
-  if (!stamp) return <Skeleton width={size} height={size} />;
-
-  return (
-    <img
-      src={`/api/files/${stamp.fileId}?width=${size * 2}&height=${size * 2}`}
-      width={size}
-      height={size}
-      loading="lazy"
-      {...props}
-      alt=""
-    />
   );
 };

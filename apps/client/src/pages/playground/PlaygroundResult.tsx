@@ -4,8 +4,8 @@ import type { FC, ReactNode } from 'react';
 import { Link } from 'react-router';
 import { ChannelIcon } from '@/components/icons/ChannelIcon';
 import { TraqMessage } from '@/components/messages/TraqMessage';
+import { StampImage } from '@/components/StampImage';
 import { UserAvatar } from '@/components/UserAvatar';
-import { StampImage } from '@/composables/useStampPicker';
 import { useChannels } from '@/hooks/useChannels';
 import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { useUsers } from '@/hooks/useUsers';
@@ -121,7 +121,7 @@ const UserName: FC<{ userId: string }> = ({ userId }) => {
   }
   return (
     <Link to={`/users/${encodeURIComponent(user.name)}`} className="flex gap-2 items-center group hover:text-blue-500">
-      <UserAvatar userId={userId} className="size-6" />
+      <UserAvatar user={user} className="size-6" />
       <div className="flex flex-col">
         <span className="text-sm font-medium">{user.displayName}</span>
         <span className="text-xs text-gray-400 -my-1">@{user.name}</span>

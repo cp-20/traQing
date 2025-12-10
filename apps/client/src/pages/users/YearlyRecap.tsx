@@ -30,7 +30,7 @@ export const YearlyRecapPage: FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-8 flex flex-col gap-16">
       <div className="py-8 flex flex-col items-center gap-4">
-        <UserAvatar userId={userId} size={128} />
+        <UserAvatar user={user} size={128} />
         <h1 className="text-center text-2xl font-semibold">
           @{user.name} の{year}年の振り返り
         </h1>

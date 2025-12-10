@@ -5,10 +5,10 @@ import { StampHours } from '@/components/hours/StampHours';
 import { TopReactedMessages } from '@/components/messages/TopReactedMessages';
 import { StampsChannelRanking } from '@/components/rankings/ChannelRanking';
 import { StampsGaveUserRanking, StampsReceivedUserRanking } from '@/components/rankings/UserRanking';
+import { StampImage } from '@/components/StampImage';
 import { RangeStampCountStat, StampCountStat } from '@/components/stats/StampStats';
 import { StampTimeline } from '@/components/timelines/StampTimeline';
 import { dateRangeKinds } from '@/composables/useDateRangePicker';
-import { StampImage } from '@/composables/useStampPicker';
 import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { assert } from '@/lib/invariant';
 

@@ -76,7 +76,7 @@ export const ChannelRankingItemWithUsers: FC<ChannelRankingItemWithUsersProps> =
   const firstUser = messages.length > 0 ? getUserFromId(messages[0]?.user) : undefined;
 
   const icon = firstUser ? (
-    <UserAvatar userId={firstUser.id} size={24} />
+    <UserAvatar user={firstUser} size={24} />
   ) : loading || users === undefined ? (
     <Skeleton circle height={24} />
   ) : (
@@ -104,12 +104,16 @@ export const ChannelRankingItemWithUsers: FC<ChannelRankingItemWithUsersProps> =
               const user = getUserFromId(m.user);
               return (
                 <div key={m.user} style={{ zIndex: arr.length - i }}>
-                  <UserAvatar
-                    userId={m.user}
-                    size={16}
-                    className="border-2 border-white bg-white"
-                    title={user && `${user.displayName} (@${user.name.split('#')[0]})`}
-                  />
+                  {user ? (
+                    <UserAvatar
+                      user={user}
+                      size={16}
+                      className="border-2 border-white bg-white"
+                      title={`${user.displayName} (@${user.name.split('#')[0]})`}
+                    />
+                  ) : (
+                    <Skeleton circle w={16} height={16} className="border-2 border-white" />
+                  )}
                 </div>
               );
             })}

@@ -180,22 +180,6 @@ const routes = app
     console.error(err);
     throw new HTTPException(500, { message: 'Internal Server Error' });
   })
-  .get(
-    '/avatars/:id',
-    zValidator('query', z.object({ width: z.coerce.number().optional(), height: z.coerce.number().optional() })),
-    async (c) => {
-      const userId = c.req.param('id');
-      const width = c.req.valid('query').width ?? c.req.valid('query').height;
-      const height = c.req.valid('query').height ?? c.req.valid('query').width;
-      const users = await getUsers();
-      const fileId = users.find((user) => user.id === userId)?.iconFileId;
-      if (!fileId) throw new HTTPException(404, { message: 'User not found' });
-      const file = await getFile(fileId, width, height);
-      c.header('Content-Type', file.type);
-      c.header('Cache-Control', 'private, max-age=31536000');
-      return c.newResponse(file.stream());
-    },
-  )
   .get('/caches', async (c) => {
     if (c.req.header('x-secret-key') !== secretKey) {
       throw new HTTPException(401, { message: 'Unauthorized' });

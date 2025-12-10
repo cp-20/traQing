@@ -3,8 +3,8 @@ import clsx from 'clsx';
 import { type FC, useMemo } from 'react';
 import { TraqMessage } from '@/components/messages/TraqMessage';
 import { type DateRange, dateRangeToQuery } from '@/composables/useDateRangePicker';
-import { StampImage } from '@/composables/useStampPicker';
 import { useStamps } from '@/hooks/useStamps';
+import { StampImage } from '../StampImage';
 
 type Props = {
   range?: DateRange;

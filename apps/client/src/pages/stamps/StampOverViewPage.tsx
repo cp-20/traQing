@@ -5,8 +5,8 @@ import { Card } from '@/components/Card';
 import { Container, ContainerTitle } from '@/components/containers/Container';
 import { StampIcon } from '@/components/icons/StampIcon';
 import { StampRanking } from '@/components/rankings/StampRanking';
+import { StampImage } from '@/components/StampImage';
 import { TopStampsTimeline } from '@/components/timelines/TopStampsTimeline';
-import { StampImage } from '@/composables/useStampPicker';
 import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { searchStamps } from '@/lib/search';
 
