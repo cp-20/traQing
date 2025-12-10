@@ -172,9 +172,11 @@ const routes = app
     c.json(await getChannelSubscribers(c.req.param('id')), 200),
   )
   .get('/message-stamps', cacheMiddleware, async (c) => c.json(await getMessageStamps(), 200))
-  .get('/og', zValidator('query', z.object({ url: z.string() })), cacheMiddleware, async (c) =>
-    c.json(await getOgInfo(c.req.valid('query').url), 200),
-  )
+  .get('/og', zValidator('query', z.object({ url: z.string() })), cacheMiddleware, async (c) => {
+    const ogData = await getOgInfo(c.req.valid('query').url);
+    if (ogData === null) return c.status(404);
+    return c.json(ogData, 200);
+  })
   .onError((err) => {
     if (err instanceof HTTPException) return err.getResponse();
     console.error(err);

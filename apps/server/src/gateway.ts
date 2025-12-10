@@ -102,7 +102,7 @@ export const getFile = memorize(
 
 export const getOgInfo = memorize(0, async (url: string) => {
   const res = await fetch(url, { headers: { 'User-Agent': 'bot' } });
-  if (!res.ok) throw new Error('Failed to fetch og');
+  if (!res.ok) return null;
   const data = await res.text();
   const metaTags = data.match(/<meta [^>]+>/g) ?? [];
   const parsedMetaTags = metaTags.map((tag) => {
