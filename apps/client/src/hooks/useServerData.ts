@@ -7,7 +7,10 @@ import { client } from '@/features/api';
 
 const fetchWrapper = <T>(
   fetcher: () => Promise<
-    ClientResponse<T, 200, 'json'> | ClientResponse<unknown, 400, 'json'> | ClientResponse<unknown, 500, 'json'>
+    | ClientResponse<T, 200, 'json'>
+    | ClientResponse<unknown, 400, 'json'>
+    | ClientResponse<unknown, 404, 'json'>
+    | ClientResponse<unknown, 500, 'json'>
   >,
 ): (() => Promise<T>) => {
   return async () => {
@@ -175,6 +178,6 @@ export type OpenGraph = {
 export const useOpenGraphData = (url: string) => {
   return useImmutableSWR<OpenGraph>(
     `/api/og?url=${encodeURIComponent(url)}`,
-    fetchWrapper(() => client.og.$get({ query: { url } })),
+    fetchWrapper<OpenGraph>(() => client.og.$get({ query: { url } })),
   );
 };
