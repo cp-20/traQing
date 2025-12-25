@@ -1,4 +1,4 @@
-import { asc, count, desc } from 'drizzle-orm';
+import { asc, count, desc, sql } from 'drizzle-orm';
 import {
   boolean,
   index,
@@ -10,7 +10,7 @@ import {
   timestamp,
   uuid,
 } from 'drizzle-orm/pg-core';
-import { sqlGetMonth } from '@/util';
+import { sqlGetMonth, sqlGetYear } from '@/util';
 
 export const messages = pgTable(
   'messages',
@@ -155,6 +155,85 @@ export const receivedMessageStampsRankingView = pgMaterializedView('received_mes
     .from(messageStamps)
     .groupBy(messageStamps.messageUserId)
     .orderBy(desc(count())),
+);
+
+export const yearlyMessagesRankingView = pgMaterializedView('yearly_messages_ranking').as((qb) =>
+  qb
+    .select({
+      year: sqlGetYear(messages.createdAt).as('year'),
+      user: messages.userId,
+      count: count().as('count'),
+    })
+    .from(messages)
+    .groupBy(sqlGetYear(messages.createdAt), messages.userId)
+    .orderBy(desc(count())),
+);
+
+export const yearlyChannelMessageRankingView = pgMaterializedView('yearly_channel_message_ranking').as((qb) =>
+  qb
+    .select({
+      year: sqlGetYear(messages.createdAt).as('year'),
+      user: messages.userId,
+      channel: messages.channelId,
+      count: count().as('count'),
+    })
+    .from(messages)
+    .groupBy(sqlGetYear(messages.createdAt), messages.userId, messages.channelId)
+    .orderBy(desc(sqlGetYear(messages.createdAt)), desc(count())),
+);
+
+export const yearlyGaveMessageStampChannelsRankingView = pgMaterializedView(
+  'yearly_gave_message_stamp_channels_ranking',
+).as((qb) =>
+  qb
+    .select({
+      year: sqlGetYear(messageStamps.createdAt).as('year'),
+      user: messageStamps.userId,
+      channel: messageStamps.channelId,
+      count: count().as('count'),
+    })
+    .from(messageStamps)
+    .groupBy(sqlGetYear(messageStamps.createdAt), messageStamps.userId, messageStamps.channelId)
+    .orderBy(desc(sqlGetYear(messageStamps.createdAt)), desc(count())),
+);
+
+export const yearlyMessageLengthRankingView = pgMaterializedView('yearly_message_length_ranking').as((qb) =>
+  qb
+    .select({
+      year: sqlGetYear(messages.createdAt).as('year'),
+      user: messages.userId,
+      contentSum: sql`SUM(length(${messages.content}))`.as('total_length'),
+    })
+    .from(messages)
+    .groupBy(sqlGetYear(messages.createdAt), messages.userId)
+    .orderBy(desc(sql`SUM(length(${messages.content}))`)),
+);
+
+export const yearlyGaveMessageStampsRankingView = pgMaterializedView('yearly_gave_message_stamps_ranking').as((qb) =>
+  qb
+    .select({
+      year: sqlGetYear(messageStamps.createdAt).as('year'),
+      user: messageStamps.userId,
+      stamp: messageStamps.stampId,
+      count: count().as('count'),
+    })
+    .from(messageStamps)
+    .groupBy(sqlGetYear(messageStamps.createdAt), messageStamps.userId, messageStamps.stampId)
+    .orderBy(desc(count())),
+);
+
+export const yearlyReceivedMessageStampsRankingView = pgMaterializedView('yearly_received_message_stamps_ranking').as(
+  (qb) =>
+    qb
+      .select({
+        year: sqlGetYear(messageStamps.createdAt).as('year'),
+        user: messageStamps.messageUserId,
+        stamp: messageStamps.stampId,
+        count: count().as('count'),
+      })
+      .from(messageStamps)
+      .groupBy(sqlGetYear(messageStamps.createdAt), messageStamps.messageUserId, messageStamps.stampId)
+      .orderBy(desc(count())),
 );
 
 export const userGroupRelations = pgTable(

@@ -2,7 +2,7 @@ import { and, asc, count, desc, eq, gt, lt, sql, sum } from 'drizzle-orm';
 import { z } from 'zod';
 import { db } from '@/db';
 import * as schema from '@/schema';
-import { sqlGetDate, sqlGetHour, sqlGetMonth } from '@/util';
+import { isYearQuery, sqlGetDate, sqlGetHour, sqlGetMonth } from '@/util';
 
 type Message = typeof schema.messages.$inferSelect;
 export const insertMessages = async (messages: Message[]) => {
@@ -84,6 +84,84 @@ export const getMessages = async (query: MessagesQuery): GetMessagesResult<Messa
     query.before && lt(schema.messages.createdAt, query.before),
     query.isBot && eq(schema.messages.isBot, query.isBot),
   ];
+
+  if (isYearQuery(query)) {
+    // biome-ignore lint/style/noNonNullAssertion: already checked above
+    const year = query.after?.toISOString().slice(0, 4)!;
+
+    if (
+      query.groupBy === 'channel' &&
+      (query.target ?? 'count') === 'count' &&
+      (query.orderBy ?? 'target') === 'target' &&
+      !query.userId &&
+      query.channelId !== undefined &&
+      !query.isBot
+    ) {
+      const results = await db
+        .select({
+          channel: schema.yearlyChannelMessageRankingView.channel,
+          count: schema.yearlyChannelMessageRankingView.count,
+        })
+        .from(schema.yearlyChannelMessageRankingView)
+        .where(
+          and(
+            eq(schema.yearlyChannelMessageRankingView.year, year),
+            eq(schema.yearlyChannelMessageRankingView.channel, query.channelId),
+          ),
+        )
+        .orderBy(order(schema.yearlyChannelMessageRankingView.count))
+        .limit(Math.min(query?.limit ?? 10000, 10000))
+        .offset(query?.offset ?? 0)
+        .execute();
+
+      return results;
+    }
+
+    if (
+      query.groupBy === 'user' &&
+      (query.target ?? 'count') === 'count' &&
+      (query.orderBy ?? 'target') === 'target' &&
+      !query.userId &&
+      !query.channelId &&
+      !query.isBot
+    ) {
+      const results = await db
+        .select({
+          user: schema.yearlyMessagesRankingView.user,
+          count: schema.yearlyMessagesRankingView.count,
+        })
+        .from(schema.yearlyMessagesRankingView)
+        .where(eq(schema.yearlyMessagesRankingView.year, year))
+        .orderBy(order(schema.yearlyMessagesRankingView.count))
+        .limit(Math.min(query?.limit ?? 10000, 10000))
+        .offset(query?.offset ?? 0)
+        .execute();
+
+      return results;
+    }
+
+    if (
+      query.groupBy === 'user' &&
+      query.target === 'contentSum' &&
+      !query.userId &&
+      !query.channelId &&
+      !query.isBot
+    ) {
+      const results = await db
+        .select({
+          user: schema.yearlyMessageLengthRankingView.user,
+          contentSum: schema.yearlyMessageLengthRankingView.contentSum,
+        })
+        .from(schema.yearlyMessageLengthRankingView)
+        .where(eq(schema.yearlyMessageLengthRankingView.year, year))
+        .orderBy(order(schema.yearlyMessageLengthRankingView.contentSum))
+        .limit(Math.min(query?.limit ?? 10000, 10000))
+        .offset(query?.offset ?? 0)
+        .execute();
+
+      return results;
+    }
+  }
 
   const initialQuery = db
     .select({

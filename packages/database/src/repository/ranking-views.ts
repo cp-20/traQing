@@ -38,4 +38,10 @@ export const updateMaterializedViews = async () => {
   await db.refreshMaterializedView(schema.channelStampsRankingView);
   await db.refreshMaterializedView(schema.gaveMessageStampsRankingView);
   await db.refreshMaterializedView(schema.receivedMessageStampsRankingView);
+  await db.refreshMaterializedView(schema.yearlyChannelMessageRankingView);
+  await db.refreshMaterializedView(schema.yearlyGaveMessageStampChannelsRankingView);
+  await db.refreshMaterializedView(schema.yearlyGaveMessageStampsRankingView);
+  await db.refreshMaterializedView(schema.yearlyMessageLengthRankingView);
+  await db.refreshMaterializedView(schema.yearlyMessagesRankingView);
+  await db.refreshMaterializedView(schema.yearlyReceivedMessageStampsRankingView);
 };

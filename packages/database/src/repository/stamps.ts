@@ -2,7 +2,7 @@ import { and, asc, count, desc, eq, gt, lt } from 'drizzle-orm';
 import { z } from 'zod';
 import { db } from '@/db';
 import * as schema from '@/schema';
-import { sqlGetDate, sqlGetHour, sqlGetMonth } from '@/util';
+import { isYearQuery, sqlGetDate, sqlGetHour, sqlGetMonth } from '@/util';
 
 export const StampsQuerySchema = z
   .object({
@@ -71,6 +71,98 @@ export const getStamps = async (query: StampsQuery) => {
     query.before && lt(schema.messageStamps.createdAt, query.before),
     query.isBot && eq(schema.messageStamps.isBot, query.isBot),
   ];
+
+  if (isYearQuery(query)) {
+    // biome-ignore lint/style/noNonNullAssertion: already checked above
+    const year = query.after?.toISOString().slice(0, 4)!;
+
+    if (
+      query.groupBy === 'channel' &&
+      (query.orderBy ?? 'count') === 'count' &&
+      query.userId !== undefined &&
+      !query.messageUserId &&
+      !query.channelId &&
+      !query.stampId &&
+      !query.isBot
+    ) {
+      const results = await db
+        .select({
+          channel: schema.yearlyGaveMessageStampChannelsRankingView.channel,
+          count: schema.yearlyGaveMessageStampChannelsRankingView.count,
+        })
+        .from(schema.yearlyGaveMessageStampChannelsRankingView)
+        .where(
+          and(
+            eq(schema.yearlyGaveMessageStampChannelsRankingView.year, year),
+            eq(schema.yearlyGaveMessageStampChannelsRankingView.user, query.userId),
+          ),
+        )
+        .orderBy(order(schema.yearlyGaveMessageStampChannelsRankingView.count))
+        .limit(Math.min(query?.limit ?? 10000, 10000))
+        .offset(query?.offset ?? 0)
+        .execute();
+
+      return results;
+    }
+
+    if (
+      query.groupBy === 'stamp' &&
+      (query.orderBy ?? 'count') === 'count' &&
+      query.userId !== undefined &&
+      !query.messageUserId &&
+      !query.channelId &&
+      !query.stampId &&
+      !query.isBot
+    ) {
+      const results = await db
+        .select({
+          stamp: schema.yearlyGaveMessageStampsRankingView.stamp,
+          count: schema.yearlyGaveMessageStampsRankingView.count,
+        })
+        .from(schema.yearlyGaveMessageStampsRankingView)
+        .where(
+          and(
+            eq(schema.yearlyGaveMessageStampsRankingView.year, year),
+            eq(schema.yearlyGaveMessageStampsRankingView.user, query.userId),
+          ),
+        )
+        .orderBy(order(schema.yearlyGaveMessageStampsRankingView.count))
+        .limit(Math.min(query?.limit ?? 10000, 10000))
+        .offset(query?.offset ?? 0)
+        .execute();
+
+      return results;
+    }
+
+    if (
+      query.groupBy === 'stamp' &&
+      (query.orderBy ?? 'count') === 'count' &&
+      !query.userId &&
+      query.messageUserId !== undefined &&
+      !query.channelId &&
+      !query.stampId &&
+      !query.isBot
+    ) {
+      const results = await db
+        .select({
+          stamp: schema.yearlyReceivedMessageStampsRankingView.stamp,
+          count: schema.yearlyReceivedMessageStampsRankingView.count,
+        })
+        .from(schema.yearlyReceivedMessageStampsRankingView)
+        .where(
+          and(
+            eq(schema.yearlyReceivedMessageStampsRankingView.year, year),
+            eq(schema.yearlyReceivedMessageStampsRankingView.user, query.messageUserId),
+          ),
+        )
+        .orderBy(order(schema.yearlyReceivedMessageStampsRankingView.count))
+        .limit(Math.min(query?.limit ?? 10000, 10000))
+        .offset(query?.offset ?? 0)
+        .execute();
+
+      return results;
+    }
+  }
 
   const initialQuery = db
     .select({

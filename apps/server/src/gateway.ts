@@ -121,29 +121,29 @@ export const getOgInfo = memorize(0, async (url: string) => {
   return { title, description, image, origin, type };
 });
 
-export const getMessagesCached = memorizeWithKey(3600, 'messages', getMessages);
-export const getMessageContentsCached = memorizeWithKey(3600, 'messageContents', getMessageContents);
-export const getChannelMessageRankingCached = memorizeWithKey(3600, 'channelMessageRanking', getChannelMessageRanking);
-export const getMessagesRankingCached = memorizeWithKey(3600, 'messagesRanking', getMessagesRanking);
-export const getMessagesTimelineCached = memorizeWithKey(3600, 'messagesTimeline', getMessagesTimeline);
-export const getStampRankingCached = memorizeWithKey(3600, 'stampRanking', getStampRanking);
-export const getChannelStampsRankingCached = memorizeWithKey(3600, 'channelStampsRanking', getChannelStampsRanking);
+export const getMessagesCached = memorizeWithKey(60, 'messages', getMessages);
+export const getMessageContentsCached = memorizeWithKey(60, 'messageContents', getMessageContents);
+export const getChannelMessageRankingCached = memorizeWithKey(60, 'channelMessageRanking', getChannelMessageRanking);
+export const getMessagesRankingCached = memorizeWithKey(60, 'messagesRanking', getMessagesRanking);
+export const getMessagesTimelineCached = memorizeWithKey(60, 'messagesTimeline', getMessagesTimeline);
+export const getStampRankingCached = memorizeWithKey(60, 'stampRanking', getStampRanking);
+export const getChannelStampsRankingCached = memorizeWithKey(60, 'channelStampsRanking', getChannelStampsRanking);
 export const getGaveMessageStampsRankingCached = memorizeWithKey(
-  3600,
+  60,
   'gaveMessageStampsRanking',
   getGaveMessageStampsRanking,
 );
 export const getReceivedMessageStampsRankingCached = memorizeWithKey(
-  3600,
+  60,
   'receivedMessageStampsRanking',
   getReceivedMessageStampsRanking,
 );
-export const getUserGroupRankingCached = memorizeWithKey(3600, 'userGroupRanking', getUserGroupRanking);
-export const getTagRankingCached = memorizeWithKey(3600, 'tagRanking', getTagRanking);
-export const getSubscriptionRankingCached = memorizeWithKey(3600, 'subscriptionRanking', getSubscriptionRanking);
-export const getStampsCached = memorizeWithKey(3600, 'stamps', getStamps);
-export const getStampsMeanUsageCached = memorizeWithKey(3600, 'stampsMeanUsage', getStampsMeanUsage);
-export const getStampRelationsCached = memorizeWithKey(3600, 'stampRelations', getStampRelations);
+export const getUserGroupRankingCached = memorizeWithKey(60, 'userGroupRanking', getUserGroupRanking);
+export const getTagRankingCached = memorizeWithKey(60, 'tagRanking', getTagRanking);
+export const getSubscriptionRankingCached = memorizeWithKey(60, 'subscriptionRanking', getSubscriptionRanking);
+export const getStampsCached = memorizeWithKey(60, 'stamps', getStamps);
+export const getStampsMeanUsageCached = memorizeWithKey(60, 'stampsMeanUsage', getStampsMeanUsage);
+export const getStampRelationsCached = memorizeWithKey(60, 'stampRelations', getStampRelations);
 
 export const forgotCaches = () => {
   purgeCache('messages');

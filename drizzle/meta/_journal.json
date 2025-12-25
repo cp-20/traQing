@@ -57,6 +57,13 @@
       "when": 1753992359416,
       "tag": "0007_curious_frightful_four",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1766644613674,
+      "tag": "0008_conscious_harry_osborn",
+      "breakpoints": true
     }
   ]
 }

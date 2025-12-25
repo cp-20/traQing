@@ -8,8 +8,8 @@ export type CommonRecapComponentProps = {
 };
 
 export const yearToDateRange = (year: number) => {
-  const start = new Date(`${year}-01-01T00:00:00+00:00`);
-  const end = new Date(`${year}-12-31T23:59:59+00:00`);
+  const start = new Date(`${year}-01-01T00:00:00.000+00:00`);
+  const end = new Date(`${year}-12-31T23:59:59.999+00:00`);
   return [start, end] satisfies DateRange;
 };
 
