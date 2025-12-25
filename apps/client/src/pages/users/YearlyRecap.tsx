@@ -12,7 +12,6 @@ import {
   TotalReactionsGave,
   TotalReactionsReceived,
 } from '@/components/recap/stats';
-import { WordCloudRecap } from '@/components/recap/wordcloud';
 import { UserAvatar } from '@/components/UserAvatar';
 import { useUsers } from '@/hooks/useUsers';
 import { assert } from '@/lib/invariant';
@@ -69,11 +68,6 @@ export const YearlyRecapPage: FC = () => {
           <TopReceivedStamps userId={userId} year={year} />
         </Card>
       </div>
-
-      <Card>
-        <div className="font-semibold mb-2">よく使った言葉</div>
-        <WordCloudRecap userId={userId} year={year} />
-      </Card>
 
       <Card>
         <div className="font-semibold mb-2">注目の投稿</div>

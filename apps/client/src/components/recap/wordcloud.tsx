@@ -38,7 +38,7 @@ export const WordCloudRecap: FC<CommonRecapComponentProps> = ({ userId, year }) 
         height={600}
         font="Noto Sans JP"
         fontWeight="bold"
-        fontSize={(word) => word.value ** 0.6 * (width / 800)}
+        fontSize={(word) => word.value ** 0.7 * (width / 800)}
         padding={5}
         random={Math.random}
       />

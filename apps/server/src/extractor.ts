@@ -10,7 +10,7 @@ const tokenizer = await new Promise<kuromoji.Tokenizer<kuromoji.IpadicFeatures>>
 });
 
 const onlySpecialCharactersRegex = /^[\s!"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]+$/;
-const onlyNumbersRegex = /^\d+$/;
+const onlyNumberOrAlphabetRegex = /^[a-zA-Z0-9]+$/;
 const urlRegex = /https?:\/\/\S+/g;
 const mentionRegex = /!\{"type":"(?:user|channel)","raw":"(.+?)","id":"[a-z0-9-]+"\}/g;
 
@@ -23,7 +23,8 @@ export const extractWords = async (text: string) => {
     .filter(
       (t) =>
         t.pos === '名詞' &&
-        !onlyNumbersRegex.test(t.surface_form) &&
+        t.pos_detail_1 !== '代名詞' &&
+        !onlyNumberOrAlphabetRegex.test(t.surface_form) &&
         !onlySpecialCharactersRegex.test(t.surface_form) &&
         t.surface_form.length >= 2,
     )
