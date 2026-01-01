@@ -14,8 +14,7 @@ export const updateMessages = async (getAll: boolean) => {
     const after = lastMessage ? new Date(lastMessage.getTime() - 1000 * 60 * 60 * 24 * 7).toISOString() : undefined;
     return after;
   })();
-  // let before = new Date().toISOString();
-  let before = '2025-08-09T10:37:20.159593Z';
+  let before = new Date().toISOString();
 
   const res = await api.users.getUsers();
   if (!res.ok) {
