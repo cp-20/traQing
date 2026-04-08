@@ -82,7 +82,7 @@ export const getMessages = async (query: MessagesQuery): GetMessagesResult<Messa
     query.channelId && eq(schema.messages.channelId, query.channelId),
     query.after && gt(schema.messages.createdAt, query.after),
     query.before && lt(schema.messages.createdAt, query.before),
-    query.isBot && eq(schema.messages.isBot, query.isBot),
+    query.isBot !== undefined && eq(schema.messages.isBot, query.isBot),
   ];
 
   if (isYearQuery(query)) {

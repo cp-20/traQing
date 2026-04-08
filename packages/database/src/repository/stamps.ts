@@ -69,7 +69,7 @@ export const getStamps = async (query: StampsQuery) => {
     query.stampId && eq(schema.messageStamps.stampId, query.stampId),
     query.after && gt(schema.messageStamps.createdAt, query.after),
     query.before && lt(schema.messageStamps.createdAt, query.before),
-    query.isBot && eq(schema.messageStamps.isBot, query.isBot),
+    query.isBot !== undefined && eq(schema.messageStamps.isBot, query.isBot),
   ];
 
   if (isYearQuery(query)) {
