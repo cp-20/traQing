@@ -95,17 +95,13 @@ const routes = app
     const data = await getSubscriptions(token);
     return c.json(data, 200);
   })
-  .put(
-    '/subscriptions/:id',
-    zValidator('json', z.object({ level: z.union([z.literal(0), z.literal(1), z.literal(2)]) })),
-    async (c) => {
-      const token = c.get('token');
-      const channelId = c.req.param('id');
-      const level = c.req.valid('json').level;
-      await setSubscriptionLevel(token, channelId, level);
-      return c.status(200);
-    },
-  )
+  .put('/subscriptions/:id', zValidator('json', z.object({ level: z.int() })), async (c) => {
+    const token = c.get('token');
+    const channelId = c.req.param('id');
+    const level = c.req.valid('json').level;
+    await setSubscriptionLevel(token, channelId, level);
+    return c.status(200);
+  })
   .get('/messages', zValidator('query', MessagesQuerySchema), cacheMiddleware, async (c) =>
     c.json(await getMessagesCached(c.req.valid('query')), 200),
   )

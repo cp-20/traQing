@@ -20,7 +20,7 @@ const formatNumber = (num: number) => {
 export const useCountUp = (option: Option) => {
   const duration = option.duration ?? 2;
   const { ref, start: startValue, end: endValue, onEnd } = option;
-  const intervalRef = useRef<NodeJS.Timeout | undefined>(undefined);
+  const intervalRef = useRef<number | undefined>(undefined);
 
   const start = () => {
     clearInterval(intervalRef.current);
