@@ -29,6 +29,7 @@ export const messages = pgTable(
     createdAtIndex: index('messages_created_at_idx').on(t.createdAt),
     pinnedIndex: index('messages_pinned_idx').on(t.pinned),
     userIdChannelIdIndex: index('messages_user_id_channel_id_idx').on(t.userId, t.channelId),
+    userIdCreatedAtIndex: index('messages_user_id_created_at_idx').on(t.userId, t.createdAt),
   }),
 );
 

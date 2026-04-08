@@ -58,7 +58,7 @@ export const getMessages = async (query: MessagesQuery): GetMessagesResult<Messa
   }[query.groupBy ?? 'day'];
 
   const target = {
-    count: count(schema.messages.id),
+    count: count(),
     contentSum: sum(sql`length(${schema.messages.content})`),
   }[query.target ?? 'count'];
 

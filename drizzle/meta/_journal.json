@@ -64,6 +64,13 @@
       "when": 1766644613674,
       "tag": "0008_conscious_harry_osborn",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1775658741057,
+      "tag": "0009_first_hellfire_club",
+      "breakpoints": true
     }
   ]
 }
