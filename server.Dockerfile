@@ -5,7 +5,7 @@ WORKDIR /app
 # Install procps for ps command
 RUN apt-get update && apt-get install -y procps && apt-get clean
 
-COPY ./package.json ./bun.lockb /app/
+COPY ./package.json ./bun.lock /app/
 COPY ./apps /app/apps
 COPY ./packages /app/packages
 COPY ./drizzle/ /app/drizzle
