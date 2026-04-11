@@ -1,12 +1,15 @@
+import * as path from 'node:path';
 import * as kuromoji from 'kuromoji';
 
 const tokenizer = await new Promise<kuromoji.Tokenizer<kuromoji.IpadicFeatures>>((resolve, reject) => {
-  kuromoji.builder({ dicPath: '../../node_modules/kuromoji/dict' }).build((err, newTokenizer) => {
-    if (err) {
-      reject(err);
-    }
-    resolve(newTokenizer);
-  });
+  kuromoji
+    .builder({ dicPath: path.join(import.meta.dir, '../node_modules/kuromoji/dict') })
+    .build((err, newTokenizer) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(newTokenizer);
+    });
 });
 
 const onlySpecialCharactersRegex = /^[\s!"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]+$/;
