@@ -2,7 +2,7 @@ import { and, asc, count, desc, eq, gt, lt, sql, sum } from 'drizzle-orm';
 import { z } from 'zod';
 import { db } from '@/db';
 import * as schema from '@/schema';
-import { isYearQuery, sqlGetDate, sqlGetHour, sqlGetMonth } from '@/util';
+import { isYearQuery, queryBooleanSchema, sqlGetDate, sqlGetHour, sqlGetMonth } from '@/util';
 
 type Message = typeof schema.messages.$inferSelect;
 export const insertMessages = async (messages: Message[]) => {
@@ -20,7 +20,7 @@ export const MessagesQuerySchema = z
     channelId: z.string(),
     before: z.coerce.date(),
     after: z.coerce.date(),
-    isBot: z.preprocess((input) => JSON.parse(`${input}`), z.boolean()),
+    isBot: queryBooleanSchema,
     groupBy: z.union([
       z.literal('month'),
       z.literal('day'),
@@ -86,8 +86,7 @@ export const getMessages = async (query: MessagesQuery): GetMessagesResult<Messa
   ];
 
   if (isYearQuery(query)) {
-    // biome-ignore lint/style/noNonNullAssertion: already checked above
-    const year = query.after?.toISOString().slice(0, 4)!;
+    const year = query.after.toISOString().slice(0, 4);
 
     if (
       query.groupBy === 'channel' &&
@@ -187,7 +186,7 @@ export const MessageContentsQuerySchema = z
     channelId: z.string(),
     before: z.coerce.date(),
     after: z.coerce.date(),
-    isBot: z.preprocess((input) => JSON.parse(`${input}`), z.boolean()),
+    isBot: queryBooleanSchema,
     limit: z.preprocess((x) => Number(x), z.number().int().positive()),
     offset: z.preprocess((x) => Number(x), z.number().int().nonnegative()),
   })

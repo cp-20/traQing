@@ -2,7 +2,7 @@ import { and, asc, count, desc, eq, gt, lt } from 'drizzle-orm';
 import { z } from 'zod';
 import { db } from '@/db';
 import * as schema from '@/schema';
-import { isYearQuery, sqlGetDate, sqlGetHour, sqlGetMonth } from '@/util';
+import { isYearQuery, queryBooleanSchema, sqlGetDate, sqlGetHour, sqlGetMonth } from '@/util';
 
 export const StampsQuerySchema = z
   .object({
@@ -12,7 +12,7 @@ export const StampsQuerySchema = z
     stampId: z.string(),
     before: z.coerce.date(),
     after: z.coerce.date(),
-    isBot: z.preprocess((input) => JSON.parse(`${input}`), z.boolean()),
+    isBot: queryBooleanSchema,
     groupBy: z.union([
       z.literal('month'),
       z.literal('day'),
@@ -73,8 +73,7 @@ export const getStamps = async (query: StampsQuery) => {
   ];
 
   if (isYearQuery(query)) {
-    // biome-ignore lint/style/noNonNullAssertion: already checked above
-    const year = query.after?.toISOString().slice(0, 4)!;
+    const year = query.after.toISOString().slice(0, 4);
 
     if (
       query.groupBy === 'channel' &&
@@ -191,7 +190,7 @@ export const StampsMeanUsageQuerySchema = z
     channelId: z.string(),
     before: z.coerce.date(),
     after: z.coerce.date(),
-    isBot: z.preprocess((input) => JSON.parse(`${input}`), z.boolean()),
+    isBot: queryBooleanSchema,
   })
   .partial()
   .extend({

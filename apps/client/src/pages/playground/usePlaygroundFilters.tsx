@@ -70,7 +70,13 @@ const MessagesFilter: FC<PlaygroundFilter<'messages'>> = ({ reducer }) => {
     <>
       <UserSelect reducer={reducer.actions.userSelectReducer} textInputProps={{ label: 'ユーザー名' }} />
       <ChannelSelect reducer={reducer.actions.channelSelectReducer} textInputProps={{ label: 'チャンネル名' }} />
-      <Select label="Botフィルタ" data={botKindOptions} value={botKind} onChange={(v) => setBotKind(v as BotKind)} allowDeselect={false}/>
+      <Select
+        label="Botフィルタ"
+        data={botKindOptions}
+        value={botKind}
+        onChange={(v) => setBotKind(v as BotKind)}
+        allowDeselect={false}
+      />
       <Select
         label="グループ化"
         data={groupByKindOptions.messages}

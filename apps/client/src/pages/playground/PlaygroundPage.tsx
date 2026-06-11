@@ -30,7 +30,7 @@ export const PlaygroundPage: FC = () => {
   const initialized = useRef(false);
 
   const hasPrev = page > 0;
-  const hasNext = result.length > Number.parseInt(limit);
+  const hasNext = result.length > Number.parseInt(limit, 10);
 
   useEffect(() => {
     if (initialized.current) {
@@ -87,8 +87,8 @@ export const PlaygroundPage: FC = () => {
   const query = useMemo(() => {
     return {
       ...filter.value,
-      limit: Number.parseInt(limit) + 1,
-      offset: page * Number.parseInt(limit),
+      limit: Number.parseInt(limit, 10) + 1,
+      offset: page * Number.parseInt(limit, 10),
       ...dateRangeToQuery(datePicker.value),
     };
   }, [filter.value, limit, page, datePicker.value]);
@@ -151,7 +151,13 @@ export const PlaygroundPage: FC = () => {
           </div>
           <div className="grid grid-cols-2 max-md:grid-cols-1 gap-2">
             <PlaygroundFilters apiKind={apiKind} reducer={filter} />
-            <Select label="取得件数" data={limitKindOptions} value={limit} onChange={(v) => setLimit(v as LimitKind)} allowDeselect={false}/>
+            <Select
+              label="取得件数"
+              data={limitKindOptions}
+              value={limit}
+              onChange={(v) => setLimit(v as LimitKind)}
+              allowDeselect={false}
+            />
             <div>
               <div className="text-sm/[1.75] font-medium">取得期間</div>
               {datePicker.render({ buttonProps: { fullWidth: true } })}
@@ -175,7 +181,7 @@ export const PlaygroundPage: FC = () => {
             <div className="text-red-500">エラーが発生しました</div>
           ) : (
             <ErrorBoundary fallback={<div className="text-red-500">エラーが発生しました</div>}>
-              <PlaygroundResult result={result.slice(0, Number.parseInt(limit))} />
+              <PlaygroundResult result={result.slice(0, Number.parseInt(limit, 10))} />
             </ErrorBoundary>
           )}
           <div className="flex gap-2">
@@ -194,7 +200,7 @@ export const PlaygroundPage: FC = () => {
         <pre className="border border-gray-200 rounded-md p-4">
           <code className="text-wrap break-all">{`const query = ${JSON.stringify(normalizedQuery, null, 2)};
 const params = new URLSearchParams(query);
-const result = await fetch(\`${location.origin}/api/${apiKind}?\$\{params.toString()\}\`).then((r) => r.json());
+const result = await fetch(\`${location.origin}/api/${apiKind}?$\{params.toString()}\`).then((r) => r.json());
 console.log(result);`}</code>
         </pre>
       </Card>

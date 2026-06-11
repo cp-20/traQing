@@ -54,7 +54,7 @@ export const loadFromQuery = () => {
     dateRange,
     limit: query.get('limit') as LimitKind | null,
     // biome-ignore lint/style/noNonNullAssertion: has -> get
-    page: query.get('page') ? Number.parseInt(query.get('page')!) : null,
+    page: query.get('page') ? Number.parseInt(query.get('page')!, 10) : null,
   } as QueryState<APIKind>;
 
   return {

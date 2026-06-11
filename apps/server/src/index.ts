@@ -100,7 +100,7 @@ const routes = app
     const channelId = c.req.param('id');
     const level = c.req.valid('json').level;
     await setSubscriptionLevel(token, channelId, level);
-    return c.status(200);
+    return c.body(null, 200);
   })
   .get('/messages', zValidator('query', MessagesQuerySchema), cacheMiddleware, async (c) =>
     c.json(await getMessagesCached(c.req.valid('query')), 200),
@@ -191,7 +191,7 @@ const routes = app
     }
     forgotCaches();
     console.log('Caches cleared');
-    return c.status(204);
+    return c.body(null, 204);
   });
 
 app.on(

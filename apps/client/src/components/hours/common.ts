@@ -32,4 +32,6 @@ export const commonHoursQuery = {
 
 const diff = new Date().getTimezoneOffset() / 60;
 export const getHourDataset = (data: { hour: string; count: number }[]) =>
-  hours.map((h) => data.find((s) => Number.parseInt(s.hour) === (Number.parseInt(h) + diff + 24) % 24)?.count ?? 0);
+  hours.map(
+    (h) => data.find((s) => Number.parseInt(s.hour, 10) === (Number.parseInt(h, 10) + diff + 24) % 24)?.count ?? 0,
+  );

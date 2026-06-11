@@ -1,11 +1,16 @@
 import { sql } from 'drizzle-orm';
+import { z } from 'zod';
 
 export const sqlGetYear = <T>(date: T) => sql<string>`TO_CHAR(${date}, 'YYYY')`;
 export const sqlGetMonth = <T>(date: T) => sql<string>`TO_CHAR(${date}, 'YYYY-MM')`;
 export const sqlGetDate = <T>(date: T) => sql<string>`TO_CHAR(${date}, 'YYYY-MM-DD')`;
 export const sqlGetHour = <T>(date: T) => sql<string>`TO_CHAR(${date}, 'HH24')`;
 
-export const isYearQuery = (query: { after?: Date; before?: Date }) => {
+export const queryBooleanSchema = z.enum(['true', 'false']).transform((value) => value === 'true');
+
+export const isYearQuery = <T extends { after?: Date; before?: Date }>(
+  query: T,
+): query is T & { after: Date; before: Date } => {
   if (!query.after || !query.before) return false;
 
   const afterStr = query.after.toISOString();

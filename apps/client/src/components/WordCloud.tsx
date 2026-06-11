@@ -47,7 +47,7 @@ const WordCloud: FC<Props> = ({
   // eslint-disable-next-line no-bitwise
   spiral = 'archimedean',
   padding = 1,
-  // @ts-ignore The ordinal function should accept number
+  // @ts-expect-error The ordinal function should accept number
   fill = (_, i) => defaultScaleOrdinal(i),
   onWordClick,
   onWordMouseOver,

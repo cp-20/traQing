@@ -14,6 +14,9 @@ export const fetchMessageContents = async <Q extends MessageContentsQuery>(query
   const res = await client['message-contents'].$get({
     query: normalizeMessagesQuery(query),
   });
+  if (!res.ok) {
+    throw new Error('Failed to fetch message contents');
+  }
   return await res.json();
 };
 

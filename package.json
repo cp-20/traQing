@@ -8,22 +8,22 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "npm-run-all --parallel dev:*",
-    "dev:database": "bun --filter \"@traq-ing/database\" dev",
-    "dev:client": "bun --filter \"@traq-ing/client\" dev",
-    "dev:server": "bun --filter \"@traq-ing/server\" dev",
+    "dev": "bun --filter \"*\" --elide-lines 0 dev",
+    "dev:database": "bun --filter \"@traq-ing/database\" --elide-lines 0 dev",
+    "dev:client": "bun --filter \"@traq-ing/client\" --elide-lines 0 dev",
+    "dev:server": "bun --filter \"@traq-ing/server\" --elide-lines 0 dev",
     "build": "bun run build:database && bun run build:server && bun run build:client",
-    "build:database": "bun --filter \"@traq-ing/database\" build",
-    "build:client": "bun --filter \"@traq-ing/client\" build",
-    "build:server": "bun --filter \"@traq-ing/server\" build",
-    "start": "npm-run-all --parallel start:*",
-    "start:client": "bun --filter \"@traq-ing/client\" start",
-    "start:server": "bun --filter \"@traq-ing/server\" start",
-    "start:studio": "bun --filter \"@traq-ing/database\" studio",
-    "migration": "bun --filter \"@traq-ing/database\" migration",
-    "run:update-messages": "bun --filter \"@traq-ing/server\" update-messages",
-    "run:update-all-messages": "bun --filter \"@traq-ing/server\" update-all-messages",
-    "run:update-statistics": "bun --filter \"@traq-ing/server\" update-statistics",
+    "build:database": "bun --filter \"@traq-ing/database\" --elide-lines 0 build",
+    "build:client": "bun --filter \"@traq-ing/client\" --elide-lines 0 build",
+    "build:server": "bun --filter \"@traq-ing/server\" --elide-lines 0 build",
+    "start": "bun --filter \"*\" --elide-lines 0 start",
+    "start:client": "bun --filter \"@traq-ing/client\" --elide-lines 0 start",
+    "start:server": "bun --filter \"@traq-ing/server\" --elide-lines 0 start",
+    "start:studio": "bun --filter \"@traq-ing/database\" --elide-lines 0 studio",
+    "migration": "bun --filter \"@traq-ing/database\" --elide-lines 0 migration",
+    "run:update-messages": "bun --filter \"@traq-ing/server\" --elide-lines 0 update-messages",
+    "run:update-all-messages": "bun --filter \"@traq-ing/server\" --elide-lines 0 update-all-messages",
+    "run:update-statistics": "bun --filter \"@traq-ing/server\" --elide-lines 0 update-statistics",
     "start-db": "docker run --name traq-ing-db -e TZ=\"Asia/Tokyo\" -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=traq_ing -v traq-ing-db:/var/lib/postgresql/data -p 5555:5432 --shm-size=1g -d postgres:16-alpine",
     "stop-db": "docker stop traq-ing-db && docker rm traq-ing-db",
     "update-db-config": "docker cp postgresql.conf traq-ing-db:/var/lib/postgresql/data/postgresql.conf && bun stop-db && bun start-db",
@@ -33,9 +33,9 @@
     "format:check": "biome format ."
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.10",
+    "@biomejs/biome": "2.4.16",
     "npm-run-all": "^4.1.5",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   },
   "trustedDependencies": [
     "@swc/core"

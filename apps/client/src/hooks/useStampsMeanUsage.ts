@@ -13,6 +13,9 @@ export const fetchStampsMeanUsage = async <Q extends StampsMeanUsageQuery>(query
   const res = await client['stamps-mean-usage'].$get({
     query: normalizeStampsMeanUsageQuery(query),
   });
+  if (!res.ok) {
+    throw new Error('Failed to fetch stamps mean usage');
+  }
   return await res.json();
 };
 
