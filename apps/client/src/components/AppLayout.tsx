@@ -5,10 +5,10 @@ import {
   Group,
   NavLink,
   ScrollArea,
+  Skeleton,
   Stack,
   Text,
   ThemeIcon,
-  Skeleton,
   Title,
   UnstyledButton,
   useComputedColorScheme,
@@ -21,8 +21,8 @@ import {
   IconHash,
   IconHome,
   IconMessageCircle,
-  IconMoon,
   IconMoodSmile,
+  IconMoon,
   IconSun,
   IconTags,
   IconUsers,
@@ -59,7 +59,7 @@ export const AppLayout: FC<Props> = ({ children }) => {
 
   const nav = (
     <Stack h="100%" gap="md">
-      <Group px="md" h={60} justify="center">
+      <Group px="md" h={60} justify="center" mt={16}>
         <img src={LogoImage} alt="traQing" width={112} />
       </Group>
       <ScrollArea flex={1} px="xs">
