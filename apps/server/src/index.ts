@@ -1,7 +1,10 @@
 import { zValidator } from '@hono/zod-validator';
 import {
+  ApiQueryMetricsQuerySchema,
+  getApiQueryMetrics,
   MessageContentsQuerySchema,
   MessagesQuerySchema,
+  recordApiQueryMetric,
   StampRelationsQuerySchema,
   StampsMeanUsageQuerySchema,
   StampsQuerySchema,
@@ -58,6 +61,56 @@ const cacheMiddleware = createMiddleware(async (c, next) => {
   await next();
 });
 
+const normalizeQuery = (url: string) => {
+  const params = [...new URL(url).searchParams.entries()].sort(([aKey, aValue], [bKey, bValue]) => {
+    if (aKey === bKey) return aValue.localeCompare(bValue);
+    return aKey.localeCompare(bKey);
+  });
+  return new URLSearchParams(params).toString();
+};
+
+const databaseQueryMetricPaths = new Set([
+  '/messages',
+  '/message-contents',
+  '/channel-messages-ranking',
+  '/messages-ranking',
+  '/messages-timeline',
+  '/stamp-ranking',
+  '/channel-stamps-ranking',
+  '/gave-stamps-ranking',
+  '/received-stamps-ranking',
+  '/group-ranking',
+  '/tag-ranking',
+  '/subscription-ranking',
+  '/stamps',
+  '/stamps-mean-usage',
+  '/stamp-relations',
+]);
+
+const apiQueryMetricsMiddleware = createMiddleware(async (c, next) => {
+  const start = performance.now();
+  let failed = false;
+  try {
+    await next();
+  } catch (err) {
+    failed = true;
+    throw err;
+  } finally {
+    const path = c.req.path;
+    if (databaseQueryMetricPaths.has(path)) {
+      const method = c.req.method;
+      const query = normalizeQuery(c.req.url);
+      const durationMs = performance.now() - start;
+      const status = failed ? 500 : c.res.status;
+      const measuredAt = new Date();
+
+      recordApiQueryMetric({ method, path, query, durationMs, status, measuredAt }).catch((err) => {
+        console.error('Failed to record API query metric', err);
+      });
+    }
+  }
+});
+
 const getToken = (c: Context): string | null => {
   const cookieToken = getCookie(c, tokenKey);
   if (typeof cookieToken === 'string') {
@@ -86,6 +139,7 @@ const routes = app
     return await next();
   })
   .route('/auth', traqAuthRoutes())
+  .use(apiQueryMetricsMiddleware)
   .get('/me', async (c) => {
     const data = await getMe(c.get('token'));
     return c.json(data, 200);
@@ -172,6 +226,9 @@ const routes = app
     const ogData = await getOgInfo(c.req.valid('query').url);
     if (ogData === null) return c.text('Not Found', 404);
     return c.json(ogData, 200);
+  })
+  .get('/admin/query-metrics', zValidator('query', ApiQueryMetricsQuerySchema), async (c) => {
+    return c.json(await getApiQueryMetrics(c.req.valid('query'), [...databaseQueryMetricPaths]), 200);
   })
   .onError((err) => {
     if (err instanceof HTTPException) return err.getResponse();

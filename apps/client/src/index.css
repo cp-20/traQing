@@ -175,6 +175,70 @@ body {
   border-right: 0;
 }
 
+.traqing-query-param-badge {
+  background: light-dark(
+    var(--mantine-color-white),
+    var(--mantine-color-dark-8)
+  );
+  border: 1px solid
+    light-dark(var(--mantine-color-gray-4), var(--mantine-color-dark-3));
+  color: light-dark(var(--mantine-color-gray-8), var(--mantine-color-dark-0));
+}
+
+.traqing-query-sort-header {
+  border-radius: var(--mantine-radius-sm);
+  color: inherit;
+  display: block;
+  font: inherit;
+  font-weight: 700;
+  margin-left: auto;
+  padding: 2px 4px;
+}
+
+.traqing-query-sort-header:hover {
+  background: light-dark(
+    var(--mantine-color-gray-1),
+    var(--mantine-color-dark-5)
+  );
+}
+
+.traqing-query-content-loading {
+  opacity: 0.48;
+  transition: opacity 120ms ease;
+}
+
+.traqing-query-histogram-row {
+  align-items: center;
+  display: grid;
+  gap: 4px;
+  grid-template-columns: 54px minmax(96px, 1fr) 40px;
+  line-height: 1;
+}
+
+.traqing-query-histogram-label,
+.traqing-query-histogram-count {
+  color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-1));
+  font-size: 10px;
+}
+
+.traqing-query-histogram-track {
+  background: light-dark(
+    var(--mantine-color-gray-2),
+    var(--mantine-color-dark-5)
+  );
+  border-radius: 999px;
+  height: 5px;
+  overflow: hidden;
+}
+
+.traqing-query-histogram-fill {
+  background: hsl(
+    calc(210deg - (210deg * var(--traqing-query-histogram-color-index))) 58% 42%
+  );
+  border-radius: inherit;
+  height: 100%;
+}
+
 .traqing-code-block {
   background: light-dark(
     var(--mantine-color-gray-0),

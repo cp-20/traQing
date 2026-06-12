@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router';
 import { AppLayout } from '@/components/AppLayout';
+import { QueryMetricsPage } from '@/pages/admin/QueryMetricsPage';
 import { ChannelDetailPage } from '@/pages/channels/ChannelDetailPage';
 import { ChannelOverviewPage } from '@/pages/channels/ChannelOverviewPage';
 import { Dashboard } from '@/pages/dashboard';
@@ -39,6 +40,7 @@ export const AppRouter = () => (
         <Route path="/tags" element={<TagOverviewPage />} />
         <Route path="/subscriptions" element={<SubscriptionSettingsPage />} />
         <Route path="/playground" element={<PlaygroundPage />} />
+        <Route path="/admin/query-metrics" element={<QueryMetricsPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </AppLayout>

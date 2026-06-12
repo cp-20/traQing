@@ -10,15 +10,16 @@ export type StatProps = {
   valueProps?: ComponentProps<'span'>;
   unit?: ReactNode;
   annotation?: ReactNode;
+  periodLabel?: ReactNode;
 };
 
-export const Stat: FC<StatProps> = ({ label, value, unit, annotation, valueProps }) => {
+export const Stat: FC<StatProps> = ({ label, value, unit, annotation, valueProps, periodLabel }) => {
   return (
     <Card className="h-32">
       <div className="flex h-full flex-col justify-between">
         <div className="flex justify-between items-center">
           <div className="traqing-stat-label text-sm font-semibold">{label}</div>
-          <PeriodBadge kind="all" />
+          <PeriodBadge kind="all" label={periodLabel} />
         </div>
         <div>
           <span {...valueProps} className={clsx(valueProps?.className, 'traqing-stat-value text-4xl font-semibold')}>
@@ -34,11 +35,13 @@ export const Stat: FC<StatProps> = ({ label, value, unit, annotation, valueProps
 
 export type StatSkeletonProps = {
   label: ReactNode;
+  periodLabel?: ReactNode;
 };
 
-export const StatSkeleton: FC<StatSkeletonProps> = ({ label }) => (
+export const StatSkeleton: FC<StatSkeletonProps> = ({ label, periodLabel }) => (
   <Stat
     label={label}
+    periodLabel={periodLabel}
     value={
       <div className="h-10 flex items-center">
         <Skeleton h={32} />

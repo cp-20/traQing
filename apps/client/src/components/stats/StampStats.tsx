@@ -11,22 +11,23 @@ type StampStatsProps = {
 
 export const StampCountStat: FC<StampStatsProps> = ({ stampId }) => {
   const { data: stamps } = useStampRanking();
-  if (stamps === undefined) return <StatSkeleton label="押された回数 (合計)" />;
+  if (stamps === undefined) return <StatSkeleton label="押された回数" />;
   const index = stamps.findIndex((s) => s.stamp === stampId);
 
   if (index === -1) {
-    return <Stat label="押された回数 (合計)" value={0} />;
+    return <Stat label="押された回数" value={0} />;
   }
 
-  return <Stat label="押された回数 (合計)" value={stamps[index].count} annotation={`全体${index + 1}位`} />;
+  return <Stat label="押された回数" value={stamps[index].count} annotation={`全体${index + 1}位`} />;
 };
 
 type RangeStampCountStatProps = {
   label: string;
+  periodLabel: string;
   range: DateRange;
 } & StampStatsProps;
 
-export const RangeStampCountStat: FC<RangeStampCountStatProps> = ({ stampId, label, range }) => {
+export const RangeStampCountStat: FC<RangeStampCountStatProps> = ({ stampId, label, periodLabel, range }) => {
   const query = useMemo(
     () =>
       ({
@@ -38,12 +39,12 @@ export const RangeStampCountStat: FC<RangeStampCountStatProps> = ({ stampId, lab
     [range],
   );
   const { stamps, loading } = useStamps(query);
-  if (loading && stamps.length === 0) return <StatSkeleton label={label} />;
+  if (loading && stamps.length === 0) return <StatSkeleton label={label} periodLabel={periodLabel} />;
   const index = stamps.findIndex((s) => s.stamp === stampId);
 
   if (index === -1) {
-    return <Stat label={label} value={0} />;
+    return <Stat label={label} value={0} periodLabel={periodLabel} />;
   }
 
-  return <Stat label={label} value={stamps[index].count} annotation={`全体${index + 1}位`} />;
+  return <Stat label={label} value={stamps[index].count} annotation={`全体${index + 1}位`} periodLabel={periodLabel} />;
 };

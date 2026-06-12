@@ -1,6 +1,7 @@
 import { asc, count, desc, sql } from 'drizzle-orm';
 import {
   boolean,
+  doublePrecision,
   index,
   integer,
   pgMaterializedView,
@@ -286,5 +287,24 @@ export const channelPins = pgTable(
     pk: primaryKey({ columns: [t.channelId, t.messageId] }),
     channelIdIndex: index('channel_pins_channel_id_idx').on(t.channelId),
     messageIdIndex: index('channel_pins_message_id_idx').on(t.messageId),
+  }),
+);
+
+export const apiQueryMeasurements = pgTable(
+  'api_query_measurements',
+  {
+    id: uuid('id').primaryKey().notNull().defaultRandom(),
+    method: text('method').notNull(),
+    path: text('path').notNull(),
+    query: text('query').notNull(),
+    durationMs: doublePrecision('duration_ms').notNull(),
+    status: integer('status').notNull(),
+    measuredAt: timestamp('measured_at').notNull(),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+  },
+  (t) => ({
+    pathIndex: index('api_query_measurements_path_idx').on(t.path),
+    measuredAtIndex: index('api_query_measurements_measured_at_idx').on(t.measuredAt),
+    methodPathIndex: index('api_query_measurements_method_path_idx').on(t.method, t.path),
   }),
 );

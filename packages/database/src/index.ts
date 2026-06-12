@@ -1,3 +1,4 @@
+export * from '@/repository/api-query-metrics';
 export * from '@/repository/channel-pins';
 export * from '@/repository/channel-subscriptions';
 export * from '@/repository/message-stamps';
