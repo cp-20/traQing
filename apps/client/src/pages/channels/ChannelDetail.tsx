@@ -1,3 +1,4 @@
+import { Badge, Group, Title } from '@mantine/core';
 import type { FC } from 'react';
 import { Card } from '@/components/Card';
 import { Container, ContainerTitle } from '@/components/containers/Container';
@@ -13,6 +14,7 @@ import {
 } from '@/components/stats/ChannelStats';
 import { ChannelActionTimeline } from '@/components/timelines/ChannelActionTimeline';
 import { StampPicker, useStampPicker } from '@/composables/useStampPicker';
+import { useDateRangePicker } from '@/composables/useDateRangePicker';
 import { useChannels } from '@/hooks/useChannels';
 
 type Props = {
@@ -21,6 +23,7 @@ type Props = {
 
 export const ChannelDetail: FC<Props> = ({ channelId }) => {
   const stampPicker = useStampPicker();
+  const range = useDateRangePicker('last-30-days');
   const { getChannelName } = useChannels();
   const channelName = getChannelName(channelId);
 
@@ -28,7 +31,7 @@ export const ChannelDetail: FC<Props> = ({ channelId }) => {
 
   return (
     <Container>
-      <ContainerTitle>
+      <ContainerTitle actions={range.render()}>
         <ChannelIcon className="size-10 -mr-1" />
         <div className="text-2xl font-semibold pb-1">{channelName}</div>
       </ContainerTitle>
@@ -40,53 +43,95 @@ export const ChannelDetail: FC<Props> = ({ channelId }) => {
             <ChannelSubscribersCountStat channelId={channelId} />
           </div>
           <Card>
-            <div className="font-semibold mb-2">スタンプ</div>
-            <StampRanking channelId={channelId} />
+            <Group justify="space-between" mb="sm">
+              <Title order={2} size="h5">
+                スタンプ
+              </Title>
+              <Badge color="gray" variant="outline">
+                選択期間
+              </Badge>
+            </Group>
+            <StampRanking range={range.value} channelId={channelId} />
           </Card>
-          <Card className="max-lg:hidden">
-            <div className="font-semibold mb-4">リアクションの多い投稿</div>
+          <Card>
+            <Group justify="space-between" mb="md">
+              <Title order={2} size="h5">
+                リアクションの多い投稿
+              </Title>
+              <Badge color="gray" variant="outline">
+                選択期間
+              </Badge>
+            </Group>
             <div className="space-y-2">
               <StampPicker reducer={stampPicker} />
-              <TopReactedMessages stampId={stampPicker.stampId} channelId={channelId} />
+              <TopReactedMessages range={range.value} stampId={stampPicker.stampId} channelId={channelId} />
             </div>
           </Card>
         </div>
         <div className="flex flex-col sm:gap-8 gap-4">
           <Card>
-            <div className="font-semibold mb-4">各アクションの時系列遷移</div>
+            <Group justify="space-between" mb="md">
+              <Title order={2} size="h5">
+                各アクションの時系列遷移
+              </Title>
+              <Badge color="gray" variant="outline">
+                選択期間
+              </Badge>
+            </Group>
             <div>
-              <ChannelActionTimeline channelId={channelId} />
+              <ChannelActionTimeline channelId={channelId} range={range.value} />
             </div>
           </Card>
           <Card>
-            <div className="font-semibold mb-4">各アクションの時間帯</div>
+            <Group justify="space-between" mb="md">
+              <Title order={2} size="h5">
+                各アクションの時間帯
+              </Title>
+              <Badge color="gray" variant="outline">
+                選択期間
+              </Badge>
+            </Group>
             <div>
-              <ChannelActionHours channelId={channelId} />
+              <ChannelActionHours channelId={channelId} range={range.value} />
             </div>
           </Card>
           <Card>
-            <div className="font-semibold mb-4">よく投稿するユーザー</div>
+            <Group justify="space-between" mb="md">
+              <Title order={2} size="h5">
+                よく投稿するユーザー
+              </Title>
+              <Badge color="gray" variant="outline">
+                選択期間
+              </Badge>
+            </Group>
             <div>
-              <MessagesUserRanking channelId={channelId} />
+              <MessagesUserRanking range={range.value} channelId={channelId} />
             </div>
           </Card>
           <Card>
-            <div className="font-semibold mb-4">よくスタンプを付けるユーザー</div>
+            <Group justify="space-between" mb="md">
+              <Title order={2} size="h5">
+                よくスタンプを付けるユーザー
+              </Title>
+              <Badge color="gray" variant="outline">
+                選択期間
+              </Badge>
+            </Group>
             <div>
-              <StampsGaveUserRanking channelId={channelId} />
+              <StampsGaveUserRanking range={range.value} channelId={channelId} />
             </div>
           </Card>
           <Card>
-            <div className="font-semibold mb-4">よく使われるスタンプ</div>
+            <Group justify="space-between" mb="md">
+              <Title order={2} size="h5">
+                よく使われるスタンプ
+              </Title>
+              <Badge color="gray" variant="outline">
+                選択期間
+              </Badge>
+            </Group>
             <div>
-              <StampRanking channelId={channelId} />
-            </div>
-          </Card>
-          <Card className="lg:hidden">
-            <div className="font-semibold mb-4">リアクションの多い投稿</div>
-            <div className="space-y-2">
-              <StampPicker reducer={stampPicker} />
-              <TopReactedMessages stampId={stampPicker.stampId} channelId={channelId} />
+              <StampRanking range={range.value} channelId={channelId} />
             </div>
           </Card>
         </div>

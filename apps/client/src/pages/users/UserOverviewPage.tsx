@@ -1,4 +1,4 @@
-import { Skeleton, TextInput } from '@mantine/core';
+import { Badge, Group, Skeleton, Stack, Text, TextInput, Title } from '@mantine/core';
 import { type FC, useState } from 'react';
 import { Link } from 'react-router';
 import { Card } from '@/components/Card';
@@ -12,6 +12,7 @@ import {
 import { TopUserMessagesTimeline } from '@/components/timelines/TopMessagesTimeline';
 import { UserAvatar } from '@/components/UserAvatar';
 import { StampPicker, useStampPicker } from '@/composables/useStampPicker';
+import { useDateRangePicker } from '@/composables/useDateRangePicker';
 import { useUsers } from '@/hooks/useUsers';
 import { searchUsers } from '@/lib/search';
 
@@ -24,12 +25,12 @@ const SearchUserBlock: FC = () => {
   return (
     <div className="space-y-4">
       <TextInput placeholder="ユーザー名" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
-      <div className="h-96 overflow-y-scroll border border-gray-200 rounded text-text-primary">
+      <div className="traqing-search-list h-96 overflow-y-scroll">
         {filteredUsers?.slice(0, 100).map((user) => (
           <Link
             key={user.id}
             to={`/users/${encodeURIComponent(user.name)}`}
-            className="flex items-center gap-2 px-4 py-2 hover:bg-blue-100 transition-colors duration-200"
+            className="traqing-search-row flex items-center gap-2 px-4 py-2 transition-colors duration-150"
           >
             <UserAvatar user={user} />
             <span className="font-semibold">{user.displayName}</span>
@@ -52,49 +53,73 @@ const SearchUserBlock: FC = () => {
 
 export const UserOverviewPage: FC = () => {
   const picker = useStampPicker();
+  const range = useDateRangePicker('last-30-days');
   return (
     <Container>
-      <ContainerTitle>
+      <ContainerTitle actions={range.render()}>
         <UserIcon className="size-8" />
-        <span className="text-2xl font-bold">ユーザー</span>
+        <span>ユーザー</span>
       </ContainerTitle>
 
       <Card>
-        <h2 className="text-lg font-semibold mb-2">投稿数ランキング</h2>
+        <Group justify="space-between" mb="sm">
+          <Title order={2} size="h4">
+            投稿数ランキング
+          </Title>
+          <Badge color="gray" variant="outline">
+            選択期間
+          </Badge>
+        </Group>
         <div className="grid grid-cols-2 max-lg:grid-cols-1 gap-4">
           <div>
-            <MessagesUserRanking limit={20} />
+            <MessagesUserRanking limit={20} range={range.value} />
           </div>
 
           <div className="flex flex-col">
             <div className="flex-1">
-              <TopUserMessagesTimeline />
+              <TopUserMessagesTimeline range={range.value} />
             </div>
           </div>
         </div>
       </Card>
 
       <Card>
-        <h2 className="text-lg font-semibold mb-2">つけた/もらったスタンプのランキング</h2>
+        <Group justify="space-between" mb="sm">
+          <Title order={2} size="h4">
+            つけた/もらったスタンプのランキング
+          </Title>
+          <Badge color="gray" variant="outline">
+            選択期間
+          </Badge>
+        </Group>
         <div className="mb-4">
           <StampPicker reducer={picker} />
         </div>
         <div className="grid grid-cols-2 max-lg:grid-cols-1 gap-4">
           <div>
             <h3 className="font-semibold mb-2">つけたスタンプ</h3>
-            <StampsGaveUserRanking limit={20} stampId={picker.stampId ?? undefined} />
+            <StampsGaveUserRanking limit={20} range={range.value} stampId={picker.stampId ?? undefined} />
           </div>
 
           <div>
             <h3 className="font-semibold mb-2">もらったスタンプ</h3>
-            <StampsReceivedUserRanking limit={20} stampId={picker.stampId ?? undefined} />
+            <StampsReceivedUserRanking limit={20} range={range.value} stampId={picker.stampId ?? undefined} />
           </div>
         </div>
       </Card>
 
       <Card>
-        <h2 className="text-lg font-semibold mb-2">ユーザー検索</h2>
-        <SearchUserBlock />
+        <Stack gap="sm">
+          <Group justify="space-between">
+            <Title order={2} size="h4">
+              ユーザー検索
+            </Title>
+            <Text size="sm" c="dimmed">
+              全ユーザー
+            </Text>
+          </Group>
+          <SearchUserBlock />
+        </Stack>
       </Card>
     </Container>
   );

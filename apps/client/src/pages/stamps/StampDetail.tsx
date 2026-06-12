@@ -1,3 +1,4 @@
+import { Badge, Group, Title } from '@mantine/core';
 import type { FC } from 'react';
 import { Card } from '@/components/Card';
 import { Container, ContainerTitle } from '@/components/containers/Container';
@@ -8,7 +9,7 @@ import { StampsGaveUserRanking, StampsReceivedUserRanking } from '@/components/r
 import { StampImage } from '@/components/StampImage';
 import { RangeStampCountStat, StampCountStat } from '@/components/stats/StampStats';
 import { StampTimeline } from '@/components/timelines/StampTimeline';
-import { dateRangeKinds } from '@/composables/useDateRangePicker';
+import { dateRangeKinds, useDateRangePicker } from '@/composables/useDateRangePicker';
 import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { assert } from '@/lib/invariant';
 
@@ -18,12 +19,13 @@ type Props = {
 
 export const StampDetail: FC<Props> = ({ stampId }) => {
   const { getStamp } = useMessageStamps();
+  const range = useDateRangePicker('last-30-days');
   const stamp = getStamp(stampId);
   assert(stamp);
 
   return (
     <Container>
-      <ContainerTitle>
+      <ContainerTitle actions={range.render()}>
         <div>
           <StampImage stampId={stampId} size={64} loading="eager" />
         </div>
@@ -46,39 +48,77 @@ export const StampDetail: FC<Props> = ({ stampId }) => {
               label={`押された回数 (${dateRangeKinds['last-7-days'].label})`}
             />
           </div>
-          <Card className="max-lg:hidden">
-            <div className="font-semibold mb-4">リアクションの多い投稿</div>
-            <TopReactedMessages stampId={stampId} />
+          <Card>
+            <Group justify="space-between" mb="md">
+              <Title order={2} size="h5">
+                リアクションの多い投稿
+              </Title>
+              <Badge color="gray" variant="outline">
+                選択期間
+              </Badge>
+            </Group>
+            <TopReactedMessages range={range.value} stampId={stampId} />
           </Card>
         </div>
         <div className="flex flex-col sm:gap-8 gap-4">
           <Card>
-            <div className="font-semibold mb-4">リアクション数の時系列遷移</div>
+            <Group justify="space-between" mb="md">
+              <Title order={2} size="h5">
+                リアクション数の時系列遷移
+              </Title>
+              <Badge color="gray" variant="outline">
+                選択期間
+              </Badge>
+            </Group>
             <div>
-              <StampTimeline stampId={stampId} />
+              <StampTimeline stampId={stampId} range={range.value} />
             </div>
           </Card>
           <Card>
-            <div className="font-semibold mb-4">リアクションの時間帯</div>
+            <Group justify="space-between" mb="md">
+              <Title order={2} size="h5">
+                リアクションの時間帯
+              </Title>
+              <Badge color="gray" variant="outline">
+                選択期間
+              </Badge>
+            </Group>
             <div>
-              <StampHours stampId={stampId} />
+              <StampHours stampId={stampId} range={range.value} />
             </div>
           </Card>
           <Card>
-            <div className="font-semibold mb-2">つけた人</div>
-            <StampsGaveUserRanking stampId={stampId} />
+            <Group justify="space-between" mb="sm">
+              <Title order={2} size="h5">
+                つけた人
+              </Title>
+              <Badge color="gray" variant="outline">
+                選択期間
+              </Badge>
+            </Group>
+            <StampsGaveUserRanking range={range.value} stampId={stampId} />
           </Card>
           <Card>
-            <div className="font-semibold mb-2">つけられた人</div>
-            <StampsReceivedUserRanking stampId={stampId} />
+            <Group justify="space-between" mb="sm">
+              <Title order={2} size="h5">
+                つけられた人
+              </Title>
+              <Badge color="gray" variant="outline">
+                選択期間
+              </Badge>
+            </Group>
+            <StampsReceivedUserRanking range={range.value} stampId={stampId} />
           </Card>
           <Card>
-            <div className="font-semibold mb-2">よく使われるチャンネル</div>
-            <StampsChannelRanking stampId={stampId} />
-          </Card>
-          <Card className="lg:hidden">
-            <div className="font-semibold mb-4">リアクションの多い投稿</div>
-            <TopReactedMessages stampId={stampId} />
+            <Group justify="space-between" mb="sm">
+              <Title order={2} size="h5">
+                よく使われるチャンネル
+              </Title>
+              <Badge color="gray" variant="outline">
+                選択期間
+              </Badge>
+            </Group>
+            <StampsChannelRanking range={range.value} stampId={stampId} />
           </Card>
         </div>
       </div>

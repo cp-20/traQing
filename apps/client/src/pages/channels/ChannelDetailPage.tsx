@@ -13,10 +13,10 @@ export const ChannelDetailPage: FC = () => {
   const channelId = getChannelId(channelName);
 
   return (
-    <div className="bg-gray-100 min-h-screen relative">
+    <div className="traqing-loading-host relative">
       <div
         className={clsx(
-          'grid place-content-center absolute inset-0 bg-gray-100 duration-200 transition-all ease-in',
+          'traqing-loading-overlay grid place-content-center absolute inset-0 duration-200 transition-all ease-in',
           channels !== undefined && 'invisible opacity-0',
         )}
       >

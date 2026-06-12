@@ -1,4 +1,4 @@
-import { Skeleton, TextInput } from '@mantine/core';
+import { Badge, Group, Skeleton, Stack, Text, TextInput, Title } from '@mantine/core';
 import { type FC, useState } from 'react';
 import { Link } from 'react-router';
 import { Card } from '@/components/Card';
@@ -11,6 +11,7 @@ import {
 } from '@/components/rankings/ChannelRanking';
 import { TopChannelMessagesTimeline } from '@/components/timelines/TopMessagesTimeline';
 import { StampPicker, useStampPicker } from '@/composables/useStampPicker';
+import { useDateRangePicker } from '@/composables/useDateRangePicker';
 import { useChannels } from '@/hooks/useChannels';
 import { searchChannels } from '@/lib/search';
 
@@ -23,12 +24,12 @@ const SearchChannelBlock: FC = () => {
   return (
     <div className="space-y-4">
       <TextInput placeholder="チャンネル名" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
-      <div className="h-96 overflow-y-scroll border border-gray-200 rounded text-text-primary">
+      <div className="traqing-search-list h-96 overflow-y-scroll">
         {filteredChannels?.slice(0, 200).map((channel) => (
           <Link
             key={channel.id}
             to={`/channels/${getChannelName(channel.id)}`}
-            className="flex items-center gap-2 px-4 py-2 hover:bg-blue-100 transition-colors duration-200"
+            className="traqing-search-row flex items-center gap-2 px-4 py-2 transition-colors duration-150"
           >
             <ChannelIcon />
             <span>{getChannelName(channel.id)}</span>
@@ -50,41 +51,72 @@ const SearchChannelBlock: FC = () => {
 
 export const ChannelOverviewPage: FC = () => {
   const picker = useStampPicker();
+  const range = useDateRangePicker('last-30-days');
   return (
     <Container>
-      <ContainerTitle>
+      <ContainerTitle actions={range.render()}>
         <ChannelIcon className="size-8" />
-        <span className="text-2xl font-bold">チャンネル</span>
+        <span>チャンネル</span>
       </ContainerTitle>
 
       <Card>
-        <h2 className="text-lg font-semibold mb-2">投稿数ランキング</h2>
+        <Group justify="space-between" mb="sm">
+          <Title order={2} size="h4">
+            投稿数ランキング
+          </Title>
+          <Badge color="gray" variant="outline">
+            選択期間
+          </Badge>
+        </Group>
         <div className="grid grid-cols-2 max-lg:grid-cols-1 gap-4">
-          <MessagesChannelRanking limit={20} />
+          <MessagesChannelRanking limit={20} range={range.value} />
           <div>
-            <TopChannelMessagesTimeline />
+            <TopChannelMessagesTimeline range={range.value} />
           </div>
         </div>
       </Card>
 
       <div className="grid grid-cols-2 max-lg:grid-cols-1 gap-4">
         <Card>
-          <h2 className="text-lg font-semibold mb-2">つけられたスタンプのランキング</h2>
+          <Group justify="space-between" mb="sm">
+            <Title order={2} size="h4">
+              つけられたスタンプのランキング
+            </Title>
+            <Badge color="gray" variant="outline">
+              選択期間
+            </Badge>
+          </Group>
           <div className="mb-4">
             <StampPicker reducer={picker} />
           </div>
-          <StampsChannelRanking limit={20} stampId={picker.stampId ?? undefined} />
+          <StampsChannelRanking limit={20} range={range.value} stampId={picker.stampId ?? undefined} />
         </Card>
 
         <Card>
-          <h2 className="text-lg font-semibold mb-2">メンバー数ランキング</h2>
+          <Group justify="space-between" mb="sm">
+            <Title order={2} size="h4">
+              メンバー数ランキング
+            </Title>
+            <Text size="sm" c="dimmed">
+              現在値
+            </Text>
+          </Group>
           <SubscribersChannelRanking limit={20} />
         </Card>
       </div>
 
       <Card>
-        <h2 className="text-lg font-semibold mb-2">チャンネル検索</h2>
-        <SearchChannelBlock />
+        <Stack gap="sm">
+          <Group justify="space-between">
+            <Title order={2} size="h4">
+              チャンネル検索
+            </Title>
+            <Text size="sm" c="dimmed">
+              全チャンネル
+            </Text>
+          </Group>
+          <SearchChannelBlock />
+        </Stack>
       </Card>
     </Container>
   );

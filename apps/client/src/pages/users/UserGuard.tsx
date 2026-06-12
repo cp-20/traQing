@@ -16,10 +16,10 @@ export const UserGuard: FC = () => {
   const userId = getUserId(username);
 
   return (
-    <div className="bg-gray-100 min-h-screen relative">
+    <div className="traqing-loading-host relative">
       <div
         className={clsx(
-          'grid place-content-center absolute inset-0 bg-gray-100 duration-200 transition-all ease-in',
+          'traqing-loading-overlay grid place-content-center absolute inset-0 duration-200 transition-all ease-in',
           users !== undefined && 'invisible opacity-0',
         )}
       >
