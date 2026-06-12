@@ -109,7 +109,7 @@ export const TraqMessage: FC<TraqMessageProps> = ({ messageId, annotation }) => 
   }, new Map<string, number>());
 
   return (
-    <div className="border border-gray-200 p-4 rounded-md flex flex-col">
+    <div className="traq-message-card p-4 rounded-md flex flex-col">
       <div className="flex flex-col gap-2" ref={messageContainerRef}>
         <div className="flex gap-1 items-center">
           <UserAvatar user={user} size={24} />
@@ -130,14 +130,14 @@ export const TraqMessage: FC<TraqMessageProps> = ({ messageId, annotation }) => 
       </div>
       <div className="flex gap-1 flex-wrap">
         {[...aggregatedStamps.entries()].map(([stampId, count]) => (
-          <div className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded" key={stampId}>
+          <div className="traq-message-stamp flex items-center gap-1 px-2 py-1 rounded" key={stampId}>
             <StampImage stampId={stampId} size={16} className="size-4" />
             <span className="font-semibold text-sm">{count}</span>
           </div>
         ))}
       </div>
-      <div className="flex gap-1 justify-between text-gray-500 mt-1">
-        <a href={`https://q.trap.jp/messages/${messageId}`} className="text-blue-600 font-medium hover:underline">
+      <div className="traq-message-footer flex gap-1 justify-between mt-1">
+        <a href={`https://q.trap.jp/messages/${messageId}`} className="font-medium hover:underline">
           traQで開く
         </a>
         <span>#{channel}</span>
@@ -165,7 +165,7 @@ const QuotedMessage: FC<QuotedMessageProps> = ({ messageId, markdownIt }) => {
 
   const markdown = markdownIt.render(message.content);
   return (
-    <div className="border-l-4 border-gray-200 pl-2 py-1">
+    <div className="traq-message-quote pl-2 py-1">
       <div className="flex gap-1">
         <div>
           <UserAvatar user={user} size={20} />
@@ -191,7 +191,7 @@ const QuotedMessage: FC<QuotedMessageProps> = ({ messageId, markdownIt }) => {
 
 const TraqMessageSkeleton: FC = () => {
   return (
-    <div className="border border-gray-200 p-4 rounded-md flex flex-col gap-4">
+    <div className="traq-message-card p-4 rounded-md flex flex-col gap-4">
       <div className="flex flex-col gap-2">
         <div className="flex gap-1 items-center">
           <div>
@@ -205,7 +205,7 @@ const TraqMessageSkeleton: FC = () => {
           <Skeleton h={12} radius="md" width="70%" />
         </div>
       </div>
-      <span className="text-blue-600 font-medium hover:underline">traQで開く</span>
+      <span className="font-medium hover:underline">traQで開く</span>
     </div>
   );
 };
@@ -223,7 +223,7 @@ const UrlRichPreview: FC<UrlRichPreviewProps> = ({ url }) => {
   return (
     <a
       href={url}
-      className="border border-gray-200 rounded-md flex flex-col gap-2 mb-4 hover:bg-gray-100 transition-all duration-200 max-w-96"
+      className="traq-message-preview rounded-md flex flex-col gap-2 mb-4 transition-all duration-200 max-w-96"
     >
       {og.type === 'article' && og.image && (
         <div className="flex justify-center">

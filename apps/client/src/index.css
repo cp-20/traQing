@@ -8,5 +8,200 @@ body {
   font-family: "Noto Sans JP", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
-  color: #49535b;
+  color: light-dark(var(--mantine-color-gray-8), var(--mantine-color-dark-0));
+  background: light-dark(
+    var(--mantine-color-gray-1),
+    var(--mantine-color-dark-9)
+  );
+}
+
+.traqing-ranking-row {
+  border-top: 1px solid
+    light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
+}
+
+.traqing-ranking-row:hover {
+  background: light-dark(
+    var(--mantine-color-gray-0),
+    var(--mantine-color-dark-6)
+  );
+}
+
+.traqing-ranking-rank,
+.traqing-stat-label {
+  color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-2));
+}
+
+.traqing-ranking-meter {
+  background: light-dark(
+    var(--mantine-color-gray-2),
+    var(--mantine-color-dark-5)
+  );
+  border-radius: 999px;
+  display: block;
+  flex: 0 0 48px;
+  height: 8px;
+  overflow: hidden;
+}
+
+.traqing-ranking-meter-fill {
+  background: var(--mantine-color-blue-6);
+  border-radius: inherit;
+  display: block;
+  height: 100%;
+}
+
+@media (max-width: 36em) {
+  .traqing-ranking-meter {
+    display: none;
+  }
+}
+
+.traqing-stat-value {
+  color: light-dark(var(--mantine-color-gray-9), var(--mantine-color-gray-0));
+}
+
+.traqing-loading-overlay {
+  background: light-dark(
+    var(--mantine-color-gray-1),
+    var(--mantine-color-dark-9)
+  );
+}
+
+.traqing-loading-host {
+  min-height: calc(100dvh - 112px);
+}
+
+@media (min-width: 48em) {
+  .traqing-loading-host {
+    min-height: calc(100dvh - 48px);
+  }
+}
+
+.traqing-search-list {
+  border: 1px solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  border-radius: var(--mantine-radius-sm);
+  color: light-dark(var(--mantine-color-gray-8), var(--mantine-color-dark-0));
+}
+
+.traqing-search-row {
+  color: inherit;
+  text-decoration: none;
+}
+
+.traqing-search-row:hover {
+  background: light-dark(
+    var(--mantine-color-gray-0),
+    var(--mantine-color-dark-6)
+  );
+}
+
+.traqing-sidebar-button {
+  border: 1px solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-5));
+  border-radius: var(--mantine-radius-sm);
+  display: block;
+}
+
+.traqing-sidebar-button:hover {
+  background: light-dark(
+    var(--mantine-color-gray-0),
+    var(--mantine-color-dark-7)
+  );
+}
+
+.traqing-sidebar-nav-link {
+  color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
+}
+
+.traqing-sidebar-nav-link:hover {
+  background: light-dark(
+    var(--mantine-color-gray-0),
+    var(--mantine-color-dark-7)
+  );
+}
+
+.traqing-sidebar-nav-link[data-active] {
+  background: light-dark(var(--mantine-color-blue-0), rgba(25, 113, 194, 0.18));
+  color: light-dark(var(--mantine-color-blue-8), var(--mantine-color-blue-2));
+}
+
+.traqing-sidebar-nav-link[data-active]:hover {
+  background: light-dark(var(--mantine-color-blue-1), rgba(25, 113, 194, 0.24));
+}
+
+.mantine-AppShell-navbar,
+.mantine-AppShell-header {
+  --traqing-sidebar-dimmed: light-dark(
+    var(--mantine-color-gray-6),
+    var(--mantine-color-gray-5)
+  );
+  --traqing-sidebar-text: light-dark(
+    var(--mantine-color-gray-8),
+    var(--mantine-color-dark-0)
+  );
+}
+
+.traqing-table-wrap {
+  border: 1px solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  border-radius: var(--mantine-radius-sm);
+  overflow-x: auto;
+}
+
+.traqing-table th,
+.traqing-table td {
+  border-bottom: 1px solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  border-right: 1px solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+}
+
+.traqing-table th {
+  background: light-dark(
+    var(--mantine-color-gray-0),
+    var(--mantine-color-dark-6)
+  );
+  color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-1));
+}
+
+.traqing-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.traqing-table th:last-child,
+.traqing-table td:last-child {
+  border-right: 0;
+}
+
+.traqing-code-block {
+  background: light-dark(
+    var(--mantine-color-gray-0),
+    var(--mantine-color-dark-7)
+  );
+  border: 1px solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  color: light-dark(var(--mantine-color-gray-8), var(--mantine-color-dark-0));
+}
+
+.traqing-combobox-option {
+  border-radius: var(--mantine-radius-sm);
+  color: inherit;
+}
+
+.traqing-combobox-option:hover {
+  background: light-dark(
+    var(--mantine-color-gray-0),
+    var(--mantine-color-dark-6)
+  );
+}
+
+.traqing-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.traqing-link:hover {
+  color: var(--mantine-color-blue-6);
 }

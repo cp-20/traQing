@@ -22,7 +22,7 @@ export const GroupRankingItem: FC<GroupRankingItemProps> = ({ groupId, rank, val
     <RankingItemWithLink to={`/groups/${encodeURIComponent(group.name)}`}>
       {rate && <RankingItemBar rate={rate} />}
       <RankingItemRank rank={rank} />
-      <span className="font-medium">@{group.name}</span>
+      <span className="min-w-0 flex-1 truncate font-medium">@{group.name}</span>
       <RankingItemValue value={value} />
     </RankingItemWithLink>
   );

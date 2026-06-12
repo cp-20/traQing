@@ -27,8 +27,8 @@ export const StampRankingItem: FC<StampRankingItemProps> = ({ stampId, rank, val
     <RankingItemWithLink to={`/stamps/${encodeURIComponent(stamp.name)}`}>
       {rate && <RankingItemBar rate={rate} />}
       <RankingItemRank rank={rank} />
-      <StampImage stampId={stampId} size={24} />
-      <span className="font-medium">{stamp.name}</span>
+      <StampImage stampId={stampId} size={24} className="flex-none" />
+      <span className="min-w-0 flex-1 truncate font-medium">{stamp.name}</span>
       <RankingItemValue value={value} />
     </RankingItemWithLink>
   );

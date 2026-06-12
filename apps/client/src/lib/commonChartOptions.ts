@@ -17,18 +17,28 @@ export const commonChartOptions = {
   },
   scales: {
     x: {
+      border: {
+        color: 'rgba(134, 142, 150, 0.35)',
+      },
       grid: {
+        color: 'rgba(134, 142, 150, 0.16)',
         display: false,
       },
       ticks: {
+        color: '#868e96',
         font: { size: 12 },
       },
     },
     y: {
+      border: {
+        color: 'rgba(134, 142, 150, 0.35)',
+      },
       grid: {
-        display: false,
+        color: 'rgba(134, 142, 150, 0.16)',
+        display: true,
       },
       ticks: {
+        color: '#868e96',
         font: { size: 12 },
       },
     },

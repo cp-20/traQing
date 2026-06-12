@@ -14,9 +14,9 @@
 }
 
 .traq-markdown a {
-  color: rgb(37, 99, 235);
+  color: var(--mantine-color-blue-6);
   text-decoration: none;
-  font-weight: medium;
+  font-weight: 500;
 }
 
 .traq-markdown a:hover {
@@ -34,17 +34,82 @@
 }
 
 .traq-markdown blockquote {
-  border-left: 4px solid #e5e7eb;
+  border-left: 4px solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
   padding-left: 8px;
   margin-left: 0;
 }
 
 .traq-markdown pre {
-  background-color: #f3f4f6;
+  background-color: light-dark(
+    var(--mantine-color-gray-1),
+    var(--mantine-color-dark-7)
+  );
   padding: 8px 16px;
   margin: 0 0 8px 0;
   border-radius: 4px;
   font-family: "Consolas", Courier, monospace;
   overflow-x: auto;
   min-width: 0;
+}
+
+.traq-markdown table {
+  border-collapse: collapse;
+  display: block;
+  margin: 0 0 8px 0;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.traq-markdown th,
+.traq-markdown td {
+  border: 1px solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  padding: 6px 10px;
+  vertical-align: top;
+}
+
+.traq-markdown th {
+  background: light-dark(
+    var(--mantine-color-gray-0),
+    var(--mantine-color-dark-7)
+  );
+  font-weight: 700;
+}
+
+.traq-message-card,
+.traq-message-preview {
+  border: 1px solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  background: light-dark(
+    var(--mantine-color-white),
+    var(--mantine-color-dark-7)
+  );
+}
+
+.traq-message-preview:hover {
+  background: light-dark(
+    var(--mantine-color-gray-0),
+    var(--mantine-color-dark-6)
+  );
+}
+
+.traq-message-stamp {
+  background: light-dark(
+    var(--mantine-color-gray-1),
+    var(--mantine-color-dark-6)
+  );
+}
+
+.traq-message-footer {
+  color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-2));
+}
+
+.traq-message-footer a {
+  color: var(--mantine-color-blue-6);
+}
+
+.traq-message-quote {
+  border-left: 4px solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
 }

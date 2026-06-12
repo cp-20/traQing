@@ -49,7 +49,7 @@ export const ChannelSelect: FC<Props> = ({ reducer, textInputProps }) => {
             placeholder="チャンネル名を入力"
             value={keyword}
             onFocus={() => setOpened(true)}
-            leftSection={<ChannelIcon className="text-text-primary" />}
+            leftSection={<ChannelIcon />}
             onBlur={(e) => {
               if (e.relatedTarget?.classList.contains('channel-select-button')) return;
               setOpened(false);
@@ -82,7 +82,7 @@ export const ChannelSelect: FC<Props> = ({ reducer, textInputProps }) => {
                     setChannelId(c.id);
                     setOpened(false);
                   }}
-                  className="channel-select-button flex items-center gap-2 hover:bg-gray-100 px-4 py-1"
+                  className="traqing-combobox-option channel-select-button flex items-center gap-2 px-4 py-1"
                 >
                   <ChannelIcon className="shrink-0" />
                   <div className="flex flex-col items-start">
