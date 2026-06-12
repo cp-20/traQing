@@ -1,5 +1,5 @@
-import { Button, Select } from '@mantine/core';
-import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import { ActionIcon, Button, CopyButton, Group, Select, Tooltip } from '@mantine/core';
+import { IconCheck, IconChevronLeft, IconChevronRight, IconCopy } from '@tabler/icons-react';
 import type { MessagesQuery, StampsQuery } from '@traq-ing/database';
 import { type FC, useEffect, useMemo, useRef, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -89,7 +89,7 @@ export const PlaygroundPage: FC = () => {
       ...filter.value,
       limit: Number.parseInt(limit, 10) + 1,
       offset: page * Number.parseInt(limit, 10),
-      ...dateRangeToQuery(datePicker.value),
+      ...(datePicker.value && dateRangeToQuery(datePicker.value)),
     };
   }, [filter.value, limit, page, datePicker.value]);
 
@@ -130,6 +130,10 @@ export const PlaygroundPage: FC = () => {
     if (apiKind === 'messages') return normalizeMessagesQuery(query as MessagesQuery);
     if (apiKind === 'stamps') return normalizeStampsQuery(query as StampsQuery);
   }, [apiKind, query]);
+  const code = `const query = ${JSON.stringify(normalizedQuery, null, 2)};
+const params = new URLSearchParams(query);
+const result = await fetch(\`${location.origin}/api/${apiKind}?$\{params.toString()}\`).then((r) => r.json());
+console.log(result);`;
 
   return (
     <Container>
@@ -138,7 +142,7 @@ export const PlaygroundPage: FC = () => {
         <span className="ml-2 text-2xl font-bold">APIプレイグラウンド</span>
       </ContainerTitle>
 
-      <Card className="max-w-5xl w-full mx-auto">
+      <Card className="w-full">
         <div className="flex flex-col gap-4">
           <div>
             <Select
@@ -166,7 +170,7 @@ export const PlaygroundPage: FC = () => {
         </div>
       </Card>
 
-      <Card className="max-w-5xl w-full mx-auto">
+      <Card className="w-full">
         <div className="space-y-4">
           <div className="font-semibold">実行結果</div>
           <div className="flex gap-2">
@@ -195,13 +199,21 @@ export const PlaygroundPage: FC = () => {
         </div>
       </Card>
 
-      <Card className="max-w-5xl w-full mx-auto">
-        <div className="font-semibold mb-4">コード</div>
-        <pre className="border border-gray-200 rounded-md p-4">
-          <code className="text-wrap break-all">{`const query = ${JSON.stringify(normalizedQuery, null, 2)};
-const params = new URLSearchParams(query);
-const result = await fetch(\`${location.origin}/api/${apiKind}?$\{params.toString()}\`).then((r) => r.json());
-console.log(result);`}</code>
+      <Card className="w-full">
+        <Group justify="space-between" mb="md">
+          <div className="font-semibold">コード</div>
+          <CopyButton value={code}>
+            {({ copied, copy }) => (
+              <Tooltip label={copied ? 'コピーしました' : 'コピー'}>
+                <ActionIcon variant="default" onClick={copy} aria-label="コードをコピー">
+                  {copied ? <IconCheck size={16} /> : <IconCopy size={16} />}
+                </ActionIcon>
+              </Tooltip>
+            )}
+          </CopyButton>
+        </Group>
+        <pre className="traqing-code-block rounded-md p-4">
+          <code className="text-wrap break-all">{code}</code>
         </pre>
       </Card>
     </Container>
