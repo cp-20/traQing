@@ -97,7 +97,7 @@ export const ChannelRankingItemWithUsers: FC<ChannelRankingItemWithUsersProps> =
             {(messages.length === 0 || users === undefined) &&
               new Array(10).fill(0).map((_, i) => (
                 <div key={i} style={{ zIndex: 10 - i }}>
-                  <Skeleton circle w={20} height={20} className="border-2 border-white" />
+                  <Skeleton circle w={20} height={20} className="border-2 border-white dark:border-[#242424]" />
                 </div>
               ))}
             {messages.slice(0, 10).map((m, i, arr) => {
@@ -108,11 +108,11 @@ export const ChannelRankingItemWithUsers: FC<ChannelRankingItemWithUsersProps> =
                     <UserAvatar
                       user={user}
                       size={20}
-                      className="border-2 border-white bg-white"
+                      className="border-2 border-white bg-white dark:border-[#242424] dark:bg-[#242424]"
                       title={`${user.displayName} (@${user.name.split('#')[0]})`}
                     />
                   ) : (
-                    <Skeleton circle w={20} height={20} className="border-2 border-white" />
+                    <Skeleton circle w={20} height={20} className="border-2 border-white dark:border-[#242424]" />
                   )}
                 </div>
               );
