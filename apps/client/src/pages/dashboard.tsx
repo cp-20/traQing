@@ -216,10 +216,21 @@ const ProfilePanel: FC<{ displayName: string; name: string; user: ComponentProps
   user,
 }) => (
   <Card className="h-32">
-    <Group justify="space-between" mb="sm">
-      <Title order={3} size="h4">
-        プロフィール
-      </Title>
+    <Group justify="space-between" align="flex-start" mb="sm">
+      <div className="flex-1 flex flex-col gap-3">
+        <div className="traqing-stat-label text-sm font-semibold">プロフィール</div>
+        <Group wrap="nowrap" miw={0}>
+          <UserAvatar user={user} size={56} />
+          <div className="min-w-0">
+            <Title order={4} size="h4" className="truncate">
+              {displayName}
+            </Title>
+            <Text c="dimmed" truncate>
+              @{name}
+            </Text>
+          </div>
+        </Group>
+      </div>
       <Button
         component={Link}
         size="xs"
@@ -229,19 +240,6 @@ const ProfilePanel: FC<{ displayName: string; name: string; user: ComponentProps
       >
         詳細
       </Button>
-    </Group>
-    <Group justify="space-between" align="flex-start" wrap="nowrap">
-      <Group wrap="nowrap" miw={0}>
-        <UserAvatar user={user} size={56} />
-        <div className="min-w-0">
-          <Title order={4} size="h4" className="truncate">
-            {displayName}
-          </Title>
-          <Text c="dimmed" truncate>
-            @{name}
-          </Text>
-        </div>
-      </Group>
     </Group>
   </Card>
 );
