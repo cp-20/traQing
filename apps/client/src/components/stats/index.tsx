@@ -2,6 +2,7 @@ import { Skeleton } from '@mantine/core';
 import clsx from 'clsx';
 import type { ComponentProps, FC, ReactNode } from 'react';
 import { Card } from '@/components/Card';
+import { PeriodBadge } from '@/components/PeriodBadge';
 
 export type StatProps = {
   label: ReactNode;
@@ -13,11 +14,14 @@ export type StatProps = {
 
 export const Stat: FC<StatProps> = ({ label, value, unit, annotation, valueProps }) => {
   return (
-    <Card>
-      <div>
-        <div className="text-sm font-bold">{label}</div>
+    <Card className="h-32">
+      <div className="flex h-full flex-col justify-between">
+        <div className="flex justify-between items-center">
+          <div className="traqing-stat-label text-sm font-semibold">{label}</div>
+          <PeriodBadge kind="all" />
+        </div>
         <div>
-          <span {...valueProps} className={clsx('text-4xl text-blue-600 font-medium', valueProps?.className)}>
+          <span {...valueProps} className={clsx(valueProps?.className, 'traqing-stat-value text-4xl font-semibold')}>
             {value}
           </span>
           {unit && <span>{unit}</span>}

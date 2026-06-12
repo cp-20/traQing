@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { Paper } from '@mantine/core';
 import { type FC, forwardRef } from 'react';
 
 type CardProps = {
@@ -8,9 +8,9 @@ type CardProps = {
 
 const CardWithoutRef: FC<CardProps> = ({ children, className, forwardRef, ...props }) => {
   return (
-    <div className={clsx('bg-white rounded-md p-4', className)} {...props} ref={forwardRef}>
+    <Paper className={className} component="section" p="md" radius="sm" withBorder {...props} ref={forwardRef}>
       {children}
-    </div>
+    </Paper>
   );
 };
 

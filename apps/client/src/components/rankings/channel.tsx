@@ -35,7 +35,7 @@ export const ChannelRankingItem: FC<ChannelRankingItemProps> = ({ channelId, ran
     <RankingItemWithLink to={`/channels/${getChannelName(channelId)}`}>
       {rate && <RankingItemBar rate={rate} />}
       <RankingItemRank rank={rank} />
-      <span className="font-medium break-all">#{channel}</span>
+      <span className="min-w-0 flex-1 truncate font-medium">#{channel}</span>
       <RankingItemValue value={value} />
     </RankingItemWithLink>
   );
@@ -87,17 +87,17 @@ export const ChannelRankingItemWithUsers: FC<ChannelRankingItemWithUsersProps> =
     <RankingItemWithLink to={`/channels/${getChannelName(channelId)}`}>
       {rate && <RankingItemBar rate={rate} />}
       <RankingItemRank rank={rank} />
-      {icon}
-      <div className="flex-1 flex @2xl:flex-row flex-col @2xl:items-center @2xl:gap-2 gap-1 justify-between">
-        <div className="font-semibold break-all">
+      <span className="flex-none">{icon}</span>
+      <div className="flex min-w-0 flex-1 @2xl:flex-row flex-col @2xl:items-center @2xl:gap-2 gap-1 justify-between">
+        <div className="min-w-0 truncate font-semibold">
           {getChannelName(channelId) ? `#${getChannelName(channelId)}` : <Skeleton h={16} />}
         </div>
         {!onlyTop && (
-          <div className="flex items-center -space-x-1">
+          <div className="flex flex-none items-center -space-x-1">
             {(messages.length === 0 || users === undefined) &&
               new Array(10).fill(0).map((_, i) => (
                 <div key={i} style={{ zIndex: 10 - i }}>
-                  <Skeleton circle w={16} height={16} className="border-2 border-white" />
+                  <Skeleton circle w={20} height={20} className="border-2 border-white" />
                 </div>
               ))}
             {messages.slice(0, 10).map((m, i, arr) => {
@@ -107,12 +107,12 @@ export const ChannelRankingItemWithUsers: FC<ChannelRankingItemWithUsersProps> =
                   {user ? (
                     <UserAvatar
                       user={user}
-                      size={16}
+                      size={20}
                       className="border-2 border-white bg-white"
                       title={`${user.displayName} (@${user.name.split('#')[0]})`}
                     />
                   ) : (
-                    <Skeleton circle w={16} height={16} className="border-2 border-white" />
+                    <Skeleton circle w={20} height={20} className="border-2 border-white" />
                   )}
                 </div>
               );
@@ -157,15 +157,21 @@ export const ChannelRankingItemWithSubscription: FC<ChannelRankingItemWithSubscr
   return (
     <RankingItem>
       <RankingItemRank rank={rank} />
-      <ActionIcon variant="transparent" className="text-text-primary hover:text-text-primary" onClick={handleClick}>
+      <ActionIcon
+        variant="transparent"
+        className="flex-none text-text-primary hover:text-text-primary"
+        onClick={handleClick}
+      >
         <NotificationIcon level={currentLevel} />
       </ActionIcon>
-      <ChannelIcon />
-      <div className="flex-1 flex">
-        <div className="font-semibold">{getChannelName(channelId) ?? <Skeleton h={16} />}</div>
+      <span className="flex-none">
+        <ChannelIcon />
+      </span>
+      <div className="flex min-w-0 flex-1">
+        <div className="min-w-0 truncate font-semibold">{getChannelName(channelId) ?? <Skeleton h={16} />}</div>
       </div>
       <RankingItemValue value={value} />
-      {rate && <div>({(rate * 100).toFixed(2)}%)</div>}
+      {rate && <div className="hidden flex-none text-sm tabular-nums sm:block">({(rate * 100).toFixed(2)}%)</div>}
     </RankingItem>
   );
 };

@@ -15,9 +15,10 @@ type RankingViewProps = {
   loading: boolean;
   data: { channel: string; count: number }[];
   limit: number;
+  onlyTopUsers?: boolean;
 };
 
-const RankingView: FC<RankingViewProps> = ({ range, loading, data, limit }) => {
+const RankingView: FC<RankingViewProps> = ({ range, loading, data, limit, onlyTopUsers = true }) => {
   if (loading && data.length === 0) {
     return (
       <div className="flex flex-col">
@@ -38,7 +39,7 @@ const RankingView: FC<RankingViewProps> = ({ range, loading, data, limit }) => {
             rank={i + 1}
             value={row.count}
             rate={row.count / data[0].count}
-            onlyTop
+            onlyTop={onlyTopUsers}
           />
         </Fragment>
       ))}
@@ -50,9 +51,11 @@ export type MessagesChannelRankingProps = {
   range?: DateRange;
   userId?: string;
   limit?: number;
+  onlyTopUsers?: boolean;
+  subscriptionFilter?: 1 | 2;
 };
 
-export const MessagesChannelRanking: FC<MessagesChannelRankingProps> = ({ range, userId, limit }) => {
+export const MessagesChannelRanking: FC<MessagesChannelRankingProps> = ({ range, userId, limit, onlyTopUsers }) => {
   const query = useMemo(
     () =>
       ({
@@ -68,10 +71,17 @@ export const MessagesChannelRanking: FC<MessagesChannelRankingProps> = ({ range,
   );
   const { messages, loading } = useMessages(query);
 
-  return <RankingView range={range} loading={loading} data={messages} limit={limit ?? 10} />;
+  return (
+    <RankingView range={range} loading={loading} data={messages} limit={limit ?? 10} onlyTopUsers={onlyTopUsers} />
+  );
 };
 
-export const MessagesChannelRankingWithSubscription: FC<MessagesChannelRankingProps> = ({ range, userId, limit }) => {
+export const MessagesChannelRankingWithSubscription: FC<MessagesChannelRankingProps> = ({
+  range,
+  userId,
+  limit,
+  subscriptionFilter,
+}) => {
   const { getSubscriptionLevel } = useSubscriptions();
   const query = useMemo(
     () =>
@@ -81,23 +91,25 @@ export const MessagesChannelRankingWithSubscription: FC<MessagesChannelRankingPr
         groupBy: 'channel',
         orderBy: 'target',
         order: 'desc',
-        limit: limit ?? 10,
         ...(range && dateRangeToQuery(range)),
       }) satisfies MessagesQuery,
-    [range, userId, limit],
+    [range, userId],
   );
   const { messages, loading } = useMessages(query);
+  const filteredMessages = useMemo(
+    () =>
+      messages
+        .map((message, index) => ({ ...message, rank: index + 1 }))
+        .filter((m) => subscriptionFilter === undefined || getSubscriptionLevel(m.channel) === subscriptionFilter)
+        .slice(0, limit ?? 10),
+    [messages, getSubscriptionLevel, subscriptionFilter, limit],
+  );
 
-  const allMessagesCount = messages.map((m) => m.count).reduce((a, b) => a + b, 0);
-  const subscribedCount = messages
-    .filter((m) => getSubscriptionLevel(m.channel) > 0)
-    .map((m) => m.count)
-    .reduce((a, b) => a + b, 0);
-
-  if (loading && messages.length === 0) {
+  const allMessagesCount = filteredMessages.map((m) => m.count).reduce((a, b) => a + b, 0);
+  if (loading && filteredMessages.length === 0) {
     return (
       <div className="flex flex-col">
-        {[...Array(limit)].map((_, i) => (
+        {[...Array(limit ?? 10)].map((_, i) => (
           <RankingItemSkeleton key={i} rank={i + 1} />
         ))}
       </div>
@@ -106,19 +118,12 @@ export const MessagesChannelRankingWithSubscription: FC<MessagesChannelRankingPr
 
   return (
     <div className={clsx('space-y-2', loading && 'opacity-80')}>
-      <div className="flex justify-end gap-1">
-        <span className="font-semibold">購読率</span>
-        <span>
-          {subscribedCount}/{allMessagesCount}
-        </span>
-        <span>({((subscribedCount / allMessagesCount) * 100).toFixed(1)}%)</span>
-      </div>
       <div className="flex flex-col">
-        {messages.map((row, i) => (
+        {filteredMessages.map((row) => (
           <Fragment key={row.channel}>
             <ChannelRankingItemWithSubscription
               channelId={row.channel}
-              rank={i + 1}
+              rank={row.rank}
               value={row.count}
               rate={row.count / allMessagesCount}
             />

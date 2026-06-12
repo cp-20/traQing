@@ -84,7 +84,7 @@ export const UserSelect: FC<Props> = ({ reducer, textInputProps }) => {
                     setUserId(u.id);
                     setOpened(false);
                   }}
-                  className="user-select-button flex items-center gap-2 hover:bg-gray-100 px-4 py-1"
+                  className="traqing-combobox-option user-select-button flex items-center gap-2 px-4 py-1"
                 >
                   <UserAvatar user={u} />
                   <div className="flex flex-col items-start">

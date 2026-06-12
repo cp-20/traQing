@@ -1,4 +1,4 @@
-import { Skeleton, TextInput } from '@mantine/core';
+import { Badge, Group, Skeleton, Stack, Text, TextInput, Title } from '@mantine/core';
 import { type FC, useState } from 'react';
 import { Link } from 'react-router';
 import { Card } from '@/components/Card';
@@ -7,6 +7,7 @@ import { StampIcon } from '@/components/icons/StampIcon';
 import { StampRanking } from '@/components/rankings/StampRanking';
 import { StampImage } from '@/components/StampImage';
 import { TopStampsTimeline } from '@/components/timelines/TopStampsTimeline';
+import { useDateRangePicker } from '@/composables/useDateRangePicker';
 import { useMessageStamps } from '@/hooks/useMessageStamps';
 import { searchStamps } from '@/lib/search';
 
@@ -19,12 +20,12 @@ const SearchStampBlock: FC = () => {
   return (
     <div className="space-y-4">
       <TextInput placeholder="スタンプ名" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
-      <div className="h-96 overflow-y-scroll border border-gray-200 rounded text-text-primary">
+      <div className="traqing-search-list h-96 overflow-y-scroll">
         {filteredStamps?.slice(0, 100).map((stamp) => (
           <Link
             key={stamp.id}
             to={`/stamps/${stamp.name}`}
-            className="flex items-center gap-2 px-4 py-2 hover:bg-blue-100 transition-colors duration-200"
+            className="traqing-search-row flex items-center gap-2 px-4 py-2 transition-colors duration-150"
           >
             <StampImage stampId={stamp.id} />
             <span>:{stamp.name}:</span>
@@ -45,26 +46,43 @@ const SearchStampBlock: FC = () => {
 };
 
 export const StampOverviewPage: FC = () => {
+  const range = useDateRangePicker('last-30-days');
   return (
     <Container>
-      <ContainerTitle>
+      <ContainerTitle actions={range.render()}>
         <StampIcon className="size-8" />
-        <span className="text-2xl font-bold">スタンプ</span>
+        <span>スタンプ</span>
       </ContainerTitle>
 
       <Card>
-        <h2 className="text-lg font-semibold mb-2">つけられた数</h2>
+        <Group justify="space-between" mb="sm">
+          <Title order={2} size="h4">
+            つけられた数
+          </Title>
+          <Badge color="gray" variant="outline">
+            選択期間
+          </Badge>
+        </Group>
         <div className="grid grid-cols-2 max-lg:grid-cols-1 gap-4">
-          <StampRanking limit={20} />
+          <StampRanking limit={20} range={range.value} />
           <div>
-            <TopStampsTimeline />
+            <TopStampsTimeline range={range.value} />
           </div>
         </div>
       </Card>
 
       <Card>
-        <h2 className="text-lg font-semibold mb-2">スタンプ検索</h2>
-        <SearchStampBlock />
+        <Stack gap="sm">
+          <Group justify="space-between">
+            <Title order={2} size="h4">
+              スタンプ検索
+            </Title>
+            <Text size="sm" c="dimmed">
+              全スタンプ
+            </Text>
+          </Group>
+          <SearchStampBlock />
+        </Stack>
       </Card>
     </Container>
   );

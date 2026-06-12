@@ -1,4 +1,4 @@
-import { Skeleton, TextInput } from '@mantine/core';
+import { Group, Skeleton, Stack, Text, TextInput, Title } from '@mantine/core';
 import { type FC, useState } from 'react';
 import { Link } from 'react-router';
 import { Card } from '@/components/Card';
@@ -17,12 +17,12 @@ const SearchGroupBlock: FC = () => {
   return (
     <div className="space-y-4">
       <TextInput placeholder="グループ名" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
-      <div className="h-96 overflow-y-scroll border border-gray-200 rounded text-text-primary">
+      <div className="traqing-search-list h-96 overflow-y-scroll">
         {filteredGroups?.slice(0, 100).map((group) => (
           <Link
             key={group.id}
             to={`/groups/${group.name}`}
-            className="flex items-center gap-2 px-4 py-2 hover:bg-blue-100 transition-colors duration-200"
+            className="traqing-search-row flex items-center gap-2 px-4 py-2 transition-colors duration-150"
           >
             <span>@{group.name}</span>
           </Link>
@@ -45,17 +45,33 @@ export const GroupOverviewPage: FC = () => {
     <Container>
       <ContainerTitle>
         <GroupIcon className="size-8" />
-        <span className="text-2xl font-bold">グループ</span>
+        <span>グループ</span>
       </ContainerTitle>
 
       <Card>
-        <h2 className="text-lg font-semibold mb-2">メンバー数ランキング</h2>
+        <Group justify="space-between" mb="sm">
+          <Title order={2} size="h4">
+            メンバー数ランキング
+          </Title>
+          <Text size="sm" c="dimmed">
+            現在値
+          </Text>
+        </Group>
         <GroupMembersRanking limit={20} />
       </Card>
 
       <Card>
-        <h2 className="text-lg font-semibold mb-2">グループ検索</h2>
-        <SearchGroupBlock />
+        <Stack gap="sm">
+          <Group justify="space-between">
+            <Title order={2} size="h4">
+              グループ検索
+            </Title>
+            <Text size="sm" c="dimmed">
+              全グループ
+            </Text>
+          </Group>
+          <SearchGroupBlock />
+        </Stack>
       </Card>
     </Container>
   );

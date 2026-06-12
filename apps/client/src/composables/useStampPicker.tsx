@@ -90,7 +90,7 @@ export const StampPicker: FC<StampPickerProps> = ({ reducer, textInputProps }) =
                     setStampId(s.id);
                     setOpened(false);
                   }}
-                  className="stamp-picker-button"
+                  className="traqing-combobox-option stamp-picker-button"
                 >
                   <div className="bg-gray-400 animate-pulse" />
                   <StampImage stampId={s.id} size={24} />

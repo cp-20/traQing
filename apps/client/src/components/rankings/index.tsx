@@ -1,7 +1,5 @@
-import { Skeleton } from '@mantine/core';
-import { IconCrown } from '@tabler/icons-react';
-import clsx from 'clsx';
-import { type FC, type ReactNode, useEffect, useState } from 'react';
+import { Box, Skeleton } from '@mantine/core';
+import type { FC, ReactNode } from 'react';
 import { Link } from 'react-router';
 
 export type RankingItemSkeletonProps = {
@@ -10,10 +8,11 @@ export type RankingItemSkeletonProps = {
 };
 
 export const RankingItemSkeleton: FC<RankingItemSkeletonProps> = ({ rank, showIcon = true }) => (
-  <div className="flex items-center gap-2 px-2 py-1">
+  <div className="traqing-ranking-row flex min-w-0 items-center gap-3 px-2 py-2">
     <RankingItemRank rank={rank} />
     {showIcon && <Skeleton circle w={24} height={24} />}
-    <Skeleton h={16} className="flex-1" />
+    <Skeleton h={16} className="min-w-0 flex-1" />
+    <Skeleton h={8} w={48} radius="xl" />
   </div>
 );
 
@@ -21,7 +20,7 @@ export type RankingItemProps = {
   children: ReactNode;
 };
 export const RankingItem: FC<RankingItemProps> = ({ children }) => (
-  <div className="flex items-center gap-2 px-2 py-1">{children}</div>
+  <div className="traqing-ranking-row flex min-w-0 items-center gap-3 px-2 py-2">{children}</div>
 );
 
 export type RankingItemWithLinkProps = {
@@ -31,12 +30,17 @@ export type RankingItemWithLinkProps = {
 
 export const RankingItemWithLink: FC<RankingItemWithLinkProps> = ({ to, children }) => {
   return (
-    <Link
+    <Box
+      component={Link}
       to={to}
-      className="flex items-center gap-2 rounded-r-md px-2 py-1 relative z-0 hover:opacity-70 transition-opacity duration-150 @container"
+      className="traqing-ranking-row flex min-w-0 items-center gap-3 px-2 py-2 relative z-0 overflow-hidden transition-colors duration-150 @container"
+      style={{
+        color: 'inherit',
+        textDecoration: 'none',
+      }}
     >
       {children}
-    </Link>
+    </Box>
   );
 };
 
@@ -44,37 +48,18 @@ export type RankingItemBarProps = {
   rate: number;
 };
 
-export const RankingItemBar: FC<RankingItemBarProps> = ({ rate }) => {
-  const [displayRate, setDisplayRate] = useState(0);
-  useEffect(() => {
-    setDisplayRate(rate);
-  }, [rate]);
-
-  return (
-    <span
-      className={clsx(
-        'absolute inset-0 bg-blue-50 -z-10 origin-left rounded-r-md transition-transform duration-1000 ease-out',
-      )}
-      style={{ transform: `scale(${displayRate}, 0.9)` }}
-    />
-  );
-};
+export const RankingItemBar: FC<RankingItemBarProps> = ({ rate }) => (
+  <span className="traqing-ranking-meter order-last" aria-hidden>
+    <span className="traqing-ranking-meter-fill" style={{ width: `${Math.max(0, Math.min(rate, 1)) * 100}%` }} />
+  </span>
+);
 
 export type RankingItemRankProps = {
   rank: number;
 };
 
 export const RankingItemRank: FC<RankingItemRankProps> = ({ rank }) => {
-  if (rank <= 3) {
-    const colors = ['orange', 'silver', 'indianred'];
-    return (
-      <span className="w-9">
-        <IconCrown fill={colors[rank - 1]} color={colors[rank - 1]} />
-      </span>
-    );
-  }
-
-  return <span className="text-lg font-medium w-9">#{rank}</span>;
+  return <span className="traqing-ranking-rank w-8 flex-none text-xs font-semibold tabular-nums">#{rank}</span>;
 };
 
 export type RankingItemValueProps = {
@@ -82,5 +67,5 @@ export type RankingItemValueProps = {
 };
 
 export const RankingItemValue: FC<RankingItemValueProps> = ({ value }) => (
-  <span className="text-right font-bold ml-auto">{value}</span>
+  <span className="ml-auto flex-none text-right font-semibold tabular-nums">{value}</span>
 );

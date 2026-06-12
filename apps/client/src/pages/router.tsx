@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router';
+import { AppLayout } from '@/components/AppLayout';
 import { ChannelDetailPage } from '@/pages/channels/ChannelDetailPage';
 import { ChannelOverviewPage } from '@/pages/channels/ChannelOverviewPage';
 import { Dashboard } from '@/pages/dashboard';
@@ -19,25 +20,27 @@ import { YourRecapPage } from '@/pages/your-recap';
 
 export const AppRouter = () => (
   <BrowserRouter>
-    <Routes>
-      <Route index element={<Dashboard />} />
-      <Route path="/your-recap/:year" element={<YourRecapPage />} />
-      <Route path="/users" element={<UserOverviewPage />} />
-      <Route path="/users" element={<UserGuard />}>
-        <Route path=":username" element={<UserDetailPage />} />
-        <Route path=":username/recap/:year" element={<YearlyRecapPage />} />
-      </Route>
-      <Route path="/channels" element={<ChannelOverviewPage />} />
-      <Route path="/channels/*" element={<ChannelDetailPage />} />
-      <Route path="/stamps" element={<StampOverviewPage />} />
-      <Route path="/stamps/:stampName" element={<StampDetailPage />} />
-      <Route path="/messages" element={<MessageOverviewPage />} />
-      <Route path="/groups" element={<GroupOverviewPage />} />
-      <Route path="/groups/:groupName" element={<GroupDetailPage />} />
-      <Route path="/tags" element={<TagOverviewPage />} />
-      <Route path="/subscriptions" element={<SubscriptionSettingsPage />} />
-      <Route path="/playground" element={<PlaygroundPage />} />
-      <Route path="*" element={<NotFoundPage />} />
-    </Routes>
+    <AppLayout>
+      <Routes>
+        <Route index element={<Dashboard />} />
+        <Route path="/your-recap/:year" element={<YourRecapPage />} />
+        <Route path="/users" element={<UserOverviewPage />} />
+        <Route path="/users" element={<UserGuard />}>
+          <Route path=":username" element={<UserDetailPage />} />
+          <Route path=":username/recap/:year" element={<YearlyRecapPage />} />
+        </Route>
+        <Route path="/channels" element={<ChannelOverviewPage />} />
+        <Route path="/channels/*" element={<ChannelDetailPage />} />
+        <Route path="/stamps" element={<StampOverviewPage />} />
+        <Route path="/stamps/:stampName" element={<StampDetailPage />} />
+        <Route path="/messages" element={<MessageOverviewPage />} />
+        <Route path="/groups" element={<GroupOverviewPage />} />
+        <Route path="/groups/:groupName" element={<GroupDetailPage />} />
+        <Route path="/tags" element={<TagOverviewPage />} />
+        <Route path="/subscriptions" element={<SubscriptionSettingsPage />} />
+        <Route path="/playground" element={<PlaygroundPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </AppLayout>
   </BrowserRouter>
 );

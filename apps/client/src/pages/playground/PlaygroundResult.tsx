@@ -48,44 +48,42 @@ export const PlaygroundResult = <Row extends RowType>({ result }: Props<Row>) =>
   }
 
   return (
-    <table className="border-collapse w-full table-fixed">
-      <thead>
-        <tr>
-          {Object.entries(rows)
-            .filter(([key]) => result[0][key as ColumnType] !== undefined)
-            .map(([key, value]) => (
-              <th
-                key={key}
-                scope="col"
-                className={clsx('px-4 py-2 border-gray-300 border text-left', key === 'count' && 'w-20 text-right')}
-              >
-                {value}
-              </th>
-            ))}
-        </tr>
-      </thead>
-      <tbody>
-        {result.map((row, i) => (
-          <tr key={i}>
+    <div className="traqing-table-wrap">
+      <table className="traqing-table border-collapse w-full table-fixed">
+        <thead>
+          <tr>
             {Object.entries(rows)
-              .filter(([key]) => row[key as ColumnType] !== undefined)
-              .map(([key]) => (
-                <td
-                  key={key}
-                  className={clsx(
-                    'px-4 py-2 border-gray-300 border',
-                    numberColumns.includes(key as ColumnType) && 'text-right',
-                    key === 'count' && 'w-20',
-                  )}
-                >
-                  {/* biome-ignore lint/style/noNonNullAssertion: Object.entries */}
-                  {convertColumn(key as ColumnType, row[key as ColumnType]!)}
-                </td>
+              .filter(([key]) => result[0][key as ColumnType] !== undefined)
+              .map(([key, value]) => (
+                <th key={key} scope="col" className={clsx('px-4 py-2 text-left', key === 'count' && 'w-20 text-right')}>
+                  {value}
+                </th>
               ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {result.map((row, i) => (
+            <tr key={i}>
+              {Object.entries(rows)
+                .filter(([key]) => row[key as ColumnType] !== undefined)
+                .map(([key]) => (
+                  <td
+                    key={key}
+                    className={clsx(
+                      'px-4 py-2',
+                      numberColumns.includes(key as ColumnType) && 'text-right',
+                      key === 'count' && 'w-20',
+                    )}
+                  >
+                    {/* biome-ignore lint/style/noNonNullAssertion: Object.entries */}
+                    {convertColumn(key as ColumnType, row[key as ColumnType]!)}
+                  </td>
+                ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 
@@ -101,7 +99,7 @@ const ChannelName: FC<{ channelId: string }> = ({ channelId }) => {
     );
   }
   return (
-    <Link to={`/channels/${channel}`} className="flex group hover:text-blue-500">
+    <Link to={`/channels/${channel}`} className="traqing-link flex group">
       <ChannelIcon className="size-6" />
       <span className="font-medium">{channel}</span>
     </Link>
@@ -120,7 +118,7 @@ const UserName: FC<{ userId: string }> = ({ userId }) => {
     );
   }
   return (
-    <Link to={`/users/${encodeURIComponent(user.name)}`} className="flex gap-2 items-center group hover:text-blue-500">
+    <Link to={`/users/${encodeURIComponent(user.name)}`} className="traqing-link flex gap-2 items-center group">
       <UserAvatar user={user} className="size-6" />
       <div className="flex flex-col">
         <span className="text-sm font-medium">{user.displayName}</span>
@@ -142,7 +140,7 @@ const StampName: FC<{ stampId: string }> = ({ stampId }) => {
     );
   }
   return (
-    <Link to={`/stamps/${stamp.name}`} className="flex gap-2 items-center group hover:text-blue-500">
+    <Link to={`/stamps/${stamp.name}`} className="traqing-link flex gap-2 items-center group">
       <StampImage stampId={stampId} className="size-6" />
       <span>{stamp.name}</span>
     </Link>

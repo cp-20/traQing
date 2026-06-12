@@ -1,6 +1,7 @@
 import type { StampsQuery } from '@traq-ing/database';
 import type { FC } from 'react';
 import { useMemo } from 'react';
+import { getTimelineQuery } from '@/components/timelines/common';
 import { TimelineView } from '@/components/timelines/top-timeline';
 import { type DateRange, dateRangeToQuery } from '@/composables/useDateRangePicker';
 import { useMessageStamps } from '@/hooks/useMessageStamps';
@@ -22,6 +23,8 @@ export const TopStampsTimeline: FC<TopStampsTimelineProps> = ({
   limit,
 }) => {
   const { getStamp } = useMessageStamps();
+  const timelineQuery = useMemo(() => getTimelineQuery(range), [range]);
+  const groupBy = timelineQuery.groupBy;
   const query = useMemo(
     () =>
       ({
@@ -43,19 +46,18 @@ export const TopStampsTimeline: FC<TopStampsTimelineProps> = ({
       topStamps.map(
         (s) =>
           ({
-            groupBy: 'month',
-            orderBy: 'date',
-            order: 'asc',
+            ...timelineQuery,
             stampId: s,
+            ...(range && dateRangeToQuery(range)),
           }) satisfies StampsQuery,
       ),
-    [topStamps],
+    [topStamps, range, timelineQuery],
   );
   const { stamps } = useStampsByMultipleQueries(queries);
-  const labels = [...new Set(stamps.flatMap((s) => s.map((m) => m.month)))];
+  const labels = [...new Set(stamps.flatMap((s) => s.map((m) => m[groupBy])))].sort((a, b) => a.localeCompare(b));
   const datasets = stamps.map((stamp, i) => ({
     label: getStamp(topStamps[i]) ? `:${getStamp(topStamps[i])?.name}:` : 'unknown',
-    data: stamp.map((s) => stamp.filter((m) => m.month <= s.month).reduce((acc, cur) => acc + cur.count, 0)),
+    data: labels.map((label) => stamp.filter((m) => m[groupBy] <= label).reduce((acc, cur) => acc + cur.count, 0)),
   }));
 
   return <TimelineView labels={labels} datasets={datasets} />;

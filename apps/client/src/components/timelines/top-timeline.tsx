@@ -26,6 +26,7 @@ const options = mergeOptions(commonTimelineChartOptions, {
       position: 'bottom',
       align: 'start',
       labels: {
+        color: '#868e96',
         usePointStyle: true,
         boxWidth: 10,
         boxHeight: 10,

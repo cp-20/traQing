@@ -1,4 +1,5 @@
 import type { StampsQuery } from '@traq-ing/database';
+import { Skeleton } from '@mantine/core';
 import clsx from 'clsx';
 import { type FC, useMemo } from 'react';
 import { TraqMessage } from '@/components/messages/TraqMessage';
@@ -31,6 +32,16 @@ export const TopReactedMessages: FC<Props> = ({ range, stampId, channelId, gaveU
     [range, stampId, channelId, gaveUserId, receivedUserId, limit],
   );
   const { stamps, loading } = useStamps(query);
+
+  if (loading && stamps.length === 0) {
+    return (
+      <div className="flex flex-col gap-2">
+        {[...Array(limit ?? 5)].map((_, i) => (
+          <Skeleton key={i} h={120} radius="sm" />
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className={clsx('flex flex-col gap-2', loading && 'opacity-70')}>

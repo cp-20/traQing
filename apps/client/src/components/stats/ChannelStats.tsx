@@ -24,17 +24,10 @@ export const ChannelStampCountStat: FC<ChannelStatsProps> = ({ channelId }) => {
   const index = stamps.findIndex((m) => m.channel === channelId);
 
   if (index === -1) {
-    return <Stat label="スタンプ数" value={0} valueProps={{ className: 'text-teal-600' }} />;
+    return <Stat label="スタンプ数" value={0} />;
   }
 
-  return (
-    <Stat
-      label="スタンプ数"
-      value={stamps[index].count}
-      annotation={`全体${index + 1}位`}
-      valueProps={{ className: 'text-teal-600' }}
-    />
-  );
+  return <Stat label="スタンプ数" value={stamps[index].count} annotation={`全体${index + 1}位`} />;
 };
 
 export const ChannelSubscribersCountStat: FC<ChannelStatsProps> = ({ channelId }) => {
@@ -43,15 +36,8 @@ export const ChannelSubscribersCountStat: FC<ChannelStatsProps> = ({ channelId }
   const index = subscribers.findIndex((s) => s.group === channelId);
 
   if (index === -1) {
-    return <Stat label="メンバー数" value={0} valueProps={{ className: 'text-indigo-600' }} />;
+    return <Stat label="メンバー数" value={0} />;
   }
 
-  return (
-    <Stat
-      label="メンバー数"
-      value={subscribers[index].count}
-      annotation={`全体${index + 1}位`}
-      valueProps={{ className: 'text-indigo-600' }}
-    />
-  );
+  return <Stat label="メンバー数" value={subscribers[index].count} annotation={`全体${index + 1}位`} />;
 };

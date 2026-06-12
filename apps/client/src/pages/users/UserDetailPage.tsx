@@ -1,3 +1,4 @@
+import { Badge, Group, Title } from '@mantine/core';
 import type { FC } from 'react';
 import { useOutletContext } from 'react-router';
 import { Card } from '@/components/Card';
@@ -17,12 +18,14 @@ import {
 import { UserActionTimeline } from '@/components/timelines/UserActionTimeline';
 import { UserAvatar } from '@/components/UserAvatar';
 import { StampPicker, useStampPicker } from '@/composables/useStampPicker';
+import { useDateRangePicker } from '@/composables/useDateRangePicker';
 import { useUsers } from '@/hooks/useUsers';
 import type { UserContext } from '@/pages/users/UserGuard';
 
 export const UserDetailPage: FC = () => {
   const { userId } = useOutletContext() as UserContext;
   const stampPicker = useStampPicker();
+  const range = useDateRangePicker('last-30-days');
   const { getUserFromId } = useUsers();
   const user = getUserFromId(userId);
 
@@ -30,7 +33,7 @@ export const UserDetailPage: FC = () => {
 
   return (
     <Container>
-      <ContainerTitle>
+      <ContainerTitle actions={range.render()}>
         <div>
           <UserAvatar user={user} size={128} loading="eager" />
         </div>
@@ -51,59 +54,107 @@ export const UserDetailPage: FC = () => {
           </div>
           <div className="grid grid-cols-1 gap-4 sm:gap-8 @lg:grid-cols-2 sm:@lg:gap-4">
             <Card>
-              <div className="font-semibold mb-2">つけたスタンプ</div>
-              <StampRanking gaveUserId={userId} />
+              <Group justify="space-between" mb="sm">
+                <Title order={2} size="h5">
+                  つけたスタンプ
+                </Title>
+                <Badge color="gray" variant="outline">
+                  選択期間
+                </Badge>
+              </Group>
+              <StampRanking range={range.value} gaveUserId={userId} />
             </Card>
             <Card>
-              <div className="font-semibold mb-2">もらったスタンプ</div>
-              <StampRanking receivedUserId={userId} />
+              <Group justify="space-between" mb="sm">
+                <Title order={2} size="h5">
+                  もらったスタンプ
+                </Title>
+                <Badge color="gray" variant="outline">
+                  選択期間
+                </Badge>
+              </Group>
+              <StampRanking range={range.value} receivedUserId={userId} />
             </Card>
           </div>
-          <Card className="max-lg:hidden">
-            <div className="font-semibold mb-4">リアクションの多い投稿</div>
+          <Card>
+            <Group justify="space-between" mb="md">
+              <Title order={2} size="h5">
+                リアクションの多い投稿
+              </Title>
+              <Badge color="gray" variant="outline">
+                選択期間
+              </Badge>
+            </Group>
             <div className="space-y-2">
               <StampPicker reducer={stampPicker} />
-
-              <TopReactedMessages stampId={stampPicker.stampId} receivedUserId={userId} />
+              <TopReactedMessages range={range.value} stampId={stampPicker.stampId} receivedUserId={userId} />
             </div>
           </Card>
         </div>
         <div className="flex flex-col sm:gap-8 gap-4">
           <Card>
-            <div className="font-semibold mb-4">各アクションの時系列遷移</div>
+            <Group justify="space-between" mb="md">
+              <Title order={2} size="h5">
+                各アクションの時系列遷移
+              </Title>
+              <Badge color="gray" variant="outline">
+                選択期間
+              </Badge>
+            </Group>
             <div>
-              <UserActionTimeline userId={userId} />
+              <UserActionTimeline userId={userId} range={range.value} />
             </div>
           </Card>
           <Card>
-            <div className="font-semibold mb-4">各アクションの時間帯</div>
+            <Group justify="space-between" mb="md">
+              <Title order={2} size="h5">
+                各アクションの時間帯
+              </Title>
+              <Badge color="gray" variant="outline">
+                選択期間
+              </Badge>
+            </Group>
             <div>
-              <UserActionHours userId={userId} />
+              <UserActionHours userId={userId} range={range.value} />
             </div>
           </Card>
           <Card>
-            <div className="font-semibold mb-4">よく投稿するチャンネル</div>
+            <Group justify="space-between" mb="md">
+              <Title order={2} size="h5">
+                よく投稿するチャンネル
+              </Title>
+              <Badge color="gray" variant="outline">
+                選択期間
+              </Badge>
+            </Group>
             <div>
-              <MessagesChannelRanking userId={userId} limit={20} />
+              <MessagesChannelRanking range={range.value} userId={userId} limit={20} />
             </div>
           </Card>
           <Card>
-            <div className="font-semibold mb-4">スタンプをよく付けるチャンネル</div>
+            <Group justify="space-between" mb="md">
+              <Title order={2} size="h5">
+                スタンプをよく付けるチャンネル
+              </Title>
+              <Badge color="gray" variant="outline">
+                選択期間
+              </Badge>
+            </Group>
             <div>
-              <StampsChannelRanking gaveUserId={userId} />
+              <StampsChannelRanking range={range.value} gaveUserId={userId} />
             </div>
           </Card>
           <Card>
-            <div className="font-semibold mb-4">スタンプをよく付けられるチャンネル</div>
+            <Group justify="space-between" mb="md">
+              <Title order={2} size="h5">
+                スタンプをよく付けられるチャンネル
+              </Title>
+              <Badge color="gray" variant="outline">
+                選択期間
+              </Badge>
+            </Group>
             <div>
-              <StampsChannelRanking receivedUserId={userId} />
-            </div>
-          </Card>
-          <Card className="lg:hidden">
-            <div className="font-semibold mb-4">リアクションの多い投稿</div>
-            <div className="space-y-2">
-              <StampPicker reducer={stampPicker} />
-              <TopReactedMessages stampId={stampPicker.stampId} receivedUserId={userId} />
+              <StampsChannelRanking range={range.value} receivedUserId={userId} />
             </div>
           </Card>
         </div>
