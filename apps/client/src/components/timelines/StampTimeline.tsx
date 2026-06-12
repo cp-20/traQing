@@ -4,7 +4,8 @@ import { Chart as ChartJS, Filler } from 'chart.js';
 import clsx from 'clsx';
 import { type FC, useMemo } from 'react';
 import { Line } from 'react-chartjs-2';
-import { timelineCommonQuery } from '@/components/timelines/common';
+import { getTimelineQuery } from '@/components/timelines/common';
+import { type DateRange, dateRangeToQuery } from '@/composables/useDateRangePicker';
 import { useStamps } from '@/hooks/useStamps';
 import { getCommonLineChartOptions, mergeOptions } from '@/lib/commonChartOptions';
 
@@ -22,20 +23,24 @@ const option = mergeOptions(getCommonLineChartOptions(true), {
 
 type StampTimelineProps = {
   stampId: string | null;
+  range?: DateRange;
 };
 
-export const StampTimeline: FC<StampTimelineProps> = ({ stampId }) => {
+export const StampTimeline: FC<StampTimelineProps> = ({ stampId, range }) => {
+  const timelineQuery = useMemo(() => getTimelineQuery(range), [range]);
+  const groupBy = timelineQuery.groupBy;
   const query = useMemo(
     () =>
       ({
-        ...timelineCommonQuery,
+        ...timelineQuery,
         stampId: stampId ?? undefined,
+        ...(range && dateRangeToQuery(range)),
       }) satisfies StampsQuery,
-    [stampId],
+    [stampId, range, timelineQuery],
   );
   const { stamps, loading } = useStamps(query);
   const data = {
-    labels: stamps?.map((s) => s.month) ?? [],
+    labels: stamps?.map((s) => s[groupBy]) ?? [],
     datasets: [
       {
         label: 'スタンプ数',

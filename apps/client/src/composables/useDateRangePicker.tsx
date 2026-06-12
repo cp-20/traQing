@@ -1,4 +1,4 @@
-import { Button, type ButtonProps, Popover } from '@mantine/core';
+import { Button, type ButtonProps, Group, Popover, Radio, Stack } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 import { useEffect, useId, useState } from 'react';
 
@@ -66,7 +66,11 @@ export const dateRangeKinds = {
     label: '過去1年間',
     getRange: () => [daysBeforeNow(365), new Date()],
   },
-} satisfies Record<string, { label: string; getRange: () => DateRange | null }>;
+  all: {
+    label: '全期間',
+    getRange: () => undefined,
+  },
+} satisfies Record<string, { label: string; getRange: () => DateRange | null | undefined }>;
 
 export type DateRangeType = keyof typeof dateRangeKinds;
 
@@ -78,7 +82,9 @@ export const useDateRangePicker = (defaultType: DateRangeType, defaultRange?: Da
   const [type, setType] = useState<DateRangeType>(defaultType);
   const [settingType, setSettingType] = useState<DateRangeType>(defaultType);
   const label = dateRangeKinds[type].label;
-  const [value, setValue] = useState<DateRange>(defaultRange ?? dateRangeKinds[type].getRange() ?? getFallbackRange());
+  const [value, setValue] = useState<DateRange | undefined>(
+    defaultRange ?? dateRangeKinds[type].getRange() ?? getFallbackRange(),
+  );
   const [settingValue, setSettingValue] = useState<[Date | null, Date | null]>(
     defaultRange ?? dateRangeKinds[settingType].getRange() ?? [null, null],
   );
@@ -92,7 +98,7 @@ export const useDateRangePicker = (defaultType: DateRangeType, defaultRange?: Da
     const range = dateRangeKinds[type].getRange();
     if (range !== null) {
       setValue(range);
-      setSettingValue(range);
+      setSettingValue(range ?? [null, null]);
     }
   }, [type]);
 
@@ -105,47 +111,37 @@ export const useDateRangePicker = (defaultType: DateRangeType, defaultRange?: Da
       onChange={setOpened}
       onClose={() => {
         setSettingType(type);
-        setSettingValue(value);
+        setSettingValue(value ?? [null, null]);
       }}
     >
       <Popover.Target>
         <Button variant="default" onClick={() => setOpened((o) => !o)} {...props?.buttonProps}>
-          <span className="inline-flex gap-2 items-center text-text-primary">
+          <span className="inline-flex gap-2 items-center">
             <span className="text-xs font-bold">{label}</span>
-            <span>
-              {formatDate(value[0])}～{formatDate(value[1])}
-            </span>
+            <span>{value ? `${formatDate(value[0])}～${formatDate(value[1])}` : '全期間'}</span>
           </span>
         </Button>
       </Popover.Target>
       <Popover.Dropdown>
-        <div className="space-y-2">
-          <div className="flex gap-2">
-            <div className="flex flex-col w-32">
-              {Object.entries(dateRangeKinds).map(([key, { label, getRange }]) => (
-                <div key={key}>
-                  <input
-                    className="peer"
-                    type="radio"
+        <Stack gap="sm">
+          <Group align="flex-start" gap="md">
+            <Radio.Group value={settingType} onChange={(v) => setSettingType(v as DateRangeType)}>
+              <Stack gap={4} w={128}>
+                {Object.entries(dateRangeKinds).map(([key, { label, getRange }]) => (
+                  <Radio
+                    key={key}
                     id={`date-range-picker${id}${key}`}
-                    name={`date-range-picker${id}`}
-                    hidden
-                    checked={settingType === key}
+                    value={key}
+                    label={label}
                     onChange={() => {
                       setSettingType(key as DateRangeType);
                       const range = getRange();
                       if (range) setSettingValue(range);
                     }}
                   />
-                  <label
-                    htmlFor={`date-range-picker${id}${key}`}
-                    className="peer-checked:font-bold peer-checked:text-blue-500 peer-checked:bg-blue-100 px-2 py-1 rounded-sm w-full block"
-                  >
-                    {label}
-                  </label>
-                </div>
-              ))}
-            </div>
+                ))}
+              </Stack>
+            </Radio.Group>
             <DatePicker
               value={settingValue}
               onChange={(v) => {
@@ -160,22 +156,29 @@ export const useDateRangePicker = (defaultType: DateRangeType, defaultRange?: Da
               firstDayOfWeek={0}
               maxDate={new Date()}
             />
-          </div>
+          </Group>
           <div className="flex justify-end">
             <Button
               variant="subtle"
               onClick={() => {
                 setOpened(false);
                 setSettingType(type);
-                setSettingValue(value);
+                setSettingValue(value ?? [null, null]);
               }}
             >
               キャンセル
             </Button>
             <Button
               variant="subtle"
-              disabled={!settingValue[0]}
+              disabled={settingType !== 'all' && !settingValue[0]}
               onClick={() => {
+                if (settingType === 'all') {
+                  setOpened(false);
+                  setType(settingType);
+                  setValue(undefined);
+                  setSettingValue([null, null]);
+                  return;
+                }
                 if (!settingValue[0]) return;
                 setOpened(false);
                 setType(settingType);
@@ -193,7 +196,7 @@ export const useDateRangePicker = (defaultType: DateRangeType, defaultRange?: Da
               変更
             </Button>
           </div>
-        </div>
+        </Stack>
       </Popover.Dropdown>
     </Popover>
   );

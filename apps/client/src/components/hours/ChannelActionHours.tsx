@@ -3,6 +3,7 @@ import type { ChartOptions } from 'chart.js';
 import { type FC, useMemo } from 'react';
 import { Line } from 'react-chartjs-2';
 import { commonHoursChartOption, commonHoursQuery, getHourDataset, hours } from '@/components/hours/common';
+import { type DateRange, dateRangeToQuery } from '@/composables/useDateRangePicker';
 import { useMessages } from '@/hooks/useMessages';
 import { useStamps } from '@/hooks/useStamps';
 
@@ -12,11 +13,18 @@ const option = {
 
 type Props = {
   channelId: string;
+  range?: DateRange;
 };
 
-export const ChannelActionHours: FC<Props> = ({ channelId }) => {
-  const messagesQuery = useMemo(() => ({ ...commonHoursQuery, channelId }) satisfies MessagesQuery, [channelId]);
-  const stampsQuery = useMemo(() => ({ ...commonHoursQuery, channelId }) satisfies StampsQuery, [channelId]);
+export const ChannelActionHours: FC<Props> = ({ channelId, range }) => {
+  const messagesQuery = useMemo(
+    () => ({ ...commonHoursQuery, channelId, ...(range && dateRangeToQuery(range)) }) satisfies MessagesQuery,
+    [channelId, range],
+  );
+  const stampsQuery = useMemo(
+    () => ({ ...commonHoursQuery, channelId, ...(range && dateRangeToQuery(range)) }) satisfies StampsQuery,
+    [channelId, range],
+  );
   const { messages } = useMessages(messagesQuery);
   const { stamps } = useStamps(stampsQuery);
 

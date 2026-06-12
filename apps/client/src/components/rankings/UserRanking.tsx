@@ -7,11 +7,6 @@ import { UserRankingItem } from '@/components/rankings/user';
 import { type DateRange, dateRangeToQuery } from '@/composables/useDateRangePicker';
 import { useGroups } from '@/hooks/useGroups';
 import { useMessages } from '@/hooks/useMessages';
-import {
-  useGaveMessageStampsRanking,
-  useMessagesRanking,
-  useReceivedMessageStampsRanking,
-} from '@/hooks/useServerData';
 import { useStamps } from '@/hooks/useStamps';
 
 type RankingViewProps = {
@@ -119,41 +114,75 @@ export const StampsReceivedUserRanking: FC<StampsUserRankingProps> = ({ range, s
 
 type GroupMessagesRankingProps = {
   groupId: string;
+  range?: DateRange;
   limit?: number;
 };
-export const GroupMessagesRanking: FC<GroupMessagesRankingProps> = ({ groupId, limit }) => {
+export const GroupMessagesRanking: FC<GroupMessagesRankingProps> = ({ groupId, range, limit }) => {
   const { getGroup } = useGroups();
   const group = getGroup(groupId);
   const groupMap = new Map(group?.members.map((m) => [m.id, m]));
-  const { data: ranking } = useMessagesRanking();
+  const query = useMemo(
+    () =>
+      ({
+        target: 'count',
+        groupBy: 'user',
+        orderBy: 'target',
+        order: 'desc',
+        ...(range && dateRangeToQuery(range)),
+      }) satisfies MessagesQuery,
+    [range],
+  );
+  const { messages: ranking, loading } = useMessages(query);
   const inGroup = ranking?.filter((m) => groupMap.has(m.user)).slice(0, limit ?? 10);
 
-  return <RankingView loading={ranking === undefined} data={inGroup ?? []} limit={limit ?? 10} />;
+  return <RankingView loading={loading} data={inGroup ?? []} limit={limit ?? 10} />;
 };
 
 type GroupGaveStampsRankingProps = {
   groupId: string;
+  range?: DateRange;
   limit?: number;
 };
-export const GroupGaveStampsRanking: FC<GroupGaveStampsRankingProps> = ({ groupId, limit }) => {
+export const GroupGaveStampsRanking: FC<GroupGaveStampsRankingProps> = ({ groupId, range, limit }) => {
   const { getGroup } = useGroups();
   const group = getGroup(groupId);
   const groupMap = new Map(group?.members.map((m) => [m.id, m]));
-  const { data: ranking } = useGaveMessageStampsRanking();
+  const query = useMemo(
+    () =>
+      ({
+        groupBy: 'user',
+        orderBy: 'count',
+        order: 'desc',
+        ...(range && dateRangeToQuery(range)),
+      }) satisfies StampsQuery,
+    [range],
+  );
+  const { stamps: ranking, loading } = useStamps(query);
   const inGroup = ranking?.filter((s) => groupMap.has(s.user)).slice(0, limit ?? 10);
 
-  return <RankingView loading={ranking === undefined} data={inGroup ?? []} limit={limit ?? 10} />;
+  return <RankingView loading={loading} data={inGroup ?? []} limit={limit ?? 10} />;
 };
 
 type GroupReceivedStampsRankingProps = {
   groupId: string;
+  range?: DateRange;
   limit?: number;
 };
-export const GroupReceivedStampsRanking: FC<GroupReceivedStampsRankingProps> = ({ groupId, limit }) => {
+export const GroupReceivedStampsRanking: FC<GroupReceivedStampsRankingProps> = ({ groupId, range, limit }) => {
   const { getGroup } = useGroups();
   const group = getGroup(groupId);
   const groupMap = new Map(group?.members.map((m) => [m.id, m]));
-  const { data: ranking } = useReceivedMessageStampsRanking();
+  const query = useMemo(
+    () =>
+      ({
+        groupBy: 'messageUser',
+        orderBy: 'count',
+        order: 'desc',
+        ...(range && dateRangeToQuery(range)),
+      }) satisfies StampsQuery,
+    [range],
+  );
+  const { stamps: ranking, loading } = useStamps(query);
   const inGroup = ranking
     ?.filter((s) => groupMap.has(s.messageUser))
     .slice(0, limit ?? 10)
@@ -162,5 +191,5 @@ export const GroupReceivedStampsRanking: FC<GroupReceivedStampsRankingProps> = (
       count: s.count,
     }));
 
-  return <RankingView loading={ranking === undefined} data={inGroup ?? []} limit={limit ?? 10} />;
+  return <RankingView loading={loading} data={inGroup ?? []} limit={limit ?? 10} />;
 };
